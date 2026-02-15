@@ -630,7 +630,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
         <section className="py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="border-b border-gray-300 mb-8">
-              <div className="flex space-x-8">
+              <div className="flex space-x-4 sm:space-x-8 overflow-x-auto">
                 {['description', 'features', 'care', 'reviews'].map((tab) => (
                   <button
                     key={tab}

@@ -150,7 +150,7 @@ export default function ContactPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {contactMethods.map((method, index) => (
             <a
               key={index}
@@ -172,7 +172,7 @@ export default function ContactPage() {
 
         <div className="grid lg:grid-cols-2 gap-12">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
             <p className="text-gray-600 mb-8">
               Fill out the form below and we'll get back to you as soon as possible.
             </p>
@@ -284,7 +284,7 @@ export default function ContactPage() {
           </div>
 
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Quick Answers</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Quick Answers</h2>
             <p className="text-gray-600 mb-8">
               Find answers to common questions before reaching out
             </p>
@@ -327,7 +327,7 @@ export default function ContactPage() {
       <div className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Visit Our Store</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Visit Our Store</h2>
             <p className="text-gray-600 mb-6 leading-relaxed">
               Prefer to shop in person? Visit our store. Our knowledgeable staff will be happy to assist you with product selection and answer any questions.
             </p>

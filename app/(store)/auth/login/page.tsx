@@ -76,7 +76,7 @@ export default function LoginPage() {
     <main className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Welcome Back</h1>
           <p className="text-gray-600">Sign in to your account to continue</p>
         </div>
 

@@ -184,7 +184,7 @@ function AccountContent() {
             </button>
           </div>
 
-          <div className="grid lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Desktop Sidebar Navigation */}
             <div className="hidden lg:block lg:col-span-1">
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">

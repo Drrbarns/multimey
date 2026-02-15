@@ -331,7 +331,7 @@ export default function CheckoutPage() {
           </Link>
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
 
         {currentStep === 1 && (
           <div className="mb-8 bg-white rounded-xl shadow-sm p-6">
@@ -382,7 +382,7 @@ export default function CheckoutPage() {
 
         <CheckoutSteps currentStep={currentStep} />
 
-        <div className="grid lg:grid-cols-3 gap-8 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
           <div className="lg:col-span-2">
             {currentStep === 1 && (
               <>

@@ -168,7 +168,7 @@ export default function SignupPage() {
     <main className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Create Account</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Create Account</h1>
           <p className="text-gray-600">Join us and start shopping today</p>
         </div>
 
@@ -181,7 +181,7 @@ export default function SignupPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">
                   First Name

@@ -47,7 +47,7 @@ export default function AboutPage() {
         <div className="flex border-b border-gray-200 mb-12 justify-center">
           <button
             onClick={() => setActiveTab('story')}
-            className={`px-8 py-4 font-medium transition-colors text-lg cursor-pointer ${activeTab === 'story'
+            className={`px-4 py-2 sm:px-8 sm:py-4 font-medium transition-colors text-lg cursor-pointer ${activeTab === 'story'
               ? 'text-blue-700 border-b-4 border-blue-700 font-bold'
               : 'text-gray-500 hover:text-gray-700'
               }`}
@@ -56,7 +56,7 @@ export default function AboutPage() {
           </button>
           <button
             onClick={() => setActiveTab('mission')}
-            className={`px-8 py-4 font-medium transition-colors text-lg cursor-pointer ${activeTab === 'mission'
+            className={`px-4 py-2 sm:px-8 sm:py-4 font-medium transition-colors text-lg cursor-pointer ${activeTab === 'mission'
               ? 'text-blue-700 border-b-4 border-blue-700 font-bold'
               : 'text-gray-500 hover:text-gray-700'
               }`}
@@ -68,7 +68,7 @@ export default function AboutPage() {
         {activeTab === 'story' && (
           <div className="grid md:grid-cols-2 gap-16 items-center animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">How It All Started</h2>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">How It All Started</h2>
               <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
                 <p>
                   <strong>MultiMey Supplies</strong> started with a simple idea: bring quality products to Ghanaians at fair prices. We saw how people were paying too much for items that could be sourced smarter — so we built a bridge between trusted Chinese manufacturers, local suppliers, and everyday shoppers.

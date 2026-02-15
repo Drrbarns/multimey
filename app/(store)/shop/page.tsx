@@ -220,7 +220,7 @@ function ShopContent() {
 
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex gap-8">
+          <div className="flex flex-col lg:flex-row gap-8">
             <aside className={`${isFilterOpen ? 'fixed inset-0 z-50 bg-white overflow-y-auto' : 'hidden'} lg:block lg:w-64 lg:flex-shrink-0`}>
               <div className="lg:sticky lg:top-24">
                 <div className="bg-white lg:bg-transparent p-6 lg:p-0">

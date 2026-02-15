@@ -121,7 +121,7 @@ export default function Home() {
       {renderBanners()}
 
       {/* Hero Section */}
-      <section className="relative w-full h-[90vh] overflow-hidden bg-black">
+      <section className="relative w-full h-[70vh] md:h-[90vh] overflow-hidden bg-black">
 
         {/* Background Slider */}
         <div className="absolute inset-0 z-0">
@@ -154,7 +154,7 @@ export default function Home() {
             Welcome to MultiMey Supplies
           </p>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-6 leading-tight drop-shadow-lg animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-6 leading-tight drop-shadow-lg animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
             Your One-Stop <br />
             <span className="italic font-light">Shop for Everything</span>
           </h1>
@@ -163,16 +163,16 @@ export default function Home() {
             Dresses, electronics, bags, shoes &amp; more — locally sourced and imported directly from China.<br />Quality you can trust at prices you&apos;ll love.
           </p>
 
-          <div className="flex items-center gap-6 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             <Link
               href="/shop"
-              className="bg-white text-gray-900 px-10 py-4 rounded-full font-medium text-lg hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 duration-300"
+              className="bg-white text-gray-900 px-8 py-3 sm:px-10 sm:py-4 rounded-full font-medium text-base sm:text-lg hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1 duration-300"
             >
               Shop Collections
             </Link>
             <Link
               href="/about"
-              className="px-10 py-4 rounded-full font-medium text-lg text-white border border-white/40 hover:bg-white/10 transition-colors backdrop-blur-sm"
+              className="px-8 py-3 sm:px-10 sm:py-4 rounded-full font-medium text-base sm:text-lg text-white border border-white/40 hover:bg-white/10 transition-colors backdrop-blur-sm"
             >
               Our Story
             </Link>
@@ -211,11 +211,11 @@ export default function Home() {
       </section>
 
       {/* Categories Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <AnimatedSection className="flex items-end justify-between mb-12">
             <div>
-              <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-4">Shop by Category</h2>
+              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-gray-900 mb-4">Shop by Category</h2>
               <p className="text-gray-600 text-lg max-w-md">From dresses to electronics, bags to shoes</p>
             </div>
             <Link href="/categories" className="hidden md:flex items-center text-blue-800 font-medium hover:text-blue-900 transition-colors">
@@ -260,10 +260,10 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-24 bg-stone-50">
+      <section className="py-16 md:py-24 bg-stone-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-16">
-            <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-4">Featured Products</h2>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-gray-900 mb-4">Featured Products</h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">Top picks from our latest arrivals</p>
           </AnimatedSection>
 
