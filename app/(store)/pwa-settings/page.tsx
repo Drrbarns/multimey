@@ -71,7 +71,7 @@ export default function PWASettingsPage() {
       <div className="max-w-4xl mx-auto">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-emerald-700 hover:text-emerald-800 mb-6 whitespace-nowrap"
+          className="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 mb-6 whitespace-nowrap"
         >
           <i className="ri-arrow-left-line"></i>
           Back to Home

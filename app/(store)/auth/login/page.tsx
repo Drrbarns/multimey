@@ -96,7 +96,7 @@ export default function LoginPage() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${errors.email ? 'border-red-500' : 'border-gray-300'
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.email ? 'border-red-500' : 'border-gray-300'
                   }`}
                 placeholder="you@example.com"
               />
@@ -114,7 +114,7 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className={`w-full px-4 py-3 pr-12 border-2 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 ${errors.password ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-4 py-3 pr-12 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.password ? 'border-red-500' : 'border-gray-300'
                     }`}
                   placeholder="Enter your password"
                 />
@@ -137,11 +137,11 @@ export default function LoginPage() {
                   type="checkbox"
                   checked={formData.rememberMe}
                   onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
-                  className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-700">Remember me</span>
               </label>
-              <Link href="/auth/forgot-password" className="text-sm text-emerald-700 hover:text-emerald-900 font-medium whitespace-nowrap">
+              <Link href="/auth/forgot-password" className="text-sm text-blue-700 hover:text-blue-900 font-medium whitespace-nowrap">
                 Forgot password?
               </Link>
             </div>
@@ -149,7 +149,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading || verifying}
-              className="w-full bg-emerald-700 hover:bg-emerald-800 text-white py-4 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer"
+              className="w-full bg-blue-700 hover:bg-blue-800 text-white py-4 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer"
             >
               {isLoading || verifying ? (
                 <span className="flex items-center justify-center">
@@ -189,7 +189,7 @@ export default function LoginPage() {
 
           <p className="mt-8 text-center text-gray-600">
             Don't have an account?{' '}
-            <Link href="/auth/signup" className="text-emerald-700 hover:text-emerald-900 font-semibold whitespace-nowrap">
+            <Link href="/auth/signup" className="text-blue-700 hover:text-blue-900 font-semibold whitespace-nowrap">
               Create one now
             </Link>
           </p>

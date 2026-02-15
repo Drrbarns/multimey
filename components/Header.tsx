@@ -16,20 +16,9 @@ export default function Header() {
   const [user, setUser] = useState<any>(null);
 
   const { cartCount, isCartOpen, setIsCartOpen } = useCart();
-  const { getSetting, getSettingJSON } = useCMS();
+  const { getSetting } = useCMS();
 
-  const siteName = getSetting('site_name') || 'StandardStore';
-  const siteLogo = getSetting('site_logo') || '/logo.png';
-  const showSearch = getSetting('header_show_search') !== 'false';
-  const showWishlist = getSetting('header_show_wishlist') !== 'false';
-  const showCart = getSetting('header_show_cart') !== 'false';
-  const showAccount = getSetting('header_show_account') !== 'false';
-  const navLinks = getSettingJSON<{ label: string; href: string }[]>('header_nav_links_json', [
-    { label: 'Shop', href: '/shop' },
-    { label: 'Categories', href: '/categories' },
-    { label: 'About', href: '/about' },
-    { label: 'Contact', href: '/contact' }
-  ]);
+  const siteName = getSetting('site_name') || 'Classy Debbie Collection';
 
   useEffect(() => {
     // Wishlist logic
@@ -70,13 +59,16 @@ export default function Header() {
     <>
       <AnnouncementBar />
 
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <nav aria-label="Main navigation">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-            <div className="flex items-center justify-between">
+      <header className="bg-white sticky top-0 z-50 border-b border-gray-100 transition-all duration-300">
+        <div className="safe-area-top" />
+        <nav aria-label="Main navigation" className="relative">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="h-20 grid grid-cols-[auto_1fr_auto] items-center gap-4">
+
+              {/* Left: Mobile Menu Trigger (Mobile) & Logo */}
               <div className="flex items-center gap-4">
                 <button
-                  className="lg:hidden p-1 -ml-1 text-gray-700 hover:text-emerald-700 transition-colors"
+                  className="lg:hidden p-2 -ml-2 text-gray-900 hover:text-gray-600 transition-colors"
                   onClick={() => setIsMobileMenuOpen(true)}
                   aria-label="Open menu"
                 >
@@ -84,113 +76,94 @@ export default function Header() {
                 </button>
                 <Link
                   href="/"
-                  className="flex items-center"
+                  className="flex items-center select-none"
                   aria-label="Go to homepage"
                 >
-                  <img src={siteLogo} alt={siteName} className="h-8 md:h-10 w-auto object-contain" />
+                  <img src="/logo.svg" alt={siteName} className="h-9 md:h-11 w-auto object-contain" />
                 </Link>
               </div>
 
-              <div className="hidden lg:flex items-center space-x-8">
-                {navLinks.map((link) => (
+              {/* Center: Navigation Links (Desktop) */}
+              <div className="hidden lg:flex items-center justify-center space-x-12">
+                {[
+                  { label: 'Shop', href: '/shop' },
+                  { label: 'Categories', href: '/categories' },
+                  { label: 'About', href: '/about' },
+                  { label: 'Contact', href: '/contact' },
+                ].map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="text-gray-700 hover:text-emerald-700 font-medium transition-colors whitespace-nowrap"
+                    className="group relative py-2 text-sm uppercase tracking-widest font-medium text-gray-900 transition-colors hover:text-gray-600"
                   >
                     {link.label}
+                    <span className="absolute inset-x-0 bottom-0 h-px scale-x-0 bg-gray-900 transition-transform duration-300 ease-out group-hover:scale-x-100" />
                   </Link>
                 ))}
               </div>
 
-              <div className="flex items-center space-x-4">
-                {showSearch && (
-                  <button
-                    className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-emerald-700 transition-colors lg:hidden"
-                    onClick={() => setIsSearchOpen(true)}
-                    aria-label="Open search"
-                  >
-                    <i className="ri-search-line text-2xl"></i>
-                  </button>
-                )}
+              {/* Right: Icons */}
+              <div className="flex items-center justify-end space-x-2 sm:space-x-4">
+                <button
+                  className="p-2 text-gray-900 hover:text-gray-600 transition-transform hover:scale-105"
+                  onClick={() => setIsSearchOpen(true)}
+                  aria-label="Search"
+                >
+                  <i className="ri-search-line text-xl"></i>
+                </button>
 
-                {showSearch && (
-                  <div className="hidden lg:block relative">
-                    <input
-                      type="search"
-                      placeholder="Search products..."
-                      className="w-80 pl-10 pr-4 py-2 border-2 border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all text-sm"
-                      aria-label="Search products"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSearch(e)}
-                    />
-                    <i className="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                  </div>
-                )}
+                <Link
+                  href="/wishlist"
+                  className="p-2 text-gray-900 hover:text-gray-600 transition-transform hover:scale-105 relative hidden sm:block"
+                  aria-label="Wishlist"
+                >
+                  <i className="ri-heart-line text-xl"></i>
+                  {wishlistCount > 0 && (
+                    <span className="absolute top-1 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] font-bold text-white">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </Link>
 
-                {showWishlist && (
+                {user ? (
                   <Link
-                    href="/wishlist"
-                    className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-emerald-700 transition-colors relative"
-                    aria-label={`Wishlist, ${wishlistCount} items`}
+                    href="/account"
+                    className="p-2 text-gray-900 hover:text-gray-600 transition-transform hover:scale-105 hidden sm:block"
+                    aria-label="Account"
                   >
-                    <i className="ri-heart-line text-2xl"></i>
-                    {wishlistCount > 0 && (
-                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-700 text-white text-xs rounded-full flex items-center justify-center" aria-hidden="true">
-                        {wishlistCount}
-                      </span>
-                    )}
+                    <i className="ri-user-line text-xl"></i>
+                  </Link>
+                ) : (
+                  <Link
+                    href="/auth/login"
+                    className="p-2 text-gray-900 hover:text-gray-600 transition-transform hover:scale-105 hidden sm:block"
+                    aria-label="Login"
+                  >
+                    <i className="ri-user-line text-xl"></i>
                   </Link>
                 )}
 
-                {showCart && (
-                  <div className="relative">
-                    <button
-                      className="w-10 h-10 flex items-center justify-center text-gray-700 hover:text-emerald-700 transition-colors relative"
-                      onClick={() => setIsCartOpen(!isCartOpen)}
-                      aria-label={`Shopping cart, ${cartCount} items`}
-                      aria-expanded={isCartOpen}
-                      aria-controls="mini-cart"
-                    >
-                      <i className="ri-shopping-cart-line text-2xl"></i>
-                      {cartCount > 0 && (
-                        <span className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-700 text-white text-xs rounded-full flex items-center justify-center" aria-hidden="true">
-                          {cartCount}
-                        </span>
-                      )}
-                    </button>
-
-                    <MiniCart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-                  </div>
-                )}
-
-                {showAccount && (
-                  user ? (
-                    <Link
-                      href="/account"
-                      className="hidden lg:flex w-10 h-10 items-center justify-center text-emerald-700 hover:text-emerald-900 transition-colors bg-emerald-50 rounded-full"
-                      aria-label="My account"
-                      title="Account"
-                    >
-                      <i className="ri-user-fill text-2xl"></i>
-                    </Link>
-                  ) : (
-                    <Link
-                      href="/auth/login"
-                      className="hidden lg:flex w-10 h-10 items-center justify-center text-gray-700 hover:text-emerald-700 transition-colors"
-                      aria-label="Login"
-                      title="Login"
-                    >
-                      <i className="ri-user-line text-2xl"></i>
-                    </Link>
-                  )
-                )}
+                <div className="relative">
+                  <button
+                    className="p-2 text-gray-900 hover:text-gray-600 transition-transform hover:scale-105"
+                    onClick={() => setIsCartOpen(!isCartOpen)}
+                    aria-label="Cart"
+                  >
+                    <i className="ri-shopping-bag-line text-xl"></i>
+                    {cartCount > 0 && (
+                      <span className="absolute top-1 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] font-bold text-white">
+                        {cartCount}
+                      </span>
+                    )}
+                  </button>
+                  <MiniCart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+                </div>
               </div>
+
             </div>
           </div>
         </nav>
-      </header >
+      </header>
 
       {isSearchOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-24">
@@ -212,12 +185,12 @@ export default function Header() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search for products..."
-                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-base"
+                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                     autoFocus
                   />
                   <button
                     type="submit"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-emerald-700 hover:text-emerald-900"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-blue-700 hover:text-blue-900"
                   >
                     <i className="ri-search-line text-xl"></i>
                   </button>
@@ -240,7 +213,7 @@ export default function Header() {
           <div className="absolute top-0 left-0 bottom-0 w-4/5 max-w-xs bg-white shadow-xl flex flex-col animate-in slide-in-from-left duration-300">
             <div className="p-4 border-b border-gray-100 flex items-center justify-between">
               <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                <img src={siteLogo} alt={siteName} className="h-8 w-auto object-contain" />
+                <img src="/logo.svg" alt={siteName} className="h-8 w-auto object-contain" />
               </Link>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -252,11 +225,17 @@ export default function Header() {
             </div>
 
             <nav className="flex-1 overflow-y-auto p-4 space-y-2">
-              {[{ label: 'Home', href: '/' }, ...navLinks].map((link) => (
+              {[
+                { label: 'Home', href: '/' },
+                { label: 'Shop', href: '/shop' },
+                { label: 'Categories', href: '/categories' },
+                { label: 'About', href: '/about' },
+                { label: 'Contact', href: '/contact' },
+              ].map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block px-4 py-3 text-lg font-medium text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-colors"
+                  className="block px-4 py-3 text-lg font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.label}

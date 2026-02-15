@@ -41,6 +41,22 @@ const nextConfig: NextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' }
         ]
       },
+      // Service worker - no cache, always fresh
+      {
+        source: '/service-worker.js',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+          { key: 'Service-Worker-Allowed', value: '/' }
+        ]
+      },
+      // Manifest
+      {
+        source: '/manifest.json',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=3600' },
+          { key: 'Content-Type', value: 'application/manifest+json' }
+        ]
+      },
       // Cache storefront API routes aggressively (5 min CDN, revalidate in background)
       {
         source: '/api/storefront/:path*',

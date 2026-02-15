@@ -4,23 +4,30 @@ import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import "./globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://localhost:3000';
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'My Store';
-const siteDescription = process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'Your one-stop online store for premium quality products.';
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.classydebbie.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: siteName,
-    template: `%s | ${siteName}`
+    default: "Classy Debbie Collection | Premium Women's Fashion & Accessories",
+    template: "%s | Classy Debbie Collection"
   },
-  description: siteDescription,
+  description: "Your premier destination for women's dresses, shoes, bags, accessories, and intimate products. Classy Debbie Collection offers elegance and style for every occasion.",
   keywords: [
-    "Online Store",
-    "eCommerce",
-    "Premium Products",
-    "Shop Online",
+    "Classy Debbie Collection",
+    "Women's Fashion Ghana",
+    "Ladies Dresses",
+    "Women's Shoes",
+    "Designer Bags",
+    "Fashion Accessories",
+    "Sex Toys Ghana",
+    "Intimate Products",
+    "Buy Dresses Online",
+    "Ladies Footwear"
   ],
+  authors: [{ name: "Classy Debbie" }],
+  creator: "Classy Debbie",
+  publisher: "Classy Debbie Collection",
   robots: {
     index: true,
     follow: true,
@@ -33,33 +40,51 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.png',
-    apple: '/favicon.png',
+    icon: [
+      { url: '/icons/icon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/icons/icon-152x152.png', sizes: '152x152', type: 'image/png' },
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+    ],
+  },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Classy Debbie',
+  },
+  formatDetection: {
+    telephone: true,
   },
   verification: {
+    // Add your Google Search Console verification code here
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_GH",
     url: siteUrl,
-    title: siteName,
-    description: siteDescription,
-    siteName: siteName,
+    title: "Classy Debbie Collection | Premium Women's Fashion & Accessories",
+    description: "Discover our exclusive collection of women's dresses, shoes, bags, accessories, and intimate products. Elegance redefined.",
+    siteName: "Classy Debbie Collection",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: siteName,
+        alt: "Classy Debbie Collection",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteName,
-    description: siteDescription,
+    title: "Classy Debbie Collection | Premium Fashion",
+    description: "Exclusive women's fashion, accessories & intimate products.",
     images: ["/og-image.jpg"],
+    creator: "@classydebbie",
   },
   alternates: {
     canonical: siteUrl,
@@ -79,6 +104,24 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* PWA Meta Tags */}
+        <meta name="theme-color" content="#2563eb" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Classy Debbie" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-TileColor" content="#2563eb" />
+        <meta name="msapplication-tap-highlight" content="no" />
+
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" href="/icons/icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png" />
+        <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
+
+        {/* Apple Splash Screens */}
+        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" />
+
         <link
           href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
           rel="stylesheet"
@@ -87,16 +130,22 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-        {/* Structured Data - Organization (dynamically populated client-side or via env vars) */}
+        {/* Structured Data - Organization */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": siteName,
-              "url": siteUrl,
-              "description": siteDescription,
+              "name": "Classy Debbie Collection",
+              "url": "https://www.classydebbie.com",
+              "logo": "https://www.classydebbie.com/logo.svg",
+              "description": "Your premier destination for women's dresses, shoes, bags, accessories, and intimate products.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "GH",
+                "addressLocality": "Accra"
+              },
               "contactPoint": {
                 "@type": "ContactPoint",
                 "contactType": "customer service",
@@ -135,10 +184,10 @@ export default function RootLayout({
         />
       )}
 
-      <body className="antialiased font-sans overflow-x-hidden">
+      <body className="antialiased font-sans overflow-x-hidden pwa-body">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[10000] focus:px-6 focus:py-3 focus:bg-emerald-700 focus:text-white focus:rounded-lg focus:font-semibold focus:shadow-lg"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[10000] focus:px-6 focus:py-3 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:font-semibold focus:shadow-lg"
         >
           Skip to main content
         </a>

@@ -1,118 +1,77 @@
 /**
- * Simple HTML sanitizer to prevent XSS attacks
- * For production, consider using a library like DOMPurify
+ * HTML sanitization utilities to prevent XSS.
  */
 
-// Allowed HTML tags for content rendering
-const ALLOWED_TAGS = [
-  'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's',
-  'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-  'ul', 'ol', 'li',
-  'a', 'span', 'div',
-  'blockquote', 'pre', 'code',
-  'table', 'thead', 'tbody', 'tr', 'th', 'td',
-  'img', 'hr'
-];
-
-// Allowed attributes per tag
-const ALLOWED_ATTRS: Record<string, string[]> = {
-  'a': ['href', 'title', 'target', 'rel'],
-  'img': ['src', 'alt', 'width', 'height', 'title'],
-  'td': ['colspan', 'rowspan'],
-  'th': ['colspan', 'rowspan'],
-  '*': ['class', 'id', 'style'] // Global attributes
-};
-
-// Patterns to remove (script injection attempts)
-const DANGEROUS_PATTERNS = [
-  /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-  /javascript:/gi,
-  /on\w+\s*=/gi, // onclick, onerror, etc.
-  /data:/gi,
-  /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
-  /<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi,
-  /<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi,
-  /<form\b[^<]*(?:(?!<\/form>)<[^<]*)*<\/form>/gi,
-];
+/**
+ * Escape HTML special characters to prevent XSS injection.
+ * Use this when inserting user-provided text into HTML templates.
+ */
+export function escapeHtml(str: string): string {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
 
 /**
- * Sanitize HTML content to prevent XSS attacks
- * @param html - The HTML string to sanitize
- * @returns Sanitized HTML string
+ * Sanitize HTML content — allow safe tags for blog/article rendering
+ * while stripping dangerous elements (script, iframe, event handlers, etc.)
  */
 export function sanitizeHtml(html: string): string {
-  if (!html || typeof html !== 'string') {
-    return '';
-  }
+    if (!html) return '';
 
-  let sanitized = html;
+    // Remove script tags and their content
+    let clean = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
 
-  // Remove dangerous patterns
-  for (const pattern of DANGEROUS_PATTERNS) {
-    sanitized = sanitized.replace(pattern, '');
-  }
+    // Remove iframe, object, embed, form tags
+    clean = clean.replace(/<(iframe|object|embed|form|input|textarea|button)\b[^>]*>.*?<\/\1>/gi, '');
+    clean = clean.replace(/<(iframe|object|embed|form|input|textarea|button)\b[^>]*\/?>/gi, '');
 
-  // Remove any remaining script tags that might have been obfuscated
-  sanitized = sanitized.replace(/<script[\s\S]*?<\/script>/gi, '');
-  
-  // Remove event handlers
-  sanitized = sanitized.replace(/\s+on\w+\s*=\s*["'][^"']*["']/gi, '');
-  sanitized = sanitized.replace(/\s+on\w+\s*=\s*[^\s>]*/gi, '');
+    // Remove event handlers (onclick, onload, onerror, etc.)
+    clean = clean.replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '');
 
-  // Remove javascript: and data: URLs from href/src attributes
-  sanitized = sanitized.replace(/href\s*=\s*["']?\s*javascript:[^"'>\s]*/gi, 'href="#"');
-  sanitized = sanitized.replace(/src\s*=\s*["']?\s*javascript:[^"'>\s]*/gi, 'src=""');
-  sanitized = sanitized.replace(/href\s*=\s*["']?\s*data:[^"'>\s]*/gi, 'href="#"');
-  
-  return sanitized;
+    // Remove javascript: and data: URLs in href/src attributes
+    clean = clean.replace(/\s+(href|src|action)\s*=\s*["']?\s*javascript:/gi, ' $1="');
+    clean = clean.replace(/\s+(href|src|action)\s*=\s*["']?\s*data:/gi, ' $1="');
+
+    // Remove style attributes that could contain expressions
+    clean = clean.replace(/\s+style\s*=\s*["'][^"']*expression\s*\([^"']*["']/gi, '');
+
+    return clean;
 }
 
 /**
- * Escape HTML entities to prevent XSS when displaying user input as text
- * @param text - The text to escape
- * @returns Escaped text safe for HTML display
+ * Validate email format
  */
-export function escapeHtml(text: string): string {
-  if (!text || typeof text !== 'string') {
-    return '';
-  }
-
-  const htmlEntities: Record<string, string> = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#x27;',
-    '/': '&#x2F;',
-  };
-
-  return text.replace(/[&<>"'/]/g, (char) => htmlEntities[char] || char);
+export function isValidEmail(email: string): boolean {
+    if (!email || typeof email !== 'string') return false;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email.trim());
 }
 
 /**
- * Validate and sanitize a URL
- * @param url - The URL to validate
- * @returns Sanitized URL or empty string if invalid
+ * Validate Ghana phone number format
  */
-export function sanitizeUrl(url: string): string {
-  if (!url || typeof url !== 'string') {
-    return '';
-  }
+export function isValidGhanaPhone(phone: string): boolean {
+    if (!phone || typeof phone !== 'string') return false;
+    const cleaned = phone.replace(/\D/g, '');
+    // Valid formats: 0XXXXXXXXX (10 digits), 233XXXXXXXXX (12 digits), or 9 digits without prefix
+    return (
+        (cleaned.length === 10 && cleaned.startsWith('0')) ||
+        (cleaned.length === 12 && cleaned.startsWith('233')) ||
+        cleaned.length === 9
+    );
+}
 
-  // Only allow http, https, mailto, and tel protocols
-  const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:'];
-  
-  try {
-    const parsed = new URL(url, 'https://example.com');
-    if (allowedProtocols.includes(parsed.protocol)) {
-      return url;
-    }
-  } catch {
-    // If URL parsing fails, check if it's a relative URL
-    if (url.startsWith('/') || url.startsWith('#')) {
-      return url;
-    }
-  }
-  
-  return '#';
+/**
+ * Sanitize a string for safe use in logs (mask PII)
+ */
+export function maskEmail(email: string): string {
+    if (!email) return '***';
+    const [local, domain] = email.split('@');
+    if (!domain) return '***';
+    return local.slice(0, 2) + '***@' + domain;
 }

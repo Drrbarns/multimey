@@ -24,8 +24,6 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
   const [trackingNumber, setTrackingNumber] = useState('');
   const [adminNotes, setAdminNotes] = useState('');
   const [statusUpdating, setStatusUpdating] = useState(false);
-  const [storeName, setStoreName] = useState('My Store');
-  const [storeEmail, setStoreEmail] = useState('');
 
   const handlePrint = () => {
     window.print();
@@ -48,11 +46,6 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
 
   useEffect(() => {
     fetchOrderDetails();
-    // Fetch store name from settings
-    supabase.from('store_settings').select('value').eq('key', 'site_name').single()
-      .then(({ data }) => { if (data?.value) setStoreName(typeof data.value === 'string' ? data.value : String(data.value)); });
-    supabase.from('store_settings').select('value').eq('key', 'contact_email').single()
-      .then(({ data }) => { if (data?.value) setStoreEmail(typeof data.value === 'string' ? data.value : String(data.value)); });
   }, [orderId]);
 
   const fetchOrderDetails = async () => {
@@ -252,7 +245,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
     'pending': 'bg-amber-100 text-amber-700 border-amber-200',
     'processing': 'bg-blue-100 text-blue-700 border-blue-200',
     'shipped': 'bg-purple-100 text-purple-700 border-purple-200',
-    'delivered': 'bg-emerald-100 text-emerald-700 border-emerald-200',
+    'delivered': 'bg-blue-100 text-blue-700 border-blue-200',
     'cancelled': 'bg-red-100 text-red-700 border-red-200',
     'awaiting_payment': 'bg-gray-100 text-gray-700 border-gray-200'
   };
@@ -291,7 +284,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
           {/* Header */}
           <div className="flex justify-between items-start border-b-2 border-gray-800 pb-4 mb-4">
             <div>
-              <h1 className="text-2xl font-bold">{storeName}</h1>
+              <h1 className="text-2xl font-bold">Classy Debbie Collection</h1>
               <p className="text-sm text-gray-600">Order Packing Slip</p>
             </div>
             <div className="text-right">
@@ -352,8 +345,8 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
 
           {/* Footer */}
           <div className="border-t-2 border-gray-800 pt-4 text-center text-sm text-gray-600">
-            <p>Thank you for shopping with {storeName}!</p>
-            {storeEmail && <p>Questions? Contact us at {storeEmail}</p>}
+            <p>Thank you for shopping with Classy Debbie Collection!</p>
+            <p>Questions? Contact us at support@classydebbie.com</p>
           </div>
         </div>
       </div>
@@ -436,7 +429,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
                   <span>GH₵ {order.tax_total?.toFixed(2)}</span>
                 </div>
                 {order.discount_total > 0 && (
-                  <div className="flex justify-between text-emerald-700 font-semibold">
+                  <div className="flex justify-between text-blue-700 font-semibold">
                     <span>Discount</span>
                     <span>-GH₵ {order.discount_total?.toFixed(2)}</span>
                   </div>
@@ -453,7 +446,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
               <div className="space-y-4">
                 {timeline.map((event, index) => (
                   <div key={index} className="flex items-start space-x-4">
-                    <div className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${event.completed ? 'bg-emerald-700 border-emerald-700' : 'bg-white border-gray-300'
+                    <div className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${event.completed ? 'bg-blue-700 border-blue-700' : 'bg-white border-gray-300'
                       }`}>
                       {event.completed ? (
                         <i className="ri-check-line text-white text-xl"></i>
@@ -494,7 +487,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
                         onClick={() => {
                           handleUpdateStatus(status);
                         }}
-                        className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors ${status === currentStatus ? 'bg-emerald-50 font-semibold' : ''
+                        className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors ${status === currentStatus ? 'bg-blue-50 font-semibold' : ''
                           }`}
                       >
                         {statusLabel(status)}
@@ -512,14 +505,14 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
                   type="text"
                   value={trackingNumber}
                   onChange={(e) => setTrackingNumber(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
 
               <button
                 onClick={() => handleUpdateStatus()}
                 disabled={statusUpdating}
-                className="w-full mt-4 bg-emerald-700 hover:bg-emerald-800 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap disabled:opacity-50"
+                className="w-full mt-4 bg-blue-700 hover:bg-blue-800 text-white py-3 rounded-lg font-semibold transition-colors whitespace-nowrap disabled:opacity-50"
               >
                 {statusUpdating ? 'Updating...' : 'Update Status'}
               </button>
@@ -528,7 +521,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4">Customer</h2>
               <div className="flex items-start space-x-3 mb-4">
-                <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 text-emerald-700 rounded-full font-semibold uppercase">
+                <div className="w-12 h-12 flex items-center justify-center bg-blue-100 text-blue-700 rounded-full font-semibold uppercase">
                   {customerName.substring(0, 2)}
                 </div>
                 <div>
@@ -563,7 +556,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Status</span>
-                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold whitespace-nowrap capitalize">
+                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold whitespace-nowrap capitalize">
                     {order.payment_status}
                   </span>
                 </div>
@@ -612,7 +605,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
                 placeholder="Add internal notes about this order..."
                 rows={4}
                 maxLength={500}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
               />
               <button
                 onClick={() => handleUpdateStatus()}

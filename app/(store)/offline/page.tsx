@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function OfflinePage() {
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState(false);
+  const [retrying, setRetrying] = useState(false);
 
   useEffect(() => {
     setIsOnline(navigator.onLine);
@@ -27,72 +28,104 @@ export default function OfflinePage() {
     }
   }, [isOnline]);
 
+  const handleRetry = () => {
+    setRetrying(true);
+    setTimeout(() => {
+      if (navigator.onLine) {
+        window.location.href = '/';
+      } else {
+        setRetrying(false);
+      }
+    }, 2000);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center px-4">
-      <div className="max-w-lg w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-        <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <i className="ri-wifi-off-line text-5xl text-gray-400"></i>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center px-6">
+      <div className="max-w-md w-full text-center">
+        {/* Animated illustration */}
+        <div className="relative mb-8">
+          <div className="w-32 h-32 mx-auto relative">
+            {/* Outer ring */}
+            <div className="absolute inset-0 rounded-full border-4 border-blue-100 animate-pulse" />
+            {/* Inner circle */}
+            <div className="absolute inset-3 rounded-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+              <div className="relative">
+                <i className="ri-wifi-off-line text-5xl text-blue-600" />
+                {/* Animated dots */}
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">
+        {/* Content */}
+        <h1 className="font-serif text-3xl font-bold text-gray-900 mb-3">
           You&apos;re Offline
         </h1>
-        
-        <p className="text-gray-600 mb-8">
-          It looks like you&apos;ve lost your internet connection. Don&apos;t worry, you can still browse cached pages!
+        <p className="text-gray-500 mb-8 leading-relaxed">
+          No worries! Check your connection and try again.
+          You can still browse pages you&apos;ve visited before.
         </p>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <i className="ri-information-line text-xl text-blue-600"></i>
-            </div>
-            <h3 className="font-semibold text-blue-900">While Offline You Can:</h3>
-          </div>
-          <ul className="space-y-2 text-left text-blue-800">
-            <li className="flex items-center gap-2">
-              <i className="ri-check-line text-blue-600"></i>
-              <span>View previously visited pages</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <i className="ri-check-line text-blue-600"></i>
-              <span>Browse your saved cart items</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <i className="ri-check-line text-blue-600"></i>
-              <span>Check your wishlist</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <i className="ri-check-line text-blue-600"></i>
-              <span>View cached product images</span>
-            </li>
-          </ul>
-        </div>
-
-        <div className="space-y-3">
+        {/* Available actions */}
+        <div className="space-y-3 mb-8">
           <button
-            onClick={() => window.location.reload()}
-            className="w-full bg-emerald-700 hover:bg-emerald-800 text-white py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+            onClick={handleRetry}
+            disabled={retrying}
+            className="w-full bg-blue-700 hover:bg-blue-800 disabled:bg-blue-400 text-white py-4 px-6 rounded-2xl font-semibold transition-all active:scale-[0.98] shadow-lg shadow-blue-700/20 flex items-center justify-center gap-2"
           >
-            <i className="ri-refresh-line"></i>
-            Try Again
+            {retrying ? (
+              <>
+                <i className="ri-loader-4-line text-xl pull-refresh-spinner" />
+                Checking connection...
+              </>
+            ) : (
+              <>
+                <i className="ri-refresh-line text-xl" />
+                Try Again
+              </>
+            )}
           </button>
 
           <Link
             href="/"
-            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+            className="w-full bg-white hover:bg-gray-50 text-gray-700 py-4 px-6 rounded-2xl font-semibold transition-all border border-gray-200 flex items-center justify-center gap-2 shadow-sm active:scale-[0.98]"
           >
-            <i className="ri-home-line"></i>
-            Go to Homepage
+            <i className="ri-home-line text-xl" />
+            Go to Cached Home
           </Link>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <p className="text-sm text-gray-500">
-            Connection status: <span className={isOnline ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}>
-              {isOnline ? '🟢 Online' : '🔴 Offline'}
-            </span>
-          </p>
+        {/* Tips */}
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <h3 className="font-semibold text-gray-900 text-sm mb-3 flex items-center gap-2 justify-center">
+            <i className="ri-lightbulb-line text-amber-500" />
+            While offline you can:
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { icon: 'ri-eye-line', text: 'View cached pages' },
+              { icon: 'ri-shopping-cart-line', text: 'Check your cart' },
+              { icon: 'ri-heart-line', text: 'Browse wishlist' },
+              { icon: 'ri-image-line', text: 'See saved images' },
+            ].map((tip) => (
+              <div
+                key={tip.text}
+                className="flex items-center gap-2 text-xs text-gray-500 bg-gray-50 rounded-lg p-2"
+              >
+                <i className={`${tip.icon} text-blue-600 text-sm`} />
+                <span>{tip.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Status indicator */}
+        <div className="mt-6 flex items-center justify-center gap-2">
+          <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-blue-500' : 'bg-red-400'} ${!isOnline && 'animate-pulse'}`} />
+          <span className="text-xs text-gray-400 font-medium">
+            {isOnline ? 'Connected' : 'No connection'}
+          </span>
         </div>
       </div>
     </div>

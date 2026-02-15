@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, ReactNode } from 'react';
+import React, { useEffect, useRef, useState, ReactNode } from 'react';
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -84,6 +84,8 @@ export function AnimatedGrid({
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleItems, setVisibleItems] = useState<boolean[]>([]);
 
+  const childrenArray = React.Children.toArray(children);
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -91,7 +93,7 @@ export function AnimatedGrid({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          children.forEach((_, index) => {
+          childrenArray.forEach((_, index) => {
             setTimeout(() => {
               setVisibleItems(prev => {
                 const newState = [...prev];
@@ -109,11 +111,11 @@ export function AnimatedGrid({
     observer.observe(container);
 
     return () => observer.unobserve(container);
-  }, [children.length, staggerDelay]);
+  }, [childrenArray.length, staggerDelay]);
 
   return (
     <div ref={containerRef} className={className}>
-      {children.map((child, index) => (
+      {childrenArray.map((child, index) => (
         <div
           key={index}
           className={`scroll-animate ${visibleItems[index] ? 'is-visible' : ''} ${itemClassName}`}

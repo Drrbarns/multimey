@@ -1,13 +1,11 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useCMS } from '@/context/CMSContext';
+
+const SITE_NAME = 'Classy Debbie Collection';
 
 export function usePageTitle(title: string) {
-  const { getSetting } = useCMS();
-  const siteName = getSetting('site_name') || 'My Store';
-
   useEffect(() => {
-    document.title = title ? `${title} | ${siteName}` : siteName;
-  }, [title, siteName]);
+    document.title = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | Premium Women's Fashion & Accessories`;
+  }, [title]);
 }

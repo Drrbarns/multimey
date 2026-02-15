@@ -1,43 +1,29 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePWAInstall } from './PWAInstaller';
 
 export default function PWAPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const { canInstall, isInstalled, install } = usePWAInstall();
 
   useEffect(() => {
-    const handler = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
+    if (isInstalled || !canInstall) return;
 
-      const lastPromptTime = localStorage.getItem('pwaPromptTime');
-      const daysSinceLastPrompt = lastPromptTime 
-        ? (Date.now() - parseInt(lastPromptTime)) / (1000 * 60 * 60 * 24)
-        : 999;
+    const lastPromptTime = localStorage.getItem('pwaPromptTime');
+    const daysSinceLastPrompt = lastPromptTime
+      ? (Date.now() - parseInt(lastPromptTime)) / (1000 * 60 * 60 * 24)
+      : 999;
 
-      if (daysSinceLastPrompt > 7) {
-        setTimeout(() => setShowPrompt(true), 3000);
-      }
-    };
-
-    window.addEventListener('beforeinstallprompt', handler);
-
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
+    if (daysSinceLastPrompt > 7) {
+      const timer = setTimeout(() => setShowPrompt(true), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [canInstall, isInstalled]);
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      console.log('PWA installed');
-    }
-
-    setDeferredPrompt(null);
-    setShowPrompt(false);
+    const accepted = await install();
+    if (accepted) setShowPrompt(false);
     localStorage.setItem('pwaPromptTime', Date.now().toString());
   };
 
@@ -46,41 +32,83 @@ export default function PWAPrompt() {
     localStorage.setItem('pwaPromptTime', Date.now().toString());
   };
 
-  if (!showPrompt) return null;
+  if (!showPrompt || isInstalled) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-white rounded-xl shadow-2xl p-6 z-50 border border-gray-200 animate-slide-up">
-      <div className="flex items-start gap-4">
-        <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-          <i className="ri-smartphone-line text-2xl text-emerald-700"></i>
-        </div>
-        <div className="flex-1">
-          <h3 className="font-bold text-gray-900 mb-2">Install Our App</h3>
-          <p className="text-sm text-gray-600 mb-4">
-            Get a faster experience with offline access and quick checkout. Install our app for the best shopping experience!
-          </p>
-          <div className="flex gap-3">
+    <>
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998] pwa-prompt-backdrop"
+        onClick={handleDismiss}
+      />
+
+      {/* Install Sheet */}
+      <div className="fixed bottom-0 left-0 right-0 z-[9999] pwa-prompt-sheet">
+        <div className="bg-white rounded-t-3xl shadow-[0_-8px_40px_rgba(0,0,0,0.15)] overflow-hidden max-w-lg mx-auto">
+          {/* Drag handle */}
+          <div className="flex justify-center pt-3 pb-2">
+            <div className="w-10 h-1 bg-gray-300 rounded-full" />
+          </div>
+
+          <div className="px-6 pb-8">
+            {/* App icon and info */}
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-lg flex-shrink-0 bg-blue-50 flex items-center justify-center">
+                <img
+                  src="/logo.svg"
+                  alt="Classy Debbie"
+                  className="w-14 h-14 object-contain"
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-gray-900 text-lg truncate">Classy Debbie Collection</h3>
+                <p className="text-sm text-gray-500">classydebbie.com</p>
+                <div className="flex items-center gap-1 mt-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <i key={star} className="ri-star-fill text-amber-400 text-xs" />
+                  ))}
+                  <span className="text-xs text-gray-400 ml-1">Shopping</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Features */}
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {[
+                { icon: 'ri-flashlight-line', label: 'Lightning Fast' },
+                { icon: 'ri-wifi-off-line', label: 'Works Offline' },
+                { icon: 'ri-notification-3-line', label: 'Get Notified' },
+              ].map((feature) => (
+                <div
+                  key={feature.label}
+                  className="bg-gray-50 rounded-xl p-3 text-center"
+                >
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i className={`${feature.icon} text-blue-700 text-lg`} />
+                  </div>
+                  <span className="text-xs font-medium text-gray-600">{feature.label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA */}
             <button
               onClick={handleInstall}
-              className="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white py-2 px-4 rounded-lg font-medium transition-colors whitespace-nowrap"
+              className="w-full bg-blue-700 hover:bg-blue-800 text-white py-4 px-6 rounded-2xl font-semibold text-base transition-all active:scale-[0.98] shadow-lg shadow-blue-700/20 flex items-center justify-center gap-2"
             >
-              Install Now
+              <i className="ri-download-2-line text-xl" />
+              Add to Home Screen
             </button>
+
             <button
               onClick={handleDismiss}
-              className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors whitespace-nowrap"
+              className="w-full mt-3 py-3 text-gray-500 font-medium text-sm hover:text-gray-700 transition-colors"
             >
-              Not Now
+              Maybe Later
             </button>
           </div>
         </div>
-        <button
-          onClick={handleDismiss}
-          className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
-        >
-          <i className="ri-close-line"></i>
-        </button>
       </div>
-    </div>
+    </>
   );
 }

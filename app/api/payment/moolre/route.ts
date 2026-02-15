@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import { checkRateLimit, getClientIdentifier, RATE_LIMITS } from '@/lib/rate-limit';
 
 export async function POST(req: Request) {
@@ -6,11 +7,11 @@ export async function POST(req: Request) {
         // Rate limiting
         const clientId = getClientIdentifier(req);
         const rateLimitResult = checkRateLimit(`payment:${clientId}`, RATE_LIMITS.payment);
-        
+
         if (!rateLimitResult.success) {
             return NextResponse.json(
                 { success: false, message: 'Too many requests. Please try again later.' },
-                { 
+                {
                     status: 429,
                     headers: {
                         'X-RateLimit-Remaining': '0',
@@ -21,10 +22,10 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { orderId, amount, customerEmail } = body;
+        const { orderId, customerEmail } = body;
 
-        if (!orderId || !amount) {
-            return NextResponse.json({ success: false, message: 'Missing orderId or amount' }, { status: 400 });
+        if (!orderId || typeof orderId !== 'string') {
+            return NextResponse.json({ success: false, message: 'Missing or invalid orderId' }, { status: 400 });
         }
 
         // Ensure environment variables are set
@@ -33,32 +34,56 @@ export async function POST(req: Request) {
             return NextResponse.json({ success: false, message: 'Payment gateway configuration error' }, { status: 500 });
         }
 
+        // SECURITY: Fetch the order from the database and use its total.
+        // NEVER trust the amount from the client.
+        const { data: order, error: orderError } = await supabaseAdmin
+            .from('orders')
+            .select('id, order_number, total, email, payment_status')
+            .or(`id.eq.${orderId},order_number.eq.${orderId}`)
+            .single();
+
+        if (orderError || !order) {
+            console.error('[Payment] Order not found:', orderId);
+            return NextResponse.json({ success: false, message: 'Order not found' }, { status: 404 });
+        }
+
+        // Don't allow payment for already-paid orders
+        if (order.payment_status === 'paid') {
+            return NextResponse.json({ success: false, message: 'Order is already paid' }, { status: 400 });
+        }
+
+        // Use the database amount, NOT the client-provided amount
+        const amount = Number(order.total);
+        if (!amount || amount <= 0) {
+            return NextResponse.json({ success: false, message: 'Invalid order amount' }, { status: 400 });
+        }
+
+        const orderRef = order.order_number || orderId;
+
         const requestUrl = new URL(req.url);
-        // Remove trailing slash to prevent double-slash in URLs (e.g. //api/...)
         const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || requestUrl.origin).replace(/\/+$/, '');
 
         // Generate a unique external reference for Moolre
-        // Append a retry suffix so re-payments don't clash with previous attempts
-        const uniqueRef = `${orderId}-R${Date.now()}`;
+        const uniqueRef = `${orderRef}-R${Date.now()}`;
 
         // Moolre Payload
         const payload = {
             type: 1,
-            amount: amount.toString(), // Ensure string
-            email: process.env.MOOLRE_MERCHANT_EMAIL || 'admin@standardecom.com', // Business email
+            amount: amount.toString(),
+            email: process.env.MOOLRE_MERCHANT_EMAIL || 'admin@standardecom.com',
             externalref: uniqueRef,
             callback: `${baseUrl}/api/payment/moolre/callback`,
-            redirect: `${baseUrl}/order-success?order=${orderId}&payment_success=true`,
+            redirect: `${baseUrl}/order-success?order=${orderRef}&payment_success=true`,
             reusable: "0",
             currency: "GHS",
             accountnumber: process.env.MOOLRE_ACCOUNT_NUMBER,
             metadata: {
-                customer_email: customerEmail,
-                original_order_number: orderId
+                customer_email: customerEmail || order.email,
+                original_order_number: orderRef
             }
         };
 
-        console.log('[Payment] Initiating for order:', orderId, '| Amount:', amount, '| Callback:', payload.callback);
+        console.log('[Payment] Initiating for order:', orderRef, '| Amount from DB:', amount, '| Callback:', payload.callback);
 
         const response = await fetch('https://api.moolre.com/embed/link', {
             method: 'POST',
@@ -81,6 +106,6 @@ export async function POST(req: Request) {
 
     } catch (error: any) {
         console.error('Payment API Error:', error);
-        return NextResponse.json({ success: false, message: error.message || 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 });
     }
 }
