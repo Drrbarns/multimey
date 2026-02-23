@@ -65,9 +65,9 @@ export default function OrderSummary({ items, subtotal, shipping, tax, total }: 
         </div>
       </div>
 
-      <div className="mt-8 p-4 bg-gray-50/80 border border-gray-100/50 rounded-xl flex items-center justify-center space-x-2 text-gray-600">
+      <div className="mt-8 p-4 bg-green-50/50 border border-green-100 rounded-xl flex items-center justify-center space-x-2 text-green-800">
         <i className="ri-shield-check-fill text-xl text-green-600"></i>
-        <span className="text-sm font-semibold">100% Secure Checkout</span>
+        <span className="text-[13px] font-bold tracking-wide uppercase">100% Secure Checkout</span>
       </div>
     </div>
   );
