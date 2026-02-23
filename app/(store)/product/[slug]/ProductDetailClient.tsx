@@ -419,7 +419,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                               ? 'border-gray-900 bg-gray-900 text-white shadow-sm ring-1 ring-gray-900'
                               : isOutOfStock
                                 ? 'border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50'
-                                : 'border-gray-200 text-gray-700 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
+                                : 'border-gray-200 text-gray-700 hover:border-gray-900 bg-white cursor-pointer hover:shadow-sm'
                               }`}
                             title={isOutOfStock ? 'Out of stock' : `Select ${color}`}
                           >
@@ -474,7 +474,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                                   ? 'border-gray-900 bg-gray-900 text-white shadow-sm ring-1 ring-gray-900'
                                   : isOutOfStock
                                     ? 'border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50'
-                                    : 'border-gray-200 text-gray-700 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
+                                    : 'border-gray-200 text-gray-700 hover:border-gray-900 bg-white cursor-pointer hover:shadow-sm'
                                   }`}
                               >
                                 <span className="text-[13px]">{variant.name}</span>
@@ -516,7 +516,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                                   ? 'border-gray-900 bg-gray-900 text-white shadow-sm ring-1 ring-gray-900'
                                   : isOutOfStock
                                     ? 'border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50'
-                                    : 'border-gray-200 text-gray-700 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
+                                    : 'border-gray-200 text-gray-700 hover:border-gray-900 bg-white cursor-pointer hover:shadow-sm'
                                   }`}
                               >
                                 <span className="text-[13px]">{variant.name}</span>
