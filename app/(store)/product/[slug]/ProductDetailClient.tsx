@@ -363,19 +363,19 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                     </div>
                   </div>
 
-                <div className="flex items-baseline space-x-3 pb-6 border-b border-gray-100">
-                  {hasVariants && !selectedVariant ? (
-                    <span className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
-                      <span className="text-lg text-gray-500 font-normal mr-2">From</span>
-                      GH₵{minVariantPrice.toFixed(2)}
-                    </span>
-                  ) : (
-                    <span className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">GH₵{activePrice.toFixed(2)}</span>
-                  )}
-                  {product.compare_at_price && product.compare_at_price > activePrice && (
-                    <span className="text-xl text-gray-400 line-through decoration-gray-300">GH₵{product.compare_at_price.toFixed(2)}</span>
-                  )}
-                </div>
+                  <div className="flex items-baseline space-x-3 pb-6 border-b border-gray-100">
+                    {hasVariants && !selectedVariant ? (
+                      <span className="text-3xl sm:text-[32px] font-bold text-gray-900 tracking-tight">
+                        <span className="text-lg text-gray-500 font-normal mr-2">From</span>
+                        GH₵{minVariantPrice.toFixed(2)}
+                      </span>
+                    ) : (
+                      <span className="text-3xl sm:text-[32px] font-bold text-gray-900 tracking-tight">GH₵{activePrice.toFixed(2)}</span>
+                    )}
+                    {product.compare_at_price && product.compare_at_price > activePrice && (
+                      <span className="text-xl text-gray-400 line-through decoration-gray-300">GH₵{product.compare_at_price.toFixed(2)}</span>
+                    )}
+                  </div>
 
                 <div className="mt-6 mb-8">
                   <p className="text-gray-600 leading-relaxed text-[15px]">{product.description}</p>
