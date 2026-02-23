@@ -403,49 +403,49 @@ export default function CheckoutPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
 
         {currentStep === 1 && (
-          <div className="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+          <div className="mb-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
             <h2 className="text-2xl font-serif text-gray-900 mb-6">How would you like to checkout?</h2>
             <div className="grid md:grid-cols-2 gap-5">
               <button
                 onClick={() => !user && setCheckoutType('guest')}
-                className={`p-6 rounded-2xl border-2 transition-all text-left cursor-pointer relative overflow-hidden group ${checkoutType === 'guest'
+                className={`p-5 rounded-2xl border-2 transition-all text-left cursor-pointer relative overflow-hidden group ${checkoutType === 'guest'
                   ? 'border-gray-900 bg-gray-50/50'
                   : 'border-gray-100 hover:border-gray-300 bg-white'
                   } ${user ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={!!user}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
-                    <i className="ri-user-line text-2xl"></i>
+                <div className="flex items-center justify-between mb-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
+                    <i className="ri-user-line text-xl"></i>
                   </div>
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
                     }`}>
-                    {checkoutType === 'guest' && <i className="ri-check-line text-white text-sm"></i>}
+                    {checkoutType === 'guest' && <i className="ri-check-line text-white text-xs"></i>}
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Guest Checkout</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">Fast and easy checkout without creating an account.</p>
-                {user && <p className="text-xs font-semibold text-amber-600 mt-3 flex items-center"><i className="ri-error-warning-fill mr-1"></i> You are logged in</p>}
+                <h3 className="text-base font-bold text-gray-900 mb-1.5">Guest Checkout</h3>
+                <p className="text-[13px] text-gray-500 leading-relaxed">Fast and easy checkout without creating an account.</p>
+                {user && <p className="text-[11px] font-semibold text-amber-600 mt-2 flex items-center"><i className="ri-error-warning-fill mr-1"></i> You are logged in</p>}
               </button>
 
               <button
                 onClick={() => setCheckoutType('account')}
-                className={`p-6 rounded-2xl border-2 transition-all text-left cursor-pointer relative overflow-hidden group ${checkoutType === 'account'
+                className={`p-5 rounded-2xl border-2 transition-all text-left cursor-pointer relative overflow-hidden group ${checkoutType === 'account'
                   ? 'border-gray-900 bg-gray-50/50'
                   : 'border-gray-100 hover:border-gray-300 bg-white'
                   }`}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
-                    <i className="ri-account-circle-line text-2xl"></i>
+                <div className="flex items-center justify-between mb-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
+                    <i className="ri-account-circle-line text-xl"></i>
                   </div>
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
                     }`}>
-                    {checkoutType === 'account' && <i className="ri-check-line text-white text-sm"></i>}
+                    {checkoutType === 'account' && <i className="ri-check-line text-white text-xs"></i>}
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{user ? 'My Account' : 'Create Account'}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">
+                <h3 className="text-base font-bold text-gray-900 mb-1.5">{user ? 'My Account' : 'Create Account'}</h3>
+                <p className="text-[13px] text-gray-500 leading-relaxed">
                   {user ? `Logged in as ${user.email}` : 'Save your details for faster checkout next time.'}
                 </p>
               </button>
