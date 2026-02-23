@@ -340,28 +340,31 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
               {/* Right Column - Product Info */}
               <div className="w-full lg:w-[52%] flex flex-col pt-2 lg:pt-0">
-                  <div className="flex flex-col mb-4">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h1 className="text-3xl sm:text-[38px] lg:text-[42px] font-bold text-gray-900 mb-2 leading-tight tracking-tight">{product.name}</h1>
-                        <div className="flex items-center space-x-3 text-sm">
-                          <p className="text-gray-500 uppercase tracking-widest font-semibold">{product.category}</p>
-                          <span className="text-gray-300">|</span>
-                          <div className="flex items-center">
-                            <i className="ri-star-fill text-amber-400 mr-1"></i>
-                            <span className="font-medium text-gray-900">{Number(product.rating).toFixed(1)}</span>
-                            <span className="text-gray-500 ml-1 hover:text-gray-900 cursor-pointer transition-colors underline decoration-gray-200 underline-offset-4">({product.reviewCount} reviews)</span>
+                <div className="flex flex-col mb-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h1 className="text-3xl sm:text-[38px] lg:text-[42px] font-bold text-gray-900 mb-2 leading-tight tracking-tight">{product.name}</h1>
+                      <div className="flex items-center space-x-3 text-sm">
+                        <p className="text-gray-500 uppercase tracking-widest font-semibold">{product.category}</p>
+                        <span className="text-gray-300">|</span>
+                        <div className="flex items-center space-x-2 text-[13px]">
+                          <div className="flex items-center text-amber-400">
+                            <i className="ri-star-fill mr-0.5"></i>
+                            <span className="font-bold text-gray-900">{Number(product.rating).toFixed(1)}</span>
                           </div>
+                          <span className="text-gray-300">|</span>
+                          <span className="text-gray-500 hover:text-gray-900 cursor-pointer transition-colors underline decoration-gray-200 underline-offset-4">{product.reviewCount} reviews</span>
                         </div>
                       </div>
-                      <button
-                        onClick={() => setIsWishlisted(!isWishlisted)}
-                        className="w-12 h-12 flex-shrink-0 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 rounded-full transition-all cursor-pointer ml-4 shadow-sm group"
-                      >
-                        <i className={`${isWishlisted ? 'ri-heart-fill text-red-500' : 'ri-heart-line text-gray-400 group-hover:text-red-400'} text-xl transition-colors`}></i>
-                      </button>
                     </div>
+                    <button
+                      onClick={() => setIsWishlisted(!isWishlisted)}
+                      className="w-12 h-12 flex-shrink-0 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 rounded-full transition-all cursor-pointer ml-4 shadow-sm group"
+                    >
+                      <i className={`${isWishlisted ? 'ri-heart-fill text-red-500' : 'ri-heart-line text-gray-400 group-hover:text-red-400'} text-xl transition-colors`}></i>
+                    </button>
                   </div>
+                </div>
 
                   <div className="flex items-baseline space-x-3 pb-6 border-b border-gray-100">
                     {hasVariants && !selectedVariant ? (
