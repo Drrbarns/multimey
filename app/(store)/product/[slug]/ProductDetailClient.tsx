@@ -385,14 +385,14 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
                 {/* Color Selector */}
                 {hasVariants && product.colors.length > 0 && (
-                  <div className="mb-6">
-                    <label className="block font-semibold text-gray-900 mb-3 uppercase tracking-wider text-xs">
-                      Color: {selectedColor ? (
-                        <span className="text-gray-600 font-normal ml-1 capitalize">{selectedColor}</span>
-                      ) : (
-                        <span className="text-red-500 font-normal ml-1 capitalize">Required</span>
-                      )}
-                    </label>
+                <div className="mb-4">
+                  <label className="block font-semibold text-gray-900 mb-2 uppercase tracking-wider text-[11px] text-gray-500">
+                    Color: {selectedColor ? (
+                      <span className="text-gray-900 font-bold ml-1 capitalize">{selectedColor}</span>
+                    ) : (
+                      <span className="text-red-500 font-medium ml-1 capitalize">Required</span>
+                    )}
+                  </label>
                     <div className="flex flex-wrap gap-3">
                       {product.colors.map((color: string) => {
                         const isSelected = selectedColor === color;
@@ -448,14 +448,14 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   if (!showNameSelector && !hasColors) {
                     // Single variant with no colors — show standard picker
                     return (
-                      <div className="mb-8">
-                        <label className="block font-semibold text-gray-900 mb-3 uppercase tracking-wider text-xs">
-                          Variant: {selectedVariant ? (
-                            <span className="text-gray-600 font-normal ml-1">{selectedVariant.name} — GH₵{selectedVariant.price?.toFixed(2)}</span>
-                          ) : (
-                            <span className="text-red-500 font-normal ml-1 capitalize">Required</span>
-                          )}
-                        </label>
+                  <div className="mb-4">
+                    <label className="block font-semibold text-gray-900 mb-2 uppercase tracking-wider text-[11px] text-gray-500">
+                      Variant: {selectedVariant ? (
+                        <span className="text-gray-900 font-bold ml-1">{selectedVariant.name} — GH₵{selectedVariant.price?.toFixed(2)}</span>
+                      ) : (
+                        <span className="text-red-500 font-medium ml-1 capitalize">Required</span>
+                      )}
+                    </label>
                         <div className="flex flex-wrap gap-3">
                           {product.variants.map((variant: any) => {
                             const isSelected = selectedVariant?.id === variant.id || selectedVariant?.name === variant.name;
@@ -490,14 +490,14 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
                   if (visibleVariants.length > 1) {
                     return (
-                      <div className="mb-8">
-                        <label className="block font-semibold text-gray-900 mb-3 uppercase tracking-wider text-xs">
-                          Size / Type: {selectedVariant ? (
-                            <span className="text-gray-600 font-normal ml-1">{selectedVariant.name} — GH₵{selectedVariant.price?.toFixed(2)}</span>
-                          ) : (
-                            <span className="text-red-500 font-normal ml-1 capitalize">Required</span>
-                          )}
-                        </label>
+                  <div className="mb-4">
+                    <label className="block font-semibold text-gray-900 mb-2 uppercase tracking-wider text-[11px] text-gray-500">
+                      Size / Type: {selectedVariant ? (
+                        <span className="text-gray-900 font-bold ml-1">{selectedVariant.name} — GH₵{selectedVariant.price?.toFixed(2)}</span>
+                      ) : (
+                        <span className="text-red-500 font-medium ml-1 capitalize">Required</span>
+                      )}
+                    </label>
                         <div className="flex flex-wrap gap-3">
                           {visibleVariants.map((variant: any) => {
                             const isSelected = selectedVariant?.id === variant.id;
@@ -533,8 +533,8 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   return null;
                 })()}
 
-                <div className="mb-6">
-                  <label className="block font-semibold text-gray-900 mb-3 uppercase tracking-wider text-xs">Quantity</label>
+                <div className="mb-8">
+                  <label className="block font-semibold text-gray-900 mb-2 uppercase tracking-wider text-[11px] text-gray-500">Quantity</label>
                   <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
                     <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
                       <button
