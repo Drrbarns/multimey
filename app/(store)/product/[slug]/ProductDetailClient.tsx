@@ -415,15 +415,15 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                               }
                             }}
                             disabled={isOutOfStock}
-                            className={`h-11 px-4 rounded-xl border-2 font-medium transition-all whitespace-nowrap flex items-center gap-2.5 text-sm ${isSelected
-                              ? 'border-gray-900 bg-white text-gray-900 shadow-sm ring-1 ring-gray-900'
+                            className={`h-11 px-4 rounded-xl border font-medium transition-all whitespace-nowrap flex items-center gap-2.5 text-[13px] ${isSelected
+                              ? 'border-gray-900 bg-gray-900 text-white shadow-sm ring-1 ring-gray-900'
                               : isOutOfStock
-                                ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'
-                                : 'border-gray-200 text-gray-600 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
+                                ? 'border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50'
+                                : 'border-gray-200 text-gray-700 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
                               }`}
                             title={isOutOfStock ? 'Out of stock' : `Select ${color}`}
                           >
-                            <span className={`w-4 h-4 rounded-full border shadow-inner ${isSelected ? 'border-gray-300' : 'border-gray-200'}`} style={{ backgroundColor: product.colorHexMap?.[color] || colorNameToHex(color) }}></span>
+                            <span className={`w-3.5 h-3.5 rounded-full border shadow-inner ${isSelected ? 'border-white/50' : 'border-gray-200'}`} style={{ backgroundColor: product.colorHexMap?.[color] || colorNameToHex(color) }}></span>
                             <span className="capitalize">{color}</span>
                           </button>
                         );
@@ -470,15 +470,15 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                                   setSelectedSize(variant.name);
                                 }}
                                 disabled={isOutOfStock}
-                                className={`px-5 py-2.5 rounded-xl border-2 font-medium transition-all whitespace-nowrap flex flex-col items-center ${isSelected
-                                  ? 'border-gray-900 bg-white text-gray-900 shadow-sm ring-1 ring-gray-900'
+                                className={`px-5 py-2.5 rounded-xl border font-medium transition-all whitespace-nowrap flex flex-col items-center ${isSelected
+                                  ? 'border-gray-900 bg-gray-900 text-white shadow-sm ring-1 ring-gray-900'
                                   : isOutOfStock
-                                    ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'
-                                    : 'border-gray-200 text-gray-600 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
+                                    ? 'border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50'
+                                    : 'border-gray-200 text-gray-700 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
                                   }`}
                               >
                                 <span className="text-[13px]">{variant.name}</span>
-                                <span className={`text-[11px] mt-0.5 ${isSelected ? 'text-gray-600' : 'text-gray-500'}`}>
+                                <span className={`text-[11px] mt-0.5 ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>
                                   GH₵{(variant.price || product.price).toFixed(2)}
                                 </span>
                               </button>
@@ -512,15 +512,15 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                                   setSelectedSize(variant.name);
                                 }}
                                 disabled={isOutOfStock}
-                                className={`px-5 py-2.5 rounded-xl border-2 font-medium transition-all whitespace-nowrap flex flex-col items-center ${isSelected
-                                  ? 'border-gray-900 bg-white text-gray-900 shadow-sm ring-1 ring-gray-900'
+                                className={`px-5 py-2.5 rounded-xl border font-medium transition-all whitespace-nowrap flex flex-col items-center ${isSelected
+                                  ? 'border-gray-900 bg-gray-900 text-white shadow-sm ring-1 ring-gray-900'
                                   : isOutOfStock
-                                    ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'
-                                    : 'border-gray-200 text-gray-600 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
+                                    ? 'border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50'
+                                    : 'border-gray-200 text-gray-700 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
                                   }`}
                               >
                                 <span className="text-[13px]">{variant.name}</span>
-                                <span className={`text-[11px] mt-0.5 ${isSelected ? 'text-gray-600' : 'text-gray-500'}`}>
+                                <span className={`text-[11px] mt-0.5 ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>
                                   GH₵{(variant.price || product.price).toFixed(2)}
                                 </span>
                               </button>
