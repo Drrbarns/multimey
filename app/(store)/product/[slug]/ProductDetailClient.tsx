@@ -591,24 +591,24 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 mb-6">
-                  <button
-                    disabled={activeStock === 0 || needsVariantSelection || needsColorSelection}
-                    className={`flex-1 border-2 border-gray-900 bg-white hover:bg-gray-50 text-gray-900 h-14 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 text-base whitespace-nowrap cursor-pointer ${(activeStock === 0 || needsVariantSelection || needsColorSelection) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    onClick={handleAddToCart}
-                  >
-                    <i className="ri-shopping-cart-2-line text-xl"></i>
-                    <span>{activeStock === 0 ? 'Out of Stock' : needsColorSelection ? 'Select Color' : needsVariantSelection ? 'Select Variant' : 'Add to Cart'}</span>
-                  </button>
-                  {activeStock > 0 && !needsVariantSelection && !needsColorSelection && (
+                  <div className="flex flex-col sm:flex-row gap-3 mb-6">
                     <button
-                      onClick={handleBuyNow}
-                      className="flex-1 bg-gray-900 hover:bg-gray-800 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer text-base"
+                      disabled={activeStock === 0 || needsVariantSelection || needsColorSelection}
+                      className={`flex-1 border-2 border-gray-900 bg-white hover:bg-gray-50 text-gray-900 h-14 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 text-[15px] whitespace-nowrap cursor-pointer ${(activeStock === 0 || needsVariantSelection || needsColorSelection) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      onClick={handleAddToCart}
                     >
-                      Buy It Now
+                      <i className="ri-shopping-cart-2-line text-lg"></i>
+                      <span>{activeStock === 0 ? 'Out of Stock' : needsColorSelection ? 'Select Color' : needsVariantSelection ? 'Select Variant' : 'Add to Cart'}</span>
                     </button>
-                  )}
-                </div>
+                    {activeStock > 0 && !needsVariantSelection && !needsColorSelection && (
+                      <button
+                        onClick={handleBuyNow}
+                        className="flex-1 bg-gray-900 hover:bg-gray-800 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer text-[15px]"
+                      >
+                        Buy It Now
+                      </button>
+                    )}
+                  </div>
 
                 <div className="pt-6 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex items-start text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
