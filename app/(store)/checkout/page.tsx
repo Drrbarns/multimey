@@ -642,60 +642,92 @@ export default function CheckoutPage() {
                     <label
                       className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paystack' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paystack' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="paystack"
+                        checked={paymentMethod === 'paystack'}
+                        onChange={() => setPaymentMethod('paystack')}
+                        className="sr-only"
+                      />
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paystack' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'paystack' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
-                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
-                         <i className="ri-bank-card-line text-2xl text-gray-700"></i>
+                      <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
+                         <i className="ri-bank-card-line text-xl text-gray-700"></i>
                       </div>
                       <div className="min-w-0 z-10">
-                        <p className="font-bold text-gray-900 text-[15px]">Paystack</p>
-                        <p className="text-xs text-gray-500 mt-0.5 truncate">Card & Mobile Money</p>
+                        <p className="font-bold text-gray-900 text-[14px]">Paystack</p>
+                        <p className="text-[11px] text-gray-500 mt-0.5 truncate">Card & Mobile Money</p>
                       </div>
                     </label>
 
                     <label
                       className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'moolre' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'moolre' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="moolre"
+                        checked={paymentMethod === 'moolre'}
+                        onChange={() => setPaymentMethod('moolre')}
+                        className="sr-only"
+                      />
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'moolre' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'moolre' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
-                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
-                         <i className="ri-smartphone-line text-2xl text-gray-700"></i>
+                      <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
+                         <i className="ri-smartphone-line text-xl text-gray-700"></i>
                       </div>
                       <div className="min-w-0 z-10">
-                        <p className="font-bold text-gray-900 text-[15px]">Moolre</p>
-                        <p className="text-xs text-gray-500 mt-0.5 truncate">Mobile Money Only</p>
+                        <p className="font-bold text-gray-900 text-[14px]">Moolre</p>
+                        <p className="text-[11px] text-gray-500 mt-0.5 truncate">Mobile Money Only</p>
                       </div>
                     </label>
 
                     <label
                       className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'stripe' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
-                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'stripe' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="stripe"
+                        checked={paymentMethod === 'stripe'}
+                        onChange={() => setPaymentMethod('stripe')}
+                        className="sr-only"
+                      />
+                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'stripe' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'stripe' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
-                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
-                         <i className="ri-bank-card-2-line text-2xl text-gray-700"></i>
+                      <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
+                         <i className="ri-bank-card-2-line text-xl text-gray-700"></i>
                       </div>
                       <div className="min-w-0 z-10">
-                        <p className="font-bold text-gray-900 text-[15px]">Stripe</p>
-                        <p className="text-xs text-gray-500 mt-0.5 truncate">Credit/Debit Cards</p>
+                        <p className="font-bold text-gray-900 text-[14px]">Stripe</p>
+                        <p className="text-[11px] text-gray-500 mt-0.5 truncate">Credit/Debit Cards</p>
                       </div>
                     </label>
 
                     <label
                       className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paypal' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
-                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paypal' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="paypal"
+                        checked={paymentMethod === 'paypal'}
+                        onChange={() => setPaymentMethod('paypal')}
+                        className="sr-only"
+                      />
+                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paypal' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'paypal' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
-                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
-                         <i className="ri-paypal-line text-2xl text-gray-700"></i>
+                      <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
+                         <i className="ri-paypal-line text-xl text-gray-700"></i>
                       </div>
                       <div className="min-w-0 z-10">
-                        <p className="font-bold text-gray-900 text-[15px]">PayPal</p>
-                        <p className="text-xs text-gray-500 mt-0.5 truncate">PayPal Balance</p>
+                        <p className="font-bold text-gray-900 text-[14px]">PayPal</p>
+                        <p className="text-[11px] text-gray-500 mt-0.5 truncate">PayPal Balance</p>
                       </div>
                     </label>
                   </div>
