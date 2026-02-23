@@ -56,10 +56,9 @@ export default function OrderSummary({ items, subtotal, shipping, tax, total }: 
       </div>
 
       <div className="border-t border-gray-100 mt-5 pt-5">
-        <div className="flex justify-between items-end">
-          <span className="text-base font-bold text-gray-900">Total</span>
+        <div className="flex justify-between items-center">
+          <span className="text-lg font-bold text-gray-900">Total</span>
           <div className="text-right">
-            <span className="text-xs text-gray-500 mr-1 font-normal uppercase">GHS</span>
             <span className="text-2xl font-bold text-gray-900 tracking-tight">GH₵{total.toFixed(2)}</span>
           </div>
         </div>
