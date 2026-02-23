@@ -340,10 +340,10 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
               {/* Right Column - Product Info */}
               <div className="w-full lg:w-[52%] flex flex-col pt-2 lg:pt-0">
-                  <div className="flex flex-col mb-4">
+                  <div className="flex flex-col mb-2">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-gray-900 mb-3 leading-tight tracking-tight">{product.name}</h1>
+                        <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-gray-900 mb-2 leading-tight tracking-tight">{product.name}</h1>
                         <div className="flex items-center space-x-3 text-sm">
                           <p className="text-gray-500 uppercase tracking-widest font-semibold">{product.category}</p>
                           <span className="text-gray-300">|</span>
