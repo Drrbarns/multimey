@@ -668,32 +668,29 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
             <div className="max-w-4xl mx-auto min-h-[300px]">
               {activeTab === 'description' && (
-                <div className="prose prose-lg max-w-none text-gray-600 font-light animate-fade-in">
-                  <p className="leading-relaxed">{product.description}</p>
+                <div className="animate-fade-in text-gray-600 space-y-4">
+                  <p className="leading-relaxed text-[15px]">{product.description}</p>
                 </div>
               )}
 
               {activeTab === 'features' && (
-                <div className="animate-fade-in">
-                  <h3 className="text-2xl font-serif text-gray-900 mb-8 text-center">Product Features</h3>
-                  <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-6">
-                    {product.features.map((feature: string, index: number) => (
-                      <li key={index} className="flex items-start bg-gray-50 p-4 rounded-xl">
-                        <i className="ri-checkbox-circle-fill text-blue-600 text-xl mr-4 mt-0.5"></i>
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="animate-fade-in grid sm:grid-cols-2 gap-4">
+                  {product.features?.map((feature: string, index: number) => (
+                    <div key={index} className="flex items-start bg-gray-50/50 p-4 rounded-xl border border-gray-100/50">
+                      <i className="ri-checkbox-circle-fill text-green-500 mr-3 text-lg mt-0.5"></i>
+                      <span className="text-gray-700 text-[14px]">{feature}</span>
+                    </div>
+                  )) || <p className="text-gray-500 italic text-[15px] col-span-2 text-center py-8">No specific features listed.</p>}
                 </div>
               )}
 
               {activeTab === 'care' && (
-                <div className="animate-fade-in text-center">
-                  <div className="w-16 h-16 mx-auto bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-6">
-                    <i className="ri-drop-line text-3xl"></i>
+                <div className="animate-fade-in bg-gray-50/50 p-8 rounded-2xl border border-gray-100/50 text-center">
+                  <div className="w-12 h-12 mx-auto bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4">
+                    <i className="ri-drop-line text-2xl"></i>
                   </div>
-                  <h3 className="text-2xl font-serif text-gray-900 mb-6">Care & Maintenance</h3>
-                  <p className="text-gray-600 text-lg leading-relaxed font-light max-w-2xl mx-auto">{product.care}</p>
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">Care & Maintenance</h3>
+                  <p className="text-gray-600 text-[15px] leading-relaxed max-w-2xl mx-auto">{product.care || 'Wipe clean with a damp cloth. Store in a cool, dry place.'}</p>
                 </div>
               )}
 
