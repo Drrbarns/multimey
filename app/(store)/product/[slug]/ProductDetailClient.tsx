@@ -410,7 +410,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                               }
                             }}
                             disabled={isOutOfStock}
-                            className={`h-10 px-4 rounded-lg border-2 font-medium transition-all whitespace-nowrap flex items-center gap-2 text-sm ${isSelected
+                            className={`h-11 px-4 rounded-xl border-2 font-medium transition-all whitespace-nowrap flex items-center gap-2.5 text-sm ${isSelected
                               ? 'border-gray-900 bg-white text-gray-900 shadow-sm ring-1 ring-gray-900'
                               : isOutOfStock
                                 ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'
@@ -465,15 +465,15 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                                   setSelectedSize(variant.name);
                                 }}
                                 disabled={isOutOfStock}
-                                className={`px-5 py-2.5 rounded-lg border-2 font-medium transition-all whitespace-nowrap flex flex-col items-center ${isSelected
+                                className={`px-5 py-2.5 rounded-xl border-2 font-medium transition-all whitespace-nowrap flex flex-col items-center ${isSelected
                                   ? 'border-gray-900 bg-white text-gray-900 shadow-sm ring-1 ring-gray-900'
                                   : isOutOfStock
                                     ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'
                                     : 'border-gray-200 text-gray-600 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
                                   }`}
                               >
-                                <span className="text-sm">{variant.name}</span>
-                                <span className={`text-xs mt-0.5 ${isSelected ? 'text-gray-600' : 'text-gray-500'}`}>
+                                <span className="text-[13px]">{variant.name}</span>
+                                <span className={`text-[11px] mt-0.5 ${isSelected ? 'text-gray-600' : 'text-gray-500'}`}>
                                   GH₵{(variant.price || product.price).toFixed(2)}
                                 </span>
                               </button>
@@ -507,15 +507,15 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                                   setSelectedSize(variant.name);
                                 }}
                                 disabled={isOutOfStock}
-                                className={`px-5 py-2.5 rounded-lg border-2 font-medium transition-all whitespace-nowrap flex flex-col items-center ${isSelected
+                                className={`px-5 py-2.5 rounded-xl border-2 font-medium transition-all whitespace-nowrap flex flex-col items-center ${isSelected
                                   ? 'border-gray-900 bg-white text-gray-900 shadow-sm ring-1 ring-gray-900'
                                   : isOutOfStock
                                     ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'
                                     : 'border-gray-200 text-gray-600 hover:border-gray-400 bg-white cursor-pointer hover:shadow-sm'
                                   }`}
                               >
-                                <span className="text-sm">{variant.name}</span>
-                                <span className={`text-xs mt-0.5 ${isSelected ? 'text-gray-600' : 'text-gray-500'}`}>
+                                <span className="text-[13px]">{variant.name}</span>
+                                <span className={`text-[11px] mt-0.5 ${isSelected ? 'text-gray-600' : 'text-gray-500'}`}>
                                   GH₵{(variant.price || product.price).toFixed(2)}
                                 </span>
                               </button>
