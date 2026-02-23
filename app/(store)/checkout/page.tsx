@@ -114,7 +114,7 @@ export default function CheckoutPage() {
   };
 
   const handleContinueToPayment = async () => {
-    // Skip step 3 and directly initiate payment with default method (Moolre/Mobile Money)
+    // Initiate payment with selected method
     await handlePlaceOrder();
   };
 
