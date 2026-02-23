@@ -590,7 +590,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 mb-8">
+                <div className="flex flex-col sm:flex-row gap-3 mb-6">
                   <button
                     disabled={activeStock === 0 || needsVariantSelection || needsColorSelection}
                     className={`flex-1 border-2 border-gray-900 bg-white hover:bg-gray-50 text-gray-900 h-12 rounded-lg font-bold transition-all flex items-center justify-center space-x-2 text-sm whitespace-nowrap cursor-pointer ${(activeStock === 0 || needsVariantSelection || needsColorSelection) ? 'opacity-50 cursor-not-allowed' : ''}`}
