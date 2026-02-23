@@ -465,110 +465,89 @@ export default function CheckoutPage() {
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                          First Name *
-                        </label>
                         <input
                           type="text"
                           value={shippingData.firstName}
                           onChange={(e) => setShippingData({ ...shippingData, firstName: e.target.value })}
-                          className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.firstName ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
+                          className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm placeholder-gray-400 ${errors.firstName ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                             }`}
-                          placeholder="John"
+                          placeholder="First Name *"
                         />
                         {errors.firstName && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.firstName}</p>}
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                          Last Name *
-                        </label>
                         <input
                           type="text"
                           value={shippingData.lastName}
                           onChange={(e) => setShippingData({ ...shippingData, lastName: e.target.value })}
-                          className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.lastName ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
+                          className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm placeholder-gray-400 ${errors.lastName ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                             }`}
-                          placeholder="Doe"
+                          placeholder="Last Name *"
                         />
                         {errors.lastName && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.lastName}</p>}
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                        Email Address *
-                      </label>
                       <input
                         type="email"
                         value={shippingData.email}
                         readOnly={!!user}
                         onChange={(e) => setShippingData({ ...shippingData, email: e.target.value })}
-                        className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.email ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
+                        className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm placeholder-gray-400 ${errors.email ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                           } ${user ? 'bg-gray-100 cursor-not-allowed text-gray-500' : ''}`}
-                        placeholder="you@example.com"
+                        placeholder="Email Address *"
                       />
                       {errors.email && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.email}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                        Phone Number *
-                      </label>
                       <input
                         type="tel"
                         value={shippingData.phone}
                         onChange={(e) => setShippingData({ ...shippingData, phone: e.target.value })}
-                        className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.phone ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
+                        className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm placeholder-gray-400 ${errors.phone ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                           }`}
-                        placeholder="+233 XX XXX XXXX"
+                        placeholder="Phone Number (+233 XX XXX XXXX) *"
                       />
                       {errors.phone && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.phone}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                        Street Address *
-                      </label>
                       <input
                         type="text"
                         value={shippingData.address}
                         onChange={(e) => setShippingData({ ...shippingData, address: e.target.value })}
-                        className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.address ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
+                        className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm placeholder-gray-400 ${errors.address ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                           }`}
-                        placeholder="House number and street name"
+                        placeholder="Street Address *"
                       />
                       {errors.address && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.address}</p>}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                          City *
-                        </label>
                         <input
                           type="text"
                           value={shippingData.city}
                           onChange={(e) => setShippingData({ ...shippingData, city: e.target.value })}
-                          className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.city ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
+                          className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm placeholder-gray-400 ${errors.city ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                             }`}
-                          placeholder="Accra"
+                          placeholder="City *"
                         />
                         {errors.city && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.city}</p>}
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                          Region *
-                        </label>
                         <div className="relative">
                           <select
                             value={shippingData.region}
                             onChange={(e) => setShippingData({ ...shippingData, region: e.target.value })}
                             className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm appearance-none ${errors.region ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
-                              }`}
+                              } ${!shippingData.region ? 'text-gray-400' : 'text-gray-900'}`}
                           >
-                            <option value="">Select Region</option>
+                            <option value="" disabled hidden>Region *</option>
                             {ghanaRegions.map((region) => (
-                              <option key={region} value={region}>{region}</option>
+                              <option key={region} value={region} className="text-gray-900">{region}</option>
                             ))}
                           </select>
                           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
