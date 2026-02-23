@@ -261,53 +261,8 @@ export default function Home() {
         )}
       </section>
 
-      {/* Categories Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <AnimatedSection className="flex items-end justify-between mb-12">
-            <div>
-              <span className="text-gray-500 font-bold tracking-widest uppercase text-xs mb-3 block">Collections</span>
-              <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-4">Shop by Category</h2>
-              <p className="text-gray-600 text-lg max-w-md font-light">Browse dresses, electronics, bags, shoes and everything in between</p>
-            </div>
-            <Link href="/categories" className="hidden md:flex items-center gap-2 text-gray-900 font-bold hover:gap-4 transition-all">
-              View All <i className="ri-arrow-right-line"></i>
-            </Link>
-          </AnimatedSection>
-
-          <AnimatedGrid className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
-            {categories.map((category) => (
-              <Link href={`/shop?category=${category.slug}`} key={category.id} className="group cursor-pointer block">
-                <div className="aspect-[3/4] rounded-3xl overflow-hidden mb-4 relative shadow-sm hover:shadow-xl transition-all duration-500">
-                  <Image
-                    src={category.image || category.image_url || 'https://via.placeholder.com/600x800?text=' + encodeURIComponent(category.name)}
-                    alt={category.name}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                    quality={75}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                    <h3 className="font-serif font-bold text-xl mb-1">{category.name}</h3>
-                    <div className="flex items-center gap-2 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                      <span>Explore</span>
-                      <i className="ri-arrow-right-line"></i>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </AnimatedGrid>
-
-          <div className="mt-12 text-center md:hidden">
-            <Link href="/categories" className="inline-flex items-center gap-2 text-gray-900 font-bold">
-              View All <i className="ri-arrow-right-line"></i>
-            </Link>
-          </div>
-        </div>
-      </section>
-
+      {/* Categories Section removed per user request */}
+      
       {/* Featured Products */}
       <section className="py-24 bg-stone-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
