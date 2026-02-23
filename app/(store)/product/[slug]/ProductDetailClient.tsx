@@ -647,16 +647,16 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
           </div>
         </section>
 
-        <section className="py-16 bg-white border-t border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <section className="py-12 bg-white border-t border-gray-100 mt-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="mb-10 flex justify-center">
-              <div className="inline-flex bg-gray-100/80 p-1.5 rounded-2xl overflow-x-auto max-w-full no-scrollbar shadow-inner">
+              <div className="inline-flex bg-gray-50 p-1.5 rounded-xl overflow-x-auto max-w-full no-scrollbar shadow-sm border border-gray-100">
                 {['description', 'features', 'care', 'reviews'].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-6 sm:px-8 py-3 font-semibold transition-all rounded-xl whitespace-nowrap cursor-pointer text-sm sm:text-base ${activeTab === tab
-                      ? 'bg-white text-gray-900 shadow-sm ring-1 ring-black/5'
+                    className={`px-6 sm:px-8 py-2.5 font-semibold transition-all rounded-lg whitespace-nowrap cursor-pointer text-[13px] uppercase tracking-wider ${activeTab === tab
+                      ? 'bg-white text-gray-900 shadow-sm ring-1 ring-gray-200'
                       : 'text-gray-500 hover:text-gray-900 hover:bg-white/50'
                       }`}
                   >
