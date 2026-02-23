@@ -343,42 +343,38 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                 <div className="flex flex-col mb-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-xs text-gray-500 font-bold tracking-widest uppercase mb-2">{product.category}</p>
-                      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 leading-tight">{product.name}</h1>
+                      <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-gray-900 mb-2 leading-tight tracking-tight">{product.name}</h1>
+                      <div className="flex items-center space-x-3 text-sm">
+                        <p className="text-gray-500 uppercase tracking-widest font-semibold">{product.category}</p>
+                        <span className="text-gray-300">|</span>
+                        <div className="flex items-center">
+                          <i className="ri-star-fill text-amber-400 mr-1"></i>
+                          <span className="font-medium text-gray-900">{Number(product.rating).toFixed(1)}</span>
+                          <span className="text-gray-500 ml-1">({product.reviewCount} reviews)</span>
+                        </div>
+                      </div>
                     </div>
                     <button
                       onClick={() => setIsWishlisted(!isWishlisted)}
-                      className="w-10 h-10 flex-shrink-0 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 rounded-full transition-all cursor-pointer ml-4"
+                      className="w-12 h-12 flex-shrink-0 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 rounded-full transition-all cursor-pointer ml-4 shadow-sm"
                     >
-                      <i className={`${isWishlisted ? 'ri-heart-fill text-red-500' : 'ri-heart-line text-gray-400'} text-lg`}></i>
+                      <i className={`${isWishlisted ? 'ri-heart-fill text-red-500' : 'ri-heart-line text-gray-400'} text-xl`}></i>
                     </button>
                   </div>
+                </div>
 
-                  <div className="flex items-center mb-4">
-                    <div className="flex items-center space-x-1 mr-3">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <i
-                          key={star}
-                          className={`${star <= Math.round(product.rating) ? 'ri-star-fill text-amber-400' : 'ri-star-line text-gray-200'} text-lg`}
-                        ></i>
-                      ))}
-                    </div>
-                    <span className="text-sm text-gray-600 font-medium">{Number(product.rating).toFixed(1)} <span className="text-gray-400 ml-1">({product.reviewCount} reviews)</span></span>
-                  </div>
-
-                  <div className="flex items-baseline space-x-3 pb-4 border-b border-gray-100">
-                    {hasVariants && !selectedVariant ? (
-                      <span className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
-                        <span className="text-base text-gray-500 font-normal mr-1.5">From</span>
-                        GH₵{minVariantPrice.toFixed(2)}
-                      </span>
-                    ) : (
-                      <span className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">GH₵{activePrice.toFixed(2)}</span>
-                    )}
-                    {product.compare_at_price && product.compare_at_price > activePrice && (
-                      <span className="text-lg text-gray-400 line-through decoration-gray-300">GH₵{product.compare_at_price.toFixed(2)}</span>
-                    )}
-                  </div>
+                <div className="flex items-baseline space-x-3 pb-6 mb-6 border-b border-gray-100">
+                  {hasVariants && !selectedVariant ? (
+                    <span className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+                      <span className="text-lg text-gray-500 font-normal mr-2">From</span>
+                      GH₵{minVariantPrice.toFixed(2)}
+                    </span>
+                  ) : (
+                    <span className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">GH₵{activePrice.toFixed(2)}</span>
+                  )}
+                  {product.compare_at_price && product.compare_at_price > activePrice && (
+                    <span className="text-xl text-gray-400 line-through decoration-gray-300">GH₵{product.compare_at_price.toFixed(2)}</span>
+                  )}
                 </div>
 
                 <p className="text-gray-600 leading-relaxed mb-6 text-base font-light">{product.description}</p>
