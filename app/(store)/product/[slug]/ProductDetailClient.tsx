@@ -685,12 +685,12 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
               )}
 
               {activeTab === 'care' && (
-                <div className="animate-fade-in bg-gray-50/50 p-8 rounded-2xl border border-gray-100/50 text-center">
-                  <div className="w-12 h-12 mx-auto bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4">
-                    <i className="ri-drop-line text-2xl"></i>
+                <div className="animate-fade-in bg-gray-50/50 p-6 rounded-2xl border border-gray-100/50 text-center">
+                  <div className="w-10 h-10 mx-auto bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-3">
+                    <i className="ri-drop-line text-xl"></i>
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">Care & Maintenance</h3>
-                  <p className="text-gray-600 text-[15px] leading-relaxed max-w-2xl mx-auto">{product.care || 'Wipe clean with a damp cloth. Store in a cool, dry place.'}</p>
+                  <h3 className="text-base font-bold text-gray-900 mb-2">Care & Maintenance</h3>
+                  <p className="text-gray-600 text-[14px] leading-relaxed max-w-2xl mx-auto">{product.care || 'Wipe clean with a damp cloth. Store in a cool, dry place.'}</p>
                 </div>
               )}
 
