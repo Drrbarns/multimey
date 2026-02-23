@@ -292,92 +292,96 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
         </section>
 
         <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="grid lg:grid-cols-2 gap-12">
-              <div className="lg:pr-8">
-                <div className="relative aspect-square rounded-3xl overflow-hidden bg-gray-100 mb-6 shadow-xl border border-gray-200/50 group">
-                  <Image
-                    src={product.images[selectedImage]}
-                    alt={product.name}
-                    fill
-                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    priority
-                    quality={90}
-                  />
-                  {discount > 0 && (
-                    <span className="absolute top-6 left-6 bg-red-500 text-white text-sm font-bold tracking-wider px-4 py-2 rounded-full shadow-lg">
-                      SAVE {discount}%
-                    </span>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
+              {/* Left Column - Image Gallery */}
+              <div className="w-full lg:w-1/2">
+                <div className="sticky top-24">
+                  <div className="relative aspect-[4/5] sm:aspect-square rounded-2xl overflow-hidden bg-gray-100 mb-4 group">
+                    <Image
+                      src={product.images[selectedImage]}
+                      alt={product.name}
+                      fill
+                      className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      priority
+                      quality={90}
+                    />
+                    {discount > 0 && (
+                      <span className="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold tracking-wider px-3 py-1.5 rounded-full">
+                        SAVE {discount}%
+                      </span>
+                    )}
+                  </div>
+
+                  {product.images.length > 1 && (
+                    <div className="grid grid-cols-5 gap-3 sm:gap-4">
+                      {product.images.map((image: string, index: number) => (
+                        <button
+                          key={index}
+                          onClick={() => setSelectedImage(index)}
+                          className={`relative aspect-square rounded-xl overflow-hidden transition-all cursor-pointer ${selectedImage === index ? 'ring-2 ring-gray-900 opacity-100' : 'opacity-60 hover:opacity-100'
+                            }`}
+                        >
+                          <Image
+                            src={image}
+                            alt={`${product.name} view ${index + 1}`}
+                            fill
+                            className="object-cover object-center"
+                            sizes="(max-width: 1024px) 20vw, 10vw"
+                            quality={60}
+                          />
+                        </button>
+                      ))}
+                    </div>
                   )}
                 </div>
-
-                {product.images.length > 1 && (
-                  <div className="grid grid-cols-5 gap-4">
-                    {product.images.map((image: string, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImage(index)}
-                        className={`relative aspect-square rounded-xl overflow-hidden transition-all cursor-pointer ${selectedImage === index ? 'ring-2 ring-gray-900 ring-offset-2 shadow-md opacity-100' : 'opacity-60 hover:opacity-100 hover:shadow-sm'
-                          }`}
-                      >
-                        <Image
-                          src={image}
-                          alt={`${product.name} view ${index + 1}`}
-                          fill
-                          className="object-cover object-center"
-                          sizes="(max-width: 1024px) 20vw, 10vw"
-                          quality={60}
-                        />
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
 
-              <div>
-                <div className="flex flex-col mb-6">
+              {/* Right Column - Product Info */}
+              <div className="w-full lg:w-1/2 flex flex-col">
+                <div className="flex flex-col mb-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-sm text-blue-600 font-bold tracking-widest uppercase mb-3">{product.category}</p>
-                      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-gray-900 mb-4 leading-tight">{product.name}</h1>
+                      <p className="text-xs text-gray-500 font-bold tracking-widest uppercase mb-2">{product.category}</p>
+                      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 leading-tight">{product.name}</h1>
                     </div>
                     <button
                       onClick={() => setIsWishlisted(!isWishlisted)}
-                      className="w-12 h-12 flex-shrink-0 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 hover:border-red-200 rounded-full transition-all shadow-sm cursor-pointer ml-4"
+                      className="w-10 h-10 flex-shrink-0 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 rounded-full transition-all cursor-pointer ml-4"
                     >
-                      <i className={`${isWishlisted ? 'ri-heart-fill text-red-500' : 'ri-heart-line text-gray-400 hover:text-red-400'} text-xl`}></i>
+                      <i className={`${isWishlisted ? 'ri-heart-fill text-red-500' : 'ri-heart-line text-gray-400'} text-lg`}></i>
                     </button>
                   </div>
 
-                  <div className="flex items-center mb-6">
+                  <div className="flex items-center mb-4">
                     <div className="flex items-center space-x-1 mr-3">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <i
                           key={star}
-                          className={`${star <= Math.round(product.rating) ? 'ri-star-fill text-amber-400' : 'ri-star-line text-gray-200'} text-xl`}
+                          className={`${star <= Math.round(product.rating) ? 'ri-star-fill text-amber-400' : 'ri-star-line text-gray-200'} text-lg`}
                         ></i>
                       ))}
                     </div>
-                    <span className="text-gray-600 font-medium">{Number(product.rating).toFixed(1)} <span className="text-gray-400 ml-1">({product.reviewCount} reviews)</span></span>
+                    <span className="text-sm text-gray-600 font-medium">{Number(product.rating).toFixed(1)} <span className="text-gray-400 ml-1">({product.reviewCount} reviews)</span></span>
                   </div>
 
-                  <div className="flex items-baseline space-x-4 pb-6 border-b border-gray-100">
+                  <div className="flex items-baseline space-x-3 pb-4 border-b border-gray-100">
                     {hasVariants && !selectedVariant ? (
-                      <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight">
-                        <span className="text-xl text-gray-500 font-normal mr-2">From</span>
+                      <span className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                        <span className="text-base text-gray-500 font-normal mr-1.5">From</span>
                         GH₵{minVariantPrice.toFixed(2)}
                       </span>
                     ) : (
-                      <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight">GH₵{activePrice.toFixed(2)}</span>
+                      <span className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">GH₵{activePrice.toFixed(2)}</span>
                     )}
                     {product.compare_at_price && product.compare_at_price > activePrice && (
-                      <span className="text-xl text-gray-400 line-through decoration-gray-300">GH₵{product.compare_at_price.toFixed(2)}</span>
+                      <span className="text-lg text-gray-400 line-through decoration-gray-300">GH₵{product.compare_at_price.toFixed(2)}</span>
                     )}
                   </div>
                 </div>
 
-                <p className="text-gray-600 leading-relaxed mb-8 text-lg font-light">{product.description}</p>
+                <p className="text-gray-600 leading-relaxed mb-6 text-base font-light">{product.description}</p>
 
                 {/* Color Selector */}
                 {hasVariants && product.colors.length > 0 && (
@@ -529,55 +533,55 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   return null;
                 })()}
 
-                <div className="mb-8 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+                <div className="mb-6">
                   <label className="block font-semibold text-gray-900 mb-3 uppercase tracking-wider text-xs">Quantity</label>
                   <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
-                    <div className="flex items-center border border-gray-300 bg-white rounded-xl overflow-hidden shadow-sm">
+                    <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
                       <button
                         onClick={() => setQuantity(Math.max(product.moq || 1, quantity - 1))}
-                        className="w-12 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
                         disabled={activeStock === 0 || quantity <= (product.moq || 1)}
                       >
-                        <i className="ri-subtract-line text-lg"></i>
+                        <i className="ri-subtract-line"></i>
                       </button>
                       <input
                         type="number"
                         value={quantity}
                         onChange={(e) => setQuantity(Math.max(product.moq || 1, Math.min(activeStock, parseInt(e.target.value) || (product.moq || 1))))}
-                        className="w-16 h-12 text-center border-x border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg font-bold text-gray-900"
+                        className="w-14 h-10 text-center border-x border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-900 text-sm font-semibold text-gray-900"
                         min={product.moq || 1}
                         max={activeStock}
                         disabled={activeStock === 0}
                       />
                       <button
                         onClick={() => setQuantity(Math.min(activeStock, quantity + 1))}
-                        className="w-12 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
                         disabled={activeStock === 0 || quantity >= activeStock}
                       >
-                        <i className="ri-add-line text-lg"></i>
+                        <i className="ri-add-line"></i>
                       </button>
                     </div>
-                    <div className="flex flex-col flex-1">
+                    <div className="flex flex-col">
                       {product.moq > 1 && (
-                        <span className="text-blue-700 font-medium text-sm flex items-center bg-blue-50 w-fit px-2 py-1 rounded-md mb-1">
-                          <i className="ri-information-fill mr-1.5"></i>
+                        <span className="text-gray-600 font-medium text-xs flex items-center mb-1">
+                          <i className="ri-information-line mr-1.5 text-gray-400"></i>
                           Min order: {product.moq} units
                         </span>
                       )}
                       {activeStock > 10 && (
-                        <span className="text-emerald-700 font-medium text-sm flex items-center bg-emerald-50 w-fit px-2 py-1 rounded-md">
+                        <span className="text-green-700 font-medium text-xs flex items-center">
                           <i className="ri-checkbox-circle-fill mr-1.5"></i>
                           In stock, ready to ship
                         </span>
                       )}
                       {activeStock > 0 && activeStock <= 10 && (
-                        <span className="text-amber-700 font-medium text-sm flex items-center bg-amber-50 w-fit px-2 py-1 rounded-md">
+                        <span className="text-amber-600 font-medium text-xs flex items-center">
                           <i className="ri-error-warning-fill mr-1.5"></i>
                           Only {activeStock} left
                         </span>
                       )}
                       {activeStock === 0 && (
-                        <span className="text-red-700 font-medium text-sm flex items-center bg-red-50 w-fit px-2 py-1 rounded-md">
+                        <span className="text-red-600 font-medium text-xs flex items-center">
                           <i className="ri-close-circle-fill mr-1.5"></i>
                           Out of stock
                         </span>
@@ -586,62 +590,42 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <div className="flex flex-col sm:flex-row gap-3 mb-8">
                   <button
                     disabled={activeStock === 0 || needsVariantSelection || needsColorSelection}
-                    className={`flex-1 border-2 border-gray-900 bg-white hover:bg-gray-50 text-gray-900 py-4 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 text-lg whitespace-nowrap cursor-pointer ${(activeStock === 0 || needsVariantSelection || needsColorSelection) ? 'opacity-50 cursor-not-allowed' : 'hover:-translate-y-0.5'}`}
+                    className={`flex-1 border border-gray-900 bg-white hover:bg-gray-50 text-gray-900 h-12 rounded-lg font-bold transition-all flex items-center justify-center space-x-2 text-sm whitespace-nowrap cursor-pointer ${(activeStock === 0 || needsVariantSelection || needsColorSelection) ? 'opacity-50 cursor-not-allowed' : ''}`}
                     onClick={handleAddToCart}
                   >
-                    <i className="ri-shopping-cart-2-line text-xl"></i>
-                    <span>{activeStock === 0 ? 'Out of Stock' : needsColorSelection ? 'Select a Color' : needsVariantSelection ? 'Select a Variant' : 'Add to Cart'}</span>
+                    <i className="ri-shopping-cart-2-line text-lg"></i>
+                    <span>{activeStock === 0 ? 'Out of Stock' : needsColorSelection ? 'Select Color' : needsVariantSelection ? 'Select Variant' : 'Add to Cart'}</span>
                   </button>
                   {activeStock > 0 && !needsVariantSelection && !needsColorSelection && (
                     <button
                       onClick={handleBuyNow}
-                      className="flex-1 bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                      className="flex-1 bg-gray-900 hover:bg-gray-800 text-white h-12 rounded-lg font-bold transition-all whitespace-nowrap cursor-pointer text-sm"
                     >
                       Buy It Now
                     </button>
                   )}
                 </div>
 
-                <div className="bg-gray-50 rounded-2xl p-6 space-y-5 border border-gray-100 mt-10">
-                  <div className="flex items-start">
-                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-blue-600 shadow-sm mr-4 flex-shrink-0">
-                      <i className="ri-store-2-line text-xl"></i>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Free Store Pickup</h4>
-                      <p className="text-sm text-gray-500 mt-1">Available at our Accra location</p>
-                    </div>
+                <div className="pt-6 border-t border-gray-100 space-y-3">
+                  <div className="flex items-center text-sm text-gray-600">
+                    <i className="ri-store-2-line text-gray-400 mr-3 text-lg"></i>
+                    <span>Free store pickup at our Accra location</span>
                   </div>
-                  <div className="flex items-start">
-                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-green-600 shadow-sm mr-4 flex-shrink-0">
-                      <i className="ri-arrow-left-right-line text-xl"></i>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Easy Returns</h4>
-                      <p className="text-sm text-gray-500 mt-1">24-hour return policy for faulty items</p>
-                    </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <i className="ri-arrow-left-right-line text-gray-400 mr-3 text-lg"></i>
+                    <span>24-hour easy returns for faulty items</span>
                   </div>
-                  <div className="flex items-start">
-                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-purple-600 shadow-sm mr-4 flex-shrink-0">
-                      <i className="ri-shield-check-line text-xl"></i>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Secure Payment</h4>
-                      <p className="text-sm text-gray-500 mt-1">100% secure checkout & buyer protection</p>
-                    </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <i className="ri-shield-check-line text-gray-400 mr-3 text-lg"></i>
+                    <span>100% secure checkout & buyer protection</span>
                   </div>
                   {product.sku && (
-                    <div className="flex items-start">
-                      <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-600 shadow-sm mr-4 flex-shrink-0">
-                        <i className="ri-barcode-box-line text-xl"></i>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900">SKU</h4>
-                        <p className="text-sm text-gray-500 mt-1">{product.sku}</p>
-                      </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <i className="ri-barcode-box-line text-gray-400 mr-3 text-lg"></i>
+                      <span>SKU: {product.sku}</span>
                     </div>
                   )}
                 </div>
