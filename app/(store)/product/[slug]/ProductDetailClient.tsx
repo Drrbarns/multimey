@@ -531,11 +531,11 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
                 <div className="mb-8">
                   <label className="block font-semibold text-gray-900 mb-2 uppercase tracking-wider text-[11px] text-gray-500">Quantity</label>
-                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
-                    <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-3">
+                    <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden h-11">
                       <button
                         onClick={() => setQuantity(Math.max(product.moq || 1, quantity - 1))}
-                        className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
+                        className="w-10 h-full flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
                         disabled={activeStock === 0 || quantity <= (product.moq || 1)}
                       >
                         <i className="ri-subtract-line"></i>
@@ -544,14 +544,14 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                         type="number"
                         value={quantity}
                         onChange={(e) => setQuantity(Math.max(product.moq || 1, Math.min(activeStock, parseInt(e.target.value) || (product.moq || 1))))}
-                        className="w-14 h-10 text-center border-x border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-900 text-sm font-semibold text-gray-900"
+                        className="w-12 h-full text-center border-x border-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-900 text-[13px] font-semibold text-gray-900"
                         min={product.moq || 1}
                         max={activeStock}
                         disabled={activeStock === 0}
                       />
                       <button
                         onClick={() => setQuantity(Math.min(activeStock, quantity + 1))}
-                        className="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
+                        className="w-10 h-full flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
                         disabled={activeStock === 0 || quantity >= activeStock}
                       >
                         <i className="ri-add-line"></i>
