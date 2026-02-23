@@ -1,129 +1,120 @@
 'use client';
 
-import React, { useEffect, useRef, useState, ReactNode } from 'react';
+import { motion, useInView, useAnimation, Variants } from 'framer-motion';
+import { useRef, useEffect, ReactNode } from 'react';
 
 interface AnimatedSectionProps {
   children: ReactNode;
   className?: string;
-  animation?: 'fade-up' | 'fade-left' | 'fade-right' | 'scale' | 'fade';
   delay?: number;
-  threshold?: number;
+  direction?: 'up' | 'down' | 'left' | 'right' | 'none';
+  duration?: number;
+  once?: boolean;
 }
 
 export default function AnimatedSection({
   children,
   className = '',
-  animation = 'fade-up',
   delay = 0,
-  threshold = 0.1,
+  direction = 'up',
+  duration = 0.5,
+  once = true,
 }: AnimatedSectionProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once });
+  const controls = useAnimation();
 
   useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), delay);
-          observer.unobserve(element);
-        }
-      },
-      { threshold, rootMargin: '50px' }
-    );
-
-    observer.observe(element);
-
-    return () => observer.unobserve(element);
-  }, [delay, threshold]);
-
-  const getAnimationClass = () => {
-    switch (animation) {
-      case 'fade-up':
-        return 'scroll-animate';
-      case 'fade-left':
-        return 'scroll-animate-left';
-      case 'fade-right':
-        return 'scroll-animate-right';
-      case 'scale':
-        return 'scroll-animate-scale';
-      case 'fade':
-        return 'scroll-animate';
-      default:
-        return 'scroll-animate';
+    if (isInView) {
+      controls.start('visible');
     }
+  }, [isInView, controls]);
+
+  const variants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: direction === 'up' ? 40 : direction === 'down' ? -40 : 0,
+      x: direction === 'left' ? 40 : direction === 'right' ? -40 : 0,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      transition: {
+        duration,
+        delay,
+        ease: [0.22, 1, 0.36, 1], // Custom easing (cubic-bezier)
+      },
+    },
   };
 
   return (
-    <div
+    <motion.div
       ref={ref}
-      className={`${getAnimationClass()} ${isVisible ? 'is-visible' : ''} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+      initial="hidden"
+      animate={controls}
+      variants={variants}
+      className={className}
     >
       {children}
-    </div>
+    </motion.div>
   );
-}
-
-// Staggered grid animation component
-interface AnimatedGridProps {
-  children: ReactNode[];
-  className?: string;
-  itemClassName?: string;
-  staggerDelay?: number;
 }
 
 export function AnimatedGrid({
   children,
   className = '',
-  itemClassName = '',
-  staggerDelay = 100
-}: AnimatedGridProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [visibleItems, setVisibleItems] = useState<boolean[]>([]);
-
-  const childrenArray = React.Children.toArray(children);
+  staggerDelay = 0.1,
+}: {
+  children: ReactNode[];
+  className?: string;
+  staggerDelay?: number;
+}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const controls = useAnimation();
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+    if (isInView) {
+      controls.start('visible');
+    }
+  }, [isInView, controls]);
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          childrenArray.forEach((_, index) => {
-            setTimeout(() => {
-              setVisibleItems(prev => {
-                const newState = [...prev];
-                newState[index] = true;
-                return newState;
-              });
-            }, index * staggerDelay);
-          });
-          observer.unobserve(container);
-        }
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: staggerDelay,
       },
-      { threshold: 0.1, rootMargin: '50px' }
-    );
+    },
+  };
 
-    observer.observe(container);
-
-    return () => observer.unobserve(container);
-  }, [childrenArray.length, staggerDelay]);
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    },
+  };
 
   return (
-    <div ref={containerRef} className={className}>
-      {childrenArray.map((child, index) => (
-        <div
-          key={index}
-          className={`scroll-animate ${visibleItems[index] ? 'is-visible' : ''} ${itemClassName}`}
-          style={{ transitionDelay: `${index * staggerDelay}ms` }}
-        >
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={containerVariants}
+      className={className}
+    >
+      {children.map((child, i) => (
+        <motion.div key={i} variants={itemVariants}>
           {child}
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }

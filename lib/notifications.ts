@@ -1,17 +1,18 @@
 import { Resend } from 'resend';
 import { supabase } from '@/lib/supabase';
-import { escapeHtml } from '@/lib/sanitize';
 
 const resend = new Resend(process.env.RESEND_API_KEY || 'missing_api_key');
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@standardecom.com';
-const EMAIL_FROM = process.env.EMAIL_FROM || 'MultiMey Supplies <noreply@multimeysupplies.com>';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@example.com';
+const STORE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'MultiMey Supplies';
+const EMAIL_FROM = process.env.EMAIL_FROM || `${STORE_NAME} <noreply@example.com>`;
+const SMS_SENDER_ID = process.env.SMS_SENDER_ID || 'Prishane';
 const BRAND = {
-    name: 'MultiMey Supplies',
-    color: '#2563eb',
-    colorLight: '#eff6ff',
-    colorDark: '#064e3b',
+    name: STORE_NAME,
+    color: '#374151',
+    colorLight: '#f3f4f6',
+    colorDark: '#171717',
     url: (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000').replace(/\/+$/, ''),
-    phone: '+233209597443',
+    phone: process.env.STORE_PHONE || '',
 };
 
 // Reusable branded email layout
@@ -154,7 +155,7 @@ export async function sendSMS({ to, message }: { to: string; message: string }) 
             },
             body: JSON.stringify({
                 type: 1,
-                senderid: 'MultiMey',
+                senderid: SMS_SENDER_ID,
                 messages: [
                     {
                         recipient: recipient,
@@ -296,7 +297,7 @@ ${emailButton('View Order in Admin', `${baseUrl}/admin/orders/${id}`)}
     if (phone) {
         const smsMessage = trackingNumber
             ? `Hi ${name}, your order #${order_number || id} is confirmed! Tracking: ${trackingNumber}. Track here: ${trackingUrl}${shippingNotesSms}`
-            : `Hi ${name}, your order #${order_number || id} at MultiMey Supplies is confirmed! Track here: ${trackingUrl}${shippingNotesSms}`;
+            : `Hi ${name}, your order #${order_number || id} at ${BRAND.name} is confirmed! Track here: ${trackingUrl}${shippingNotesSms}`;
 
         await sendSMS({
             to: phone,
@@ -355,7 +356,7 @@ export async function sendOrderStatusUpdate(order: any, newStatus: string) {
     // Status icons/colors
     const statusConfig: Record<string, { icon: string; color: string; bg: string }> = {
         processing: { icon: '&#9881;', color: '#2563eb', bg: '#eff6ff' },
-        shipped: { icon: '&#128666;', color: '#2563eb', bg: '#eff6ff' },
+        shipped: { icon: '&#128666;', color: '#374151', bg: '#f3f4f6' },
         delivered: { icon: '&#127881;', color: '#16a34a', bg: '#f0fdf4' },
         cancelled: { icon: '&#10060;', color: '#dc2626', bg: '#fef2f2' },
     };
@@ -438,7 +439,7 @@ ${emailButton('Start Shopping', `${BRAND.url}/shop`)}
     if (phone) {
         await sendSMS({
             to: phone,
-            message: `Welcome ${firstName}! Thanks for joining MultiMey Supplies.`
+            message: `Welcome ${firstName}! Thanks for joining ${BRAND.name}.`
         });
     }
 }
@@ -507,12 +508,6 @@ ${emailButton('Pay Now — GH₵' + Number(total).toFixed(2), paymentUrl, '#d977
 export async function sendContactMessage(data: { name: string, email: string, subject: string, message: string }) {
     const { name, email, subject, message } = data;
 
-    // SECURITY: Sanitize all user input before injecting into HTML
-    const safeName = escapeHtml(name);
-    const safeSubject = escapeHtml(subject);
-    const safeMessage = escapeHtml(message);
-    const safeEmail = escapeHtml(email);
-
     // 1. Acknowledge to User
     await sendEmail({
         to: email,
@@ -524,16 +519,16 @@ export async function sendContactMessage(data: { name: string, email: string, su
   <p style="margin:0;color:#6b7280;font-size:14px;">We'll get back to you soon.</p>
 </div>
 
-<p style="color:#374151;font-size:14px;line-height:1.7;margin:16px 0;">Hi ${safeName},</p>
-<p style="color:#374151;font-size:14px;line-height:1.7;margin:0 0 16px;">Thank you for reaching out to ${BRAND.name}. We've received your message regarding <strong>"${safeSubject}"</strong> and our team will respond as soon as possible.</p>
+<p style="color:#374151;font-size:14px;line-height:1.7;margin:16px 0;">Hi ${name},</p>
+<p style="color:#374151;font-size:14px;line-height:1.7;margin:0 0 16px;">Thank you for reaching out to ${BRAND.name}. We've received your message regarding <strong>"${subject}"</strong> and our team will respond as soon as possible.</p>
 
 <div style="background-color:#f9fafb;border-left:4px solid ${BRAND.color};border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
   <p style="color:#6b7280;font-size:12px;margin:0 0 6px;text-transform:uppercase;letter-spacing:0.5px;">Your message</p>
-  <p style="color:#374151;font-size:14px;margin:0;line-height:1.6;">${safeMessage}</p>
+  <p style="color:#374151;font-size:14px;margin:0;line-height:1.6;">${message}</p>
 </div>
 
 <p style="color:#6b7280;font-size:13px;margin:16px 0 0;">We typically respond within 24 hours.</p>
-`, `Thanks for contacting us, ${safeName}`)
+`, `Thanks for contacting us, ${name}`)
     });
 
     // 2. Alert Admin
@@ -544,17 +539,17 @@ export async function sendContactMessage(data: { name: string, email: string, su
 <h2 style="margin:0 0 16px;color:#111827;font-size:20px;">&#128233; New Contact Message</h2>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9fafb;border-radius:12px;overflow:hidden;margin:16px 0;">
-  ${emailInfoRow('From', safeName)}
-  ${emailInfoRow('Email', `<a href="mailto:${safeEmail}" style="color:${BRAND.color};">${safeEmail}</a>`)}
-  ${emailInfoRow('Subject', safeSubject)}
+  ${emailInfoRow('From', name)}
+  ${emailInfoRow('Email', `<a href="mailto:${email}" style="color:${BRAND.color};">${email}</a>`)}
+  ${emailInfoRow('Subject', subject)}
 </table>
 
 <div style="background-color:#f9fafb;border-left:4px solid ${BRAND.color};border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
   <p style="color:#6b7280;font-size:12px;margin:0 0 6px;text-transform:uppercase;letter-spacing:0.5px;">Message</p>
-  <p style="color:#374151;font-size:14px;margin:0;line-height:1.6;">${safeMessage}</p>
+  <p style="color:#374151;font-size:14px;margin:0;line-height:1.6;">${message}</p>
 </div>
 
-${emailButton('Reply to ' + safeName, `mailto:${safeEmail}?subject=Re: ${encodeURIComponent(subject)}`)}
-`, `New contact from ${safeName}: ${safeSubject}`)
+${emailButton('Reply to ' + name, `mailto:${email}?subject=Re: ${encodeURIComponent(subject)}`)}
+`, `New contact from ${name}: ${subject}`)
     });
 }

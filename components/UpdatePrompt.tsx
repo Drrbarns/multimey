@@ -7,31 +7,15 @@ export default function UpdatePrompt() {
   const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
 
   useEffect(() => {
-    // Listen for SW update events from PWAInstaller
-    const handleUpdate = (event: Event) => {
-      const detail = (event as CustomEvent).detail;
-      if (detail?.registration) {
-        setRegistration(detail.registration);
-        setShowPrompt(true);
-      }
-    };
-
-    window.addEventListener('sw-update-available', handleUpdate);
-
-    // Also check directly
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.ready.then((reg) => {
-        if (reg.waiting) {
-          setRegistration(reg);
-          setShowPrompt(true);
-        }
+        setRegistration(reg);
 
         reg.addEventListener('updatefound', () => {
           const newWorker = reg.installing;
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                setRegistration(reg);
                 setShowPrompt(true);
               }
             });
@@ -39,41 +23,52 @@ export default function UpdatePrompt() {
         });
       });
     }
-
-    return () => window.removeEventListener('sw-update-available', handleUpdate);
   }, []);
 
   const handleUpdate = () => {
-    if (registration?.waiting) {
+    if (registration && registration.waiting) {
       registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      window.location.reload();
     }
-    window.location.reload();
+  };
+
+  const handleDismiss = () => {
+    setShowPrompt(false);
   };
 
   if (!showPrompt) return null;
 
   return (
-    <div className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:max-w-sm z-[9998] pwa-update-toast">
-      <div className="bg-gray-900 text-white rounded-2xl p-4 shadow-2xl flex items-center gap-4">
-        <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
-          <i className="ri-refresh-line text-xl" />
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9999] bg-white rounded-xl shadow-2xl p-6 border border-gray-200 animate-slide-up max-w-md w-full mx-4">
+      <div className="flex items-start gap-4">
+        <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+          <i className="ri-download-cloud-line text-2xl text-gray-800"></i>
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-sm">Update available</p>
-          <p className="text-xs text-gray-400">Tap to get the latest features</p>
+        <div className="flex-1">
+          <h3 className="font-bold text-gray-900 mb-2">Update Available! 🎉</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            A new version of the app is available with improvements and bug fixes. Update now for the best experience!
+          </p>
+          <div className="flex gap-3">
+            <button
+              onClick={handleUpdate}
+              className="flex-1 bg-gray-800 hover:bg-gray-800 text-white py-2 px-4 rounded-lg font-medium transition-colors whitespace-nowrap"
+            >
+              Update Now
+            </button>
+            <button
+              onClick={handleDismiss}
+              className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors whitespace-nowrap"
+            >
+              Later
+            </button>
+          </div>
         </div>
         <button
-          onClick={handleUpdate}
-          className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-colors flex-shrink-0 active:scale-95"
+          onClick={handleDismiss}
+          className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
         >
-          Update
-        </button>
-        <button
-          onClick={() => setShowPrompt(false)}
-          className="text-gray-500 hover:text-white p-1 flex-shrink-0"
-          aria-label="Dismiss"
-        >
-          <i className="ri-close-line text-lg" />
+          <i className="ri-close-line"></i>
         </button>
       </div>
     </div>

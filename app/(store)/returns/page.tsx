@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import Link from 'next/link';
+import { useCMS } from '@/context/CMSContext';
+import { toWhatsAppNumber } from '@/lib/contact';
+import AnimatedSection from '@/components/AnimatedSection';
 
 const mockOrders = [
   {
@@ -15,14 +16,14 @@ const mockOrders = [
         id: 1,
         name: 'Premium Leather Crossbody Bag',
         price: 289,
-        image: 'https://readdy.ai/api/search-image?query=elegant%20premium%20leather%20crossbody%20bag%20in%20deep%20forest%20green%20color%20on%20clean%20minimal%20white%20studio%20background%20with%20soft%20natural%20lighting%20showcasing%20luxury%20craftsmanship&width=400&height=400&seq=return1&orientation=squarish',
+        image: 'https://placehold.co/400x400?text=Sample',
         returnable: true
       },
       {
         id: 2,
         name: 'Minimalist Ceramic Vase Set',
         price: 159,
-        image: 'https://readdy.ai/api/search-image?query=modern%20minimalist%20ceramic%20vase%20set%20in%20matte%20cream%20and%20charcoal%20colors%20on%20pristine%20white%20background%20elegant%20home%20decor%20sophisticated%20styling&width=400&height=400&seq=return2&orientation=squarish',
+        image: 'https://placehold.co/400x400?text=Sample',
         returnable: true
       }
     ]
@@ -31,6 +32,11 @@ const mockOrders = [
 
 export default function ReturnsPortalPage() {
   const router = useRouter();
+  const { getSetting } = useCMS();
+  const contactEmail = getSetting('contact_email') || 'info@multimeysupplies.com';
+  const contactPhone = getSetting('contact_phone') || '+233209597443';
+  const whatsappHref = toWhatsAppNumber(contactPhone) ? `https://wa.me/${toWhatsAppNumber(contactPhone)}` : '#';
+
   const [step, setStep] = useState(1);
   const [orderNumber, setOrderNumber] = useState('');
   const [email, setEmail] = useState('');
@@ -78,25 +84,25 @@ export default function ReturnsPortalPage() {
   };
 
   return (
-    <>
-      <Header />
-      <main className="min-h-screen bg-gray-50 py-12">
+    <main className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Returns Portal</h1>
-          <p className="text-gray-600 mb-8">Start your return or exchange process</p>
+          <AnimatedSection>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Returns Portal</h1>
+            <p className="text-gray-600 mb-8">Start your return or exchange process</p>
+          </AnimatedSection>
 
-          <div className="mb-8">
+          <AnimatedSection delay={0.1} className="mb-8">
             <div className="flex items-center justify-between">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="flex items-center flex-1">
                   <div className={`w-10 h-10 flex items-center justify-center rounded-full font-bold ${
-                    i <= step ? 'bg-blue-700 text-white' : 'bg-gray-200 text-gray-500'
+                    i <= step ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-500'
                   }`}>
                     {i < step ? <i className="ri-check-line"></i> : i}
                   </div>
                   {i < 3 && (
                     <div className={`flex-1 h-1 mx-4 ${
-                      i < step ? 'bg-blue-700' : 'bg-gray-200'
+                      i < step ? 'bg-gray-900' : 'bg-gray-200'
                     }`}></div>
                   )}
                 </div>
@@ -107,10 +113,11 @@ export default function ReturnsPortalPage() {
               <span className="text-sm font-semibold text-gray-900">Select Items</span>
               <span className="text-sm font-semibold text-gray-900">Submit</span>
             </div>
-          </div>
+          </AnimatedSection>
 
           {step === 1 && (
-            <div className="bg-white rounded-xl shadow-sm p-8">
+            <AnimatedSection delay={0.15}>
+            <div className="bg-white rounded-xl shadow-sm p-8 hover-lift">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Find Your Order</h2>
               <form onSubmit={handleFindOrder} className="space-y-6">
                 <div>
@@ -121,7 +128,7 @@ export default function ReturnsPortalPage() {
                     type="text"
                     value={orderNumber}
                     onChange={(e) => setOrderNumber(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
                     placeholder="ORD-2024-156"
                     required
                   />
@@ -135,7 +142,7 @@ export default function ReturnsPortalPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
                     placeholder="you@example.com"
                     required
                   />
@@ -144,7 +151,7 @@ export default function ReturnsPortalPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-blue-700 hover:bg-blue-800 text-white py-4 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                  className="w-full bg-gray-900 hover:bg-gray-800 text-white py-4 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                 >
                   {isLoading ? 'Finding Order...' : 'Find Order'}
                 </button>
@@ -156,19 +163,23 @@ export default function ReturnsPortalPage() {
                   <div className="text-sm text-blue-700">
                     <p className="font-semibold mb-1">Return Policy Highlights</p>
                     <ul className="space-y-1">
-                      <li>• Returns accepted within 30 days of delivery</li>
-                      <li>• Items must be unused with original tags</li>
-                      <li>• Free return shipping for defective items</li>
-                      <li>• Refunds processed within 5-7 business days</li>
+                      <li>• 24-hour return policy: request within 24 hours of receipt if faulty, damaged, or not what you requested (hygiene reasons—no refunds for other reasons)</li>
+                      <li>• Item must be unworn/unused, with tags, in original packaging; receipt or proof of purchase required</li>
+                      <li>• Contact us first on WhatsApp <a href={whatsappHref} className="underline font-medium" target="_blank" rel="noopener noreferrer">{contactPhone}</a> or <a href={`mailto:${contactEmail}`} className="underline font-medium">{contactEmail}</a>—returns sent without requesting first are not accepted</li>
+                      <li>• No returns on custom/personalized items, personal care/beauty, sale items, or gift cards</li>
+                      <li>• Full refund to original payment method if we don’t have the same item; bank processing may take time</li>
                     </ul>
+                    <p className="mt-2"><a href="/refund-policy" className="underline font-medium">Full Refund Policy</a></p>
                   </div>
                 </div>
               </div>
             </div>
+            </AnimatedSection>
           )}
 
           {step === 2 && foundOrder && (
-            <div className="bg-white rounded-xl shadow-sm p-8">
+            <AnimatedSection>
+            <div className="bg-white rounded-xl shadow-sm p-8 hover-lift">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Select Items to Return</h2>
               
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
@@ -185,7 +196,7 @@ export default function ReturnsPortalPage() {
                         type="checkbox"
                         checked={selectedItems.includes(item.id)}
                         onChange={() => toggleItemSelection(item.id)}
-                        className="mt-1 w-5 h-5 text-blue-700 rounded border-gray-300 focus:ring-blue-500"
+                        className="mt-1 w-5 h-5 text-gray-900 rounded border-gray-300 focus:ring-gray-600"
                       />
                       <div className="w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover object-top" />
@@ -205,7 +216,7 @@ export default function ReturnsPortalPage() {
                                 ...returnReasons,
                                 [item.id]: e.target.value
                               })}
-                              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-8"
+                              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 pr-8"
                               required
                             >
                               <option value="">Select a reason</option>
@@ -231,11 +242,11 @@ export default function ReturnsPortalPage() {
                     onClick={() => setReturnType('refund')}
                     className={`p-4 rounded-lg border-2 text-left transition-all ${
                       returnType === 'refund'
-                        ? 'border-blue-700 bg-blue-50'
+                        ? 'border-gray-900 bg-gray-50'
                         : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
-                    <i className="ri-refund-line text-2xl text-blue-700 mb-2"></i>
+                    <i className="ri-refund-line text-2xl text-gray-900 mb-2"></i>
                     <p className="font-semibold text-gray-900">Get a Refund</p>
                     <p className="text-sm text-gray-600 mt-1">Money back to original payment</p>
                   </button>
@@ -245,11 +256,11 @@ export default function ReturnsPortalPage() {
                     onClick={() => setReturnType('exchange')}
                     className={`p-4 rounded-lg border-2 text-left transition-all ${
                       returnType === 'exchange'
-                        ? 'border-blue-700 bg-blue-50'
+                        ? 'border-gray-900 bg-gray-50'
                         : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
-                    <i className="ri-exchange-line text-2xl text-blue-700 mb-2"></i>
+                    <i className="ri-exchange-line text-2xl text-gray-900 mb-2"></i>
                     <p className="font-semibold text-gray-900">Exchange Item</p>
                     <p className="text-sm text-gray-600 mt-1">Get a different size or color</p>
                   </button>
@@ -266,16 +277,18 @@ export default function ReturnsPortalPage() {
                 <button
                   onClick={() => setStep(3)}
                   disabled={selectedItems.length === 0 || !selectedItems.every(id => returnReasons[id])}
-                  className="flex-1 py-4 bg-blue-700 hover:bg-blue-800 text-white rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                  className="flex-1 py-4 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                 >
                   Continue
                 </button>
               </div>
             </div>
+            </AnimatedSection>
           )}
 
           {step === 3 && (
-            <div className="bg-white rounded-xl shadow-sm p-8">
+            <AnimatedSection>
+            <div className="bg-white rounded-xl shadow-sm p-8 hover-lift">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Review & Submit</h2>
 
               <div className="mb-8">
@@ -295,7 +308,7 @@ export default function ReturnsPortalPage() {
                 </div>
               </div>
 
-              <div className="mb-8 p-6 border-2 border-blue-200 bg-blue-50 rounded-lg">
+              <div className="mb-8 p-6 border-2 border-gray-200 bg-gray-50 rounded-lg">
                 <h3 className="font-semibold text-gray-900 mb-4">Next Steps</h3>
                 <ol className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-start space-x-2">
@@ -327,16 +340,15 @@ export default function ReturnsPortalPage() {
                 <button
                   onClick={handleSubmitReturn}
                   disabled={isLoading}
-                  className="flex-1 py-4 bg-blue-700 hover:bg-blue-800 text-white rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                  className="flex-1 py-4 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                 >
                   {isLoading ? 'Submitting...' : 'Submit Return Request'}
                 </button>
               </div>
             </div>
+            </AnimatedSection>
           )}
         </div>
-      </main>
-      <Footer />
-    </>
+    </main>
   );
 }

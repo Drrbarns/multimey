@@ -19,16 +19,13 @@ interface SmartRecommendationsProps {
   title?: string;
 }
 
-export default function SmartRecommendations({ productId, type, title }: SmartRecommendationsProps) {
-  const [products, setProducts] = useState<Product[]>([]);
-
-  const allProducts: Product[] = [
+const DEFAULT_PRODUCTS: Product[] = [
     {
       id: '1',
       name: 'Premium Wireless Headphones',
       price: 450,
       originalPrice: 599,
-      image: 'https://readdy.ai/api/search-image?query=premium%20wireless%20headphones%20with%20sleek%20black%20design%20and%20cushioned%20ear%20cups%20on%20clean%20white%20background%20professional%20product%20photography%20minimalist%20style%20high%20quality&width=300&height=300&seq=rec1&orientation=squarish',
+      image: 'https://placehold.co/400x400?text=Sample',
       rating: 4.8,
       reviews: 234
     },
@@ -36,7 +33,7 @@ export default function SmartRecommendations({ productId, type, title }: SmartRe
       id: '2',
       name: 'Smart Fitness Watch',
       price: 320,
-      image: 'https://readdy.ai/api/search-image?query=modern%20smart%20fitness%20watch%20with%20black%20band%20and%20digital%20display%20showing%20health%20metrics%20on%20clean%20white%20background%20professional%20product%20photography%20minimalist%20style&width=300&height=300&seq=rec2&orientation=squarish',
+      image: 'https://placehold.co/400x400?text=Sample',
       rating: 4.6,
       reviews: 189
     },
@@ -45,7 +42,7 @@ export default function SmartRecommendations({ productId, type, title }: SmartRe
       name: 'Leather Crossbody Bag',
       price: 289,
       originalPrice: 399,
-      image: 'https://readdy.ai/api/search-image?query=elegant%20premium%20leather%20crossbody%20bag%20in%20forest%20green%20color%20on%20clean%20white%20background%20professional%20product%20photography%20luxury%20style%20high%20quality&width=300&height=300&seq=rec3&orientation=squarish',
+      image: 'https://placehold.co/400x400?text=Sample',
       rating: 4.9,
       reviews: 312
     },
@@ -53,14 +50,17 @@ export default function SmartRecommendations({ productId, type, title }: SmartRe
       id: '4',
       name: 'Minimalist Ceramic Vase Set',
       price: 159,
-      image: 'https://readdy.ai/api/search-image?query=modern%20minimalist%20ceramic%20vase%20set%20in%20cream%20and%20charcoal%20colors%20on%20white%20background%20elegant%20home%20decor%20professional%20photography%20clean%20lines&width=300&height=300&seq=rec4&orientation=squarish',
+      image: 'https://placehold.co/400x400?text=Sample',
       rating: 4.7,
       reviews: 156
     }
   ];
 
+export default function SmartRecommendations({ productId, type, title }: SmartRecommendationsProps) {
+  const [products, setProducts] = useState<Product[]>([]);
+
   useEffect(() => {
-    const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
+    const shuffled = [...DEFAULT_PRODUCTS].sort(() => 0.5 - Math.random());
     setProducts(shuffled.slice(0, 4));
   }, [productId, type]);
 
@@ -91,7 +91,7 @@ export default function SmartRecommendations({ productId, type, title }: SmartRe
           <h2 className="text-2xl font-bold text-gray-900">{getTitleByType()}</h2>
           <Link
             href="/shop"
-            className="text-blue-700 hover:text-blue-900 font-medium flex items-center space-x-1 whitespace-nowrap"
+            className="text-gray-900 hover:text-gray-900 font-medium flex items-center space-x-1 whitespace-nowrap"
           >
             <span>View All</span>
             <i className="ri-arrow-right-line"></i>
@@ -118,7 +118,7 @@ export default function SmartRecommendations({ productId, type, title }: SmartRe
                 )}
               </div>
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-700 transition-colors">
+                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-gray-900 transition-colors">
                   {product.name}
                 </h3>
                 <div className="flex items-center space-x-2 mb-3">

@@ -8,6 +8,7 @@ import AdvancedCouponSystem from '@/components/AdvancedCouponSystem';
 import { useCart } from '@/context/CartContext';
 import PageHero from '@/components/PageHero';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import AnimatedSection from '@/components/AnimatedSection';
 
 export default function CartPage() {
   usePageTitle('Shopping Cart');
@@ -59,35 +60,35 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <PageHero title="Shopping Cart" />
+      <PageHero title="Shopping Cart" backgroundImage="/hero9.jpeg" />
       <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <CartCountdown />
         {/* <FreeShippingBar currentAmount={subtotal} threshold={200} /> */}
 
         {cartItems.length === 0 && savedItems.length === 0 ? (
-          <section className="py-20">
+          <AnimatedSection className="py-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
               <div className="w-24 h-24 flex items-center justify-center mx-auto mb-6 bg-gray-200 rounded-full">
                 <i className="ri-shopping-cart-line text-5xl text-gray-400"></i>
               </div>
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
               <p className="text-gray-600 mb-8 text-lg">Looks like you&#39;t added anything to your cart yet</p>
-              <Link href="/shop" className="inline-block bg-gray-900 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors whitespace-nowrap">
+              <Link href="/shop" className="inline-block bg-gray-900 hover:bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold transition-all hover:-translate-y-1 hover:shadow-lg whitespace-nowrap">
                 Continue Shopping
               </Link>
             </div>
-          </section>
+          </AnimatedSection>
         ) : (
-          <section className="py-12">
+          <AnimatedSection direction="up" delay={0.05} className="py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-6">
-                  <div className="bg-white rounded-xl shadow-sm p-6 overflow-hidden">
+                  <div className="bg-white rounded-xl shadow-sm p-6 overflow-hidden hover-lift">
                     <div className="flex items-center justify-between mb-6">
                       <h2 className="text-2xl font-bold text-gray-900">Cart Items ({cartItems.length})</h2>
                       {savings > 0 && (
-                        <span className="text-blue-700 font-semibold">You save GH₵{savings.toFixed(2)}</span>
+                        <span className="text-gray-900 font-semibold">You save GH₵{savings.toFixed(2)}</span>
                       )}
                     </div>
 
@@ -100,7 +101,7 @@ export default function CartPage() {
 
                           <div className="flex-1">
                             <div className="flex justify-between mb-2">
-                              <Link href={`/product/${item.slug || item.id}`} className="text-lg font-semibold text-gray-900 hover:text-blue-700 transition-colors line-clamp-2">
+                              <Link href={`/product/${item.slug || item.id}`} className="text-lg font-semibold text-gray-900 hover:text-gray-900 transition-colors line-clamp-2">
                                 {item.name}
                               </Link>
                               <button
@@ -114,7 +115,7 @@ export default function CartPage() {
                             <div className="text-sm text-gray-600 mb-3 space-y-1">
                               {item.variant && <p>Variant: {item.variant}</p>}
                               {/* Stock status assuming always available if in cart for now */}
-                              <p className="text-blue-600 font-medium">In Stock</p>
+                              <p className="text-gray-700 font-medium">In Stock</p>
                             </div>
 
                             <div className="flex items-center justify-between flex-wrap gap-4">
@@ -164,7 +165,7 @@ export default function CartPage() {
                             {/*
                             <button
                               onClick={() => saveForLater(item.id)}
-                              className="mt-3 text-sm text-blue-700 hover:text-blue-900 font-medium whitespace-nowrap"
+                              className="mt-3 text-sm text-gray-900 hover:text-gray-900 font-medium whitespace-nowrap"
                             >
                               Save for Later
                             </button>
@@ -207,7 +208,7 @@ export default function CartPage() {
                       </div>
 
                       {appliedCoupon && (
-                        <div className="flex justify-between text-blue-700">
+                        <div className="flex justify-between text-gray-900">
                           <div className="flex items-center space-x-2">
                             <span>Coupon ({appliedCoupon.code})</span>
                           </div>
@@ -243,29 +244,29 @@ export default function CartPage() {
 
                     <Link
                       href="/checkout"
-                      className="block w-full bg-blue-700 hover:bg-blue-800 text-white py-4 rounded-lg font-semibold text-center transition-colors mt-6 mb-3 whitespace-nowrap"
+                      className="block w-full bg-gray-900 hover:bg-gray-800 text-white py-4 rounded-lg font-semibold text-center transition-colors mt-6 mb-3 whitespace-nowrap"
                     >
                       Proceed to Checkout
                     </Link>
 
                     <Link
                       href="/shop"
-                      className="block w-full text-center text-blue-700 hover:text-blue-900 font-semibold py-2 whitespace-nowrap"
+                      className="block w-full text-center text-gray-900 hover:text-gray-900 font-semibold py-2 whitespace-nowrap"
                     >
                       Continue Shopping
                     </Link>
 
                     <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
                       <div className="flex items-center text-sm text-gray-600">
-                        <i className="ri-shield-check-line text-blue-700 mr-2"></i>
+                        <i className="ri-shield-check-line text-gray-900 mr-2"></i>
                         <span>Secure checkout</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
-                        <i className="ri-arrow-left-right-line text-blue-700 mr-2"></i>
-                        <span>30-day returns</span>
+                        <i className="ri-arrow-left-right-line text-gray-900 mr-2"></i>
+                        <span>24-hour returns for faulty/damaged/wrong items</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
-                        <i className="ri-customer-service-line text-blue-700 mr-2"></i>
+                        <i className="ri-customer-service-line text-gray-900 mr-2"></i>
                         <span>24/7 support</span>
                       </div>
                     </div>
@@ -273,7 +274,7 @@ export default function CartPage() {
                 </div>
               </div>
             </div>
-          </section>
+          </AnimatedSection>
         )}
       </div>
     </div>

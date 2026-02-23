@@ -2,7 +2,6 @@
 
 import { useState, useTransition } from 'react';
 import { testSmsAction } from './actions';
-import { supabase } from '@/lib/supabase';
 
 export default function TestSmsPage() {
     const [isPending, startTransition] = useTransition();
@@ -13,10 +12,7 @@ export default function TestSmsPage() {
     const handleSend = () => {
         setResult(null);
         startTransition(async () => {
-            // Get auth token to pass to server action
-            const { data: { session } } = await supabase.auth.getSession();
-            const token = session?.access_token || '';
-            const res = await testSmsAction(phone, message, token);
+            const res = await testSmsAction(phone, message);
             setResult(res);
         });
     };
@@ -36,7 +32,7 @@ export default function TestSmsPage() {
                             </label>
                             <input
                                 type="text"
-                                className="w-full border rounded-md p-2 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="w-full border rounded-md p-2 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-gray-600 outline-none"
                                 placeholder="e.g. 024XXXXXXX"
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
@@ -51,7 +47,7 @@ export default function TestSmsPage() {
                                 Message
                             </label>
                             <textarea
-                                className="w-full border rounded-md p-2 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none h-24"
+                                className="w-full border rounded-md p-2 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-gray-600 outline-none h-24"
                                 placeholder="Type your message..."
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
@@ -63,7 +59,7 @@ export default function TestSmsPage() {
                             disabled={isPending}
                             className={`w-full py-2 px-4 rounded-md text-white font-medium transition-colors ${isPending
                                     ? 'bg-gray-400 cursor-not-allowed'
-                                    : 'bg-blue-600 hover:bg-blue-700'
+                                    : 'bg-gray-700 hover:bg-gray-900'
                                 }`}
                         >
                             {isPending ? 'Sending...' : 'Send SMS'}

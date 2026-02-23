@@ -2,8 +2,14 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useCMS } from '@/context/CMSContext';
+import AnimatedSection from '@/components/AnimatedSection';
 
 export default function FAQsPage() {
+  const { getSetting } = useCMS();
+  const contactEmail = getSetting('contact_email') || 'info@multimeysupplies.com';
+  const contactPhone = getSetting('contact_phone') || '+233209597443';
+
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
 
@@ -25,7 +31,7 @@ export default function FAQsPage() {
     {
       category: 'orders',
       question: 'Can I modify or cancel my order?',
-      answer: 'You can modify or cancel your order within 1 hour of placing it. Contact our customer service immediately via WhatsApp at +233 20 959 7443 or email support@multimeysupplies.com. Once an order is processed, modifications may not be possible.'
+      answer: 'You can modify or cancel your order within 1 hour of placing it. Contact customer service via the contact page. Once an order is processed, modifications may not be possible.'
     },
     {
       category: 'orders',
@@ -60,7 +66,7 @@ export default function FAQsPage() {
     {
       category: 'returns',
       question: 'What is your return policy?',
-      answer: 'We offer a 14-day return policy for unused items in original packaging. Simply initiate a return from your account, print the return label, and ship it back. Refunds are processed within 5-7 business days after we receive the item.'
+      answer: `We have a 24-hour return policy: you have 24 hours after receiving your item to request a return if it’s faulty, damaged, or not what you requested. Due to hygiene reasons we cannot accept refunds for other reasons. Items must be unworn/unused, with tags and original packaging; you’ll need the receipt or proof of purchase. Contact us first on WhatsApp ${contactPhone} or ${contactEmail}—we’ll send a return label and instructions if accepted. See our Refund Policy page for full details.`
     },
     {
       category: 'returns',
@@ -80,12 +86,12 @@ export default function FAQsPage() {
     {
       category: 'payment',
       question: 'What payment methods do you accept?',
-      answer: 'We accept MTN Mobile Money, Vodafone Cash, AirtelTigo Money, and Visa/Mastercard credit and debit cards via our secure Moolre payment gateway. All transactions are encrypted and processed securely.'
+      answer: 'We accept MTN Mobile Money, Vodafone Cash, AirtelTigo Money, Visa/Mastercard credit and debit cards, and Cash on Delivery (available for orders under GHS 1,000). All payments are processed securely.'
     },
     {
       category: 'payment',
       question: 'Is it safe to use my credit card on your site?',
-      answer: 'Absolutely. We use industry-standard SSL encryption and partner with Moolre for secure payment processing. We never store your full card details on our servers. All transactions are PCI-DSS compliant.'
+      answer: 'Absolutely. We use industry-standard SSL encryption and partner with secure payment processors (Paystack, Flutterwave). We never store your full card details on our servers. All transactions are PCI-DSS compliant.'
     },
     {
       category: 'payment',
@@ -100,7 +106,7 @@ export default function FAQsPage() {
     {
       category: 'payment',
       question: 'How do refunds work?',
-      answer: 'Refunds are processed to your original payment method within 5-7 business days after we receive and inspect your return. For mobile money refunds, ensure you provide correct details. You\'ll receive confirmation via email.'
+      answer: `If we don’t have the same item you purchased, a full refund will be made. We’ll notify you once we’ve received and inspected your return and whether the refund was approved. If approved, you’re refunded on your original payment method; your bank or card company may take extra time to process it. Contact us on WhatsApp ${contactPhone} or ${contactEmail} for any return questions.`
     },
     {
       category: 'account',
@@ -139,14 +145,14 @@ export default function FAQsPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-gradient-to-br from-blue-50 via-white to-amber-50 py-16">
+      <div className="bg-gradient-to-br from-gray-50 via-white to-amber-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <AnimatedSection className="max-w-3xl mx-auto text-center">
+            <h1 className="text-5xl font-bold text-gray-900 mb-6">
               Frequently Asked Questions
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Find quick answers to common questions about ordering, shipping, returns, payments, and more.
+              Find quick answers to common questions about ordering, shipping, returns, and more.
             </p>
 
             <div className="relative">
@@ -155,15 +161,15 @@ export default function FAQsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for answers..."
-                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm shadow-lg"
+                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-full focus:ring-2 focus:ring-gray-600 focus:border-transparent text-sm shadow-lg"
               />
               <i className="ri-search-line absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl"></i>
             </div>
-          </div>
+          </AnimatedSection>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <AnimatedSection direction="up" delay={0.1} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex flex-wrap gap-3 justify-center mb-12">
           {categories.map((category) => (
             <button
@@ -171,7 +177,7 @@ export default function FAQsPage() {
               onClick={() => setActiveCategory(category.id)}
               className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all whitespace-nowrap ${
                 activeCategory === category.id
-                  ? 'bg-blue-700 text-white shadow-lg'
+                  ? 'bg-gray-900 text-white shadow-lg'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -186,7 +192,7 @@ export default function FAQsPage() {
             {filteredFAQs.map((faq, index) => (
               <details
                 key={index}
-                className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow"
+                className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all hover-lift"
               >
                 <summary className="px-6 py-5 font-medium text-gray-900 cursor-pointer hover:bg-gray-50 transition-colors flex items-center justify-between">
                   <span className="flex-1 pr-4">{faq.question}</span>
@@ -209,48 +215,48 @@ export default function FAQsPage() {
             </p>
           </div>
         )}
-      </div>
+      </AnimatedSection>
 
-      <div className="bg-gradient-to-br from-blue-700 to-blue-900 py-16">
+      <AnimatedSection className="bg-gradient-to-br from-gray-900 to-gray-900 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <i className="ri-customer-service-2-line text-3xl text-white"></i>
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">Still Have Questions?</h2>
-          <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+          <p className="text-xl text-gray-100 mb-8 leading-relaxed">
             Our customer service team is ready to help. Contact us and we'll respond within 24 hours.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-white text-blue-700 px-8 py-4 rounded-full font-medium hover:bg-blue-50 transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-2 bg-white text-gray-900 px-8 py-4 rounded-full font-medium hover:bg-gray-50 transition-colors whitespace-nowrap"
             >
               <i className="ri-mail-line text-lg"></i>
               Contact Support
             </Link>
             <a
-              href="https://wa.me/233209597443"
+              href="https://wa.me/233595211414"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-full font-medium hover:bg-blue-500 transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-2 bg-gray-700 text-white px-8 py-4 rounded-full font-medium hover:bg-gray-600 transition-colors whitespace-nowrap"
             >
               <i className="ri-whatsapp-line text-lg"></i>
               Chat on WhatsApp
             </a>
           </div>
         </div>
-      </div>
+      </AnimatedSection>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <AnimatedSection direction="up" delay={0.1} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Quick Links</h2>
           <p className="text-gray-600">Explore more helpful resources</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          <Link href="/shipping" className="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition-all cursor-pointer">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <i className="ri-truck-line text-2xl text-blue-700"></i>
+          <Link href="/shipping" className="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition-all cursor-pointer hover-lift group">
+            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <i className="ri-truck-line text-2xl text-gray-900"></i>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">Shipping Policy</h3>
             <p className="text-gray-600 leading-relaxed">
@@ -258,9 +264,9 @@ export default function FAQsPage() {
             </p>
           </Link>
 
-          <Link href="/returns" className="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition-all cursor-pointer">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <i className="ri-arrow-go-back-line text-2xl text-blue-700"></i>
+          <Link href="/returns" className="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition-all cursor-pointer hover-lift group">
+            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <i className="ri-arrow-go-back-line text-2xl text-gray-900"></i>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">Returns Policy</h3>
             <p className="text-gray-600 leading-relaxed">
@@ -268,9 +274,9 @@ export default function FAQsPage() {
             </p>
           </Link>
 
-          <Link href="/privacy" className="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition-all cursor-pointer">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <i className="ri-shield-check-line text-2xl text-blue-700"></i>
+          <Link href="/privacy" className="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition-all cursor-pointer hover-lift group">
+            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <i className="ri-shield-check-line text-2xl text-gray-900"></i>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">Privacy & Security</h3>
             <p className="text-gray-600 leading-relaxed">
@@ -278,7 +284,7 @@ export default function FAQsPage() {
             </p>
           </Link>
         </div>
-      </div>
+      </AnimatedSection>
     </div>
   );
 }

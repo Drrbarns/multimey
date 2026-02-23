@@ -1,14 +1,22 @@
+'use client';
+
+import { useCMS } from '@/context/CMSContext';
+
 export default function TermsPage() {
+  const { getSetting } = useCMS();
+  const contactEmail = getSetting('contact_email') || 'info@multimeysupplies.com';
+  const contactPhone = getSetting('contact_phone') || '+233209597443';
+
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-gradient-to-br from-blue-50 via-white to-amber-50 py-16">
+      <div className="bg-gradient-to-br from-gray-50 via-white to-amber-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-5xl font-bold text-gray-900 mb-6">Terms & Conditions</h1>
             <p className="text-xl text-gray-600 leading-relaxed">
               Please read these terms carefully before using our website and services.
             </p>
-            <p className="text-sm text-gray-500 mt-4">Last updated: February 2026</p>
+            <p className="text-sm text-gray-500 mt-4">Last updated: December 2024</p>
           </div>
         </div>
       </div>
@@ -18,7 +26,7 @@ export default function TermsPage() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">1. Agreement to Terms</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              By accessing and using this website (multimeysupplies.com), you accept and agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you must not use our website or services.
+              By accessing and using this website, you accept and agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you must not use our website or services.
             </p>
             <p className="text-gray-600 leading-relaxed">
               These terms apply to all visitors, users, and customers who access or use our service. We reserve the right to update or modify these terms at any time without prior notice. Your continued use of the website following any changes indicates your acceptance of the new terms.
@@ -79,19 +87,19 @@ export default function TermsPage() {
             </p>
             <ul className="space-y-2 text-gray-600 mb-6">
               <li className="flex items-start gap-2">
-                <i className="ri-arrow-right-s-line text-blue-700 mt-1"></i>
+                <i className="ri-arrow-right-s-line text-gray-900 mt-1"></i>
                 <span>Modify prices at any time without notice</span>
               </li>
               <li className="flex items-start gap-2">
-                <i className="ri-arrow-right-s-line text-blue-700 mt-1"></i>
+                <i className="ri-arrow-right-s-line text-gray-900 mt-1"></i>
                 <span>Correct pricing errors, even after an order is placed</span>
               </li>
               <li className="flex items-start gap-2">
-                <i className="ri-arrow-right-s-line text-blue-700 mt-1"></i>
+                <i className="ri-arrow-right-s-line text-gray-900 mt-1"></i>
                 <span>Limit quantities available for purchase</span>
               </li>
               <li className="flex items-start gap-2">
-                <i className="ri-arrow-right-s-line text-blue-700 mt-1"></i>
+                <i className="ri-arrow-right-s-line text-gray-900 mt-1"></i>
                 <span>Discontinue products at any time</span>
               </li>
             </ul>
@@ -114,19 +122,19 @@ export default function TermsPage() {
             </p>
             <ul className="space-y-2 text-gray-600 mb-6">
               <li className="flex items-start gap-2">
-                <i className="ri-arrow-right-s-line text-blue-700 mt-1"></i>
+                <i className="ri-arrow-right-s-line text-gray-900 mt-1"></i>
                 <span>Product unavailability or pricing errors</span>
               </li>
               <li className="flex items-start gap-2">
-                <i className="ri-arrow-right-s-line text-blue-700 mt-1"></i>
+                <i className="ri-arrow-right-s-line text-gray-900 mt-1"></i>
                 <span>Suspected fraudulent or unauthorised transactions</span>
               </li>
               <li className="flex items-start gap-2">
-                <i className="ri-arrow-right-s-line text-blue-700 mt-1"></i>
+                <i className="ri-arrow-right-s-line text-gray-900 mt-1"></i>
                 <span>Inaccuracies in product or pricing information</span>
               </li>
               <li className="flex items-start gap-2">
-                <i className="ri-arrow-right-s-line text-blue-700 mt-1"></i>
+                <i className="ri-arrow-right-s-line text-gray-900 mt-1"></i>
                 <span>Failure to meet age or eligibility requirements</span>
               </li>
             </ul>
@@ -138,11 +146,11 @@ export default function TermsPage() {
             <div className="bg-gray-50 p-6 rounded-xl mb-6">
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-center gap-2">
-                  <i className="ri-smartphone-line text-blue-700"></i>
+                  <i className="ri-smartphone-line text-gray-900"></i>
                   <span>Mobile Money (MTN, Vodafone, AirtelTigo) via Moolre</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <i className="ri-bank-card-line text-blue-700"></i>
+                  <i className="ri-bank-card-line text-gray-900"></i>
                   <span>Credit/Debit Cards (Visa, Mastercard) via Moolre</span>
                 </li>
               </ul>
@@ -173,17 +181,17 @@ export default function TermsPage() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">6. Returns & Refunds</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              We offer a 14-day return policy for most products. See our Returns Policy for complete details on eligibility, process, and conditions.
+              We have a 24-hour return policy: you have 24 hours after receiving your item to request a return if it is faulty, damaged, or not what you requested. Due to hygiene reasons we cannot accept refunds for other reasons. Items must be unworn/unused, with tags and original packaging; receipt or proof of purchase required. See our <a href="/refund-policy" className="text-gray-900 font-medium hover:underline">Refund Policy</a> for full details on eligibility, process, exchanges, and contact (WhatsApp {contactPhone}, {contactEmail}).
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Refunds are processed within 5-7 business days of receiving your return. Refunds are issued to the original payment method.
+              If we do not have the same item you purchased, a full refund will be made. Refunds are issued to the original payment method once the return is approved; your bank or card company may take additional time to process the refund.
             </p>
           </section>
 
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">7. Intellectual Property</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              All content on this website, including text, graphics, logos, images, videos, and software, is the property of MultiMey Supplies or its content suppliers and is protected by copyright, trademark, and other intellectual property laws.
+              All content on this website, including text, graphics, logos, images, videos, and software, is the property of Premium Store or its content suppliers and is protected by copyright, trademark, and other intellectual property laws.
             </p>
             <p className="text-gray-600 leading-relaxed mb-4">
               You may not reproduce, distribute, modify, create derivative works of, publicly display, or otherwise use any content from this website without our express written permission.
@@ -203,19 +211,19 @@ export default function TermsPage() {
             </p>
             <ul className="space-y-2 text-gray-600 mb-6">
               <li className="flex items-start gap-2">
-                <i className="ri-checkbox-circle-line text-blue-700 mt-1"></i>
+                <i className="ri-checkbox-circle-line text-gray-900 mt-1"></i>
                 <span>Does not violate any laws or third-party rights</span>
               </li>
               <li className="flex items-start gap-2">
-                <i className="ri-checkbox-circle-line text-blue-700 mt-1"></i>
+                <i className="ri-checkbox-circle-line text-gray-900 mt-1"></i>
                 <span>Is not defamatory, offensive, or inappropriate</span>
               </li>
               <li className="flex items-start gap-2">
-                <i className="ri-checkbox-circle-line text-blue-700 mt-1"></i>
+                <i className="ri-checkbox-circle-line text-gray-900 mt-1"></i>
                 <span>Does not contain viruses or malicious code</span>
               </li>
               <li className="flex items-start gap-2">
-                <i className="ri-checkbox-circle-line text-blue-700 mt-1"></i>
+                <i className="ri-checkbox-circle-line text-gray-900 mt-1"></i>
                 <span>Is truthful and based on your genuine experience</span>
               </li>
             </ul>
@@ -227,7 +235,7 @@ export default function TermsPage() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">9. Limitation of Liability</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              To the fullest extent permitted by law, MultiMey Supplies shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from:
+              To the fullest extent permitted by law, Premium Store shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from:
             </p>
             <ul className="space-y-2 text-gray-600 mb-6">
               <li className="flex items-start gap-2">
@@ -259,7 +267,7 @@ export default function TermsPage() {
           <section className="mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">10. Indemnification</h2>
             <p className="text-gray-600 leading-relaxed">
-              You agree to indemnify and hold harmless MultiMey Supplies, its affiliates, officers, directors, employees, and agents from any claims, damages, losses, liabilities, and expenses (including legal fees) arising from your use of the website, violation of these terms, or infringement of any third-party rights.
+              You agree to indemnify and hold harmless Premium Store, its affiliates, officers, directors, employees, and agents from any claims, damages, losses, liabilities, and expenses (including legal fees) arising from your use of the website, violation of these terms, or infringement of any third-party rights.
             </p>
           </section>
 
@@ -289,34 +297,34 @@ export default function TermsPage() {
             <div className="bg-gray-50 border border-gray-200 p-8 rounded-xl">
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <i className="ri-mail-line text-blue-700 text-xl mt-1"></i>
+                  <i className="ri-mail-line text-gray-900 text-xl mt-1"></i>
                   <div>
                     <p className="font-medium text-gray-900">Email</p>
-                    <a href="mailto:support@multimeysupplies.com" className="text-blue-700 hover:underline">support@multimeysupplies.com</a>
+                    <a href="mailto:contact@example.com" className="text-gray-900 hover:underline">contact@example.com</a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <i className="ri-phone-line text-blue-700 text-xl mt-1"></i>
+                  <i className="ri-phone-line text-gray-900 text-xl mt-1"></i>
                   <div>
                     <p className="font-medium text-gray-900">Phone</p>
-                    <a href="tel:+233209597443" className="text-blue-700 hover:underline">+233 20 959 7443</a>
+                    <a href="tel:" className="text-gray-900 hover:underline">Contact</a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <i className="ri-map-pin-line text-blue-700 text-xl mt-1"></i>
+                  <i className="ri-map-pin-line text-gray-900 text-xl mt-1"></i>
                   <div>
                     <p className="font-medium text-gray-900">Address</p>
-                    <p className="text-gray-600">MultiMey Supplies<br />Accra, Ghana</p>
+                    <p className="text-gray-600">Premium Store Ghana<br />East Legon, Accra<br />Ghana</p>
                   </div>
                 </div>
               </div>
             </div>
           </section>
 
-          <div className="bg-blue-50 border-2 border-blue-200 p-8 rounded-xl text-center">
-            <i className="ri-checkbox-circle-line text-4xl text-blue-700 mb-4"></i>
+          <div className="bg-gray-50 border-2 border-gray-200 p-8 rounded-xl text-center">
+            <i className="ri-checkbox-circle-line text-4xl text-gray-900 mb-4"></i>
             <p className="text-gray-600 leading-relaxed">
               By using our website, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.
             </p>

@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
-
-const SITE_NAME = 'MultiMey Supplies';
+import { useCMS } from '@/context/CMSContext';
 
 export function usePageTitle(title: string) {
+  const { getSetting } = useCMS();
+  const siteName = getSetting('site_name') || 'MultiMey Supplies';
+
   useEffect(() => {
-    document.title = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | Dresses, Electronics, Bags, Shoes & More`;
-  }, [title]);
+    document.title = title ? `${title} | ${siteName}` : siteName;
+  }, [title, siteName]);
 }

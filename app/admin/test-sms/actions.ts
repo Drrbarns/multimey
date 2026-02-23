@@ -1,38 +1,23 @@
 'use server';
 
-import { verifyAdminToken } from '@/lib/auth';
-
-export async function testSmsAction(phone: string, message: string, authToken: string) {
-    // SECURITY: Verify admin authentication before allowing SMS sending
-    const auth = await verifyAdminToken(authToken);
-    if (!auth.authenticated) {
-        return {
-            success: false,
-            error: 'Unauthorized: ' + (auth.error || 'Admin access required')
-        };
-    }
-
+export async function testSmsAction(phone: string, message: string) {
     try {
-        console.log('Testing SMS to:', phone, '| by user:', auth.user?.email);
+        console.log('Testing SMS to:', phone);
 
         // Moolre SMS API only requires X-API-VASKEY for authentication
+        // See: https://docs.moolre.com/#/send-sms
         const smsVasKey = process.env.MOOLRE_SMS_API_KEY;
+
+        const envDebug = {
+            MOOLRE_SMS_API_KEY: smsVasKey ? 'Set' : 'Unset',
+        };
 
         if (!smsVasKey) {
             return {
                 success: false,
-                error: 'Missing MOOLRE_SMS_API_KEY environment variable'
+                error: 'Missing MOOLRE_SMS_API_KEY environment variable',
+                envOfServer: envDebug
             };
-        }
-
-        // Validate phone input
-        if (!phone || typeof phone !== 'string') {
-            return { success: false, error: 'Invalid phone number' };
-        }
-
-        // Validate message input
-        if (!message || typeof message !== 'string' || message.length > 1000) {
-            return { success: false, error: 'Invalid or too long message' };
         }
 
         // Format phone number for Ghana
@@ -54,7 +39,7 @@ export async function testSmsAction(phone: string, message: string, authToken: s
             },
             body: JSON.stringify({
                 type: 1,
-                senderid: 'MultiMey',
+                senderid: process.env.SMS_SENDER_ID || 'Prishane',
                 messages: [
                     {
                         recipient: recipient,
@@ -76,14 +61,14 @@ export async function testSmsAction(phone: string, message: string, authToken: s
             success: result?.status === 1,
             result,
             formattedPhone: recipient,
-            httpStatus: response.status
+            httpStatus: response.status,
+            envOfServer: envDebug
         };
     } catch (error: any) {
-        // SECURITY: Don't expose stack traces
-        console.error('[Test SMS] Error:', error.message, error.stack);
         return {
             success: false,
-            error: error.message || 'SMS sending failed'
+            error: error.message,
+            stack: error.stack
         };
     }
 }

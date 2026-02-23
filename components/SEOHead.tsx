@@ -15,11 +15,14 @@ interface SEOProps {
   noindex?: boolean;
 }
 
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://example.com';
+const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'MultiMey Supplies';
+
 export function generateMetadata({
-  title = 'Premium Online Shopping in Ghana',
-  description = 'Shop dresses, electronics, bags, shoes and more at MultiMey Supplies. Locally sourced and imported quality products delivered across Ghana.',
+  title = `${typeof SITE_NAME !== 'undefined' ? SITE_NAME : 'MultiMey Supplies'} - Online Store`,
+  description = 'Discover curated products with secure payment and delivery.',
   keywords = [],
-  ogImage = 'https://readdy.ai/api/search-image?query=modern%20premium%20ecommerce%20online%20shopping%20platform%20elegant%20design&width=1200&height=630&seq=ogimage&orientation=landscape',
+  ogImage = '/logo-large.png',
   ogType = 'website',
   price,
   currency = 'GHS',
@@ -29,17 +32,18 @@ export function generateMetadata({
   author,
   noindex = false
 }: SEOProps): Metadata {
-  const siteName = 'PremiumShop Ghana';
-  const siteUrl = 'https://premiumshop.com';
-  const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
+  const fullTitle = title && title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
 
   const defaultKeywords = [
-    'online shopping ghana',
-    'premium products ghana',
-    'buy online ghana',
-    'ecommerce ghana',
-    'fast delivery ghana',
-    'secure shopping'
+    'online shopping',
+    'premium products',
+    'buy online',
+    'ecommerce',
+    'secure delivery',
+    'secure shopping',
+    'hair',
+    'wigs',
+    'beauty'
   ];
 
   const allKeywords = [...new Set([...keywords, ...defaultKeywords])];
@@ -54,7 +58,7 @@ export function generateMetadata({
       description,
       images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
       type: ogType as any,
-      siteName,
+      siteName: SITE_NAME,
       locale: 'en_GH'
     },
     twitter: {
@@ -77,7 +81,7 @@ export function generateMetadata({
       }
     },
     alternates: {
-      canonical: siteUrl
+      canonical: SITE_URL
     }
   };
 
@@ -114,7 +118,7 @@ export function generateProductSchema(product: {
     sku: product.sku,
     brand: {
       '@type': 'Brand',
-      name: product.brand || 'PremiumShop'
+      name: product.brand || SITE_NAME
     },
     offers: {
       '@type': 'Offer',
@@ -162,21 +166,19 @@ export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'PremiumShop Ghana',
-    url: 'https://premiumshop.com',
-    logo: 'https://readdy.ai/api/search-image?query=premium%20shop%20logo%20elegant%20modern&width=200&height=200&seq=logo&orientation=squarish',
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo.png`,
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+233-XX-XXX-XXXX',
       contactType: 'Customer Service',
-      areaServed: 'GH',
       availableLanguage: ['English']
     },
-    sameAs: [
-      'https://facebook.com/premiumshop',
-      'https://instagram.com/premiumshop',
-      'https://twitter.com/premiumshop'
-    ]
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'US'
+    },
+    sameAs: []
   };
 }
 
@@ -184,13 +186,13 @@ export function generateWebsiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'PremiumShop Ghana',
-    url: 'https://premiumshop.com',
+    name: SITE_NAME,
+    url: SITE_URL,
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://premiumshop.com/shop?search={search_term_string}'
+        urlTemplate: `${SITE_URL}/shop?search={search_term_string}`
       },
       'query-input': 'required name=search_term_string'
     }

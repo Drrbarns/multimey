@@ -15,9 +15,15 @@ export default function PaymentPage() {
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'paystack' | 'moolre' | 'stripe' | 'paypal'>('paystack');
   const [error, setError] = useState<string | null>(null);
+  const [storeName, setStoreName] = useState('MultiMey Supplies');
 
   useEffect(() => {
+    // Fetch store name
+    supabase.from('store_settings').select('value').eq('key', 'site_name').single()
+      .then(({ data }) => { if (data?.value) setStoreName(typeof data.value === 'string' ? data.value : String(data.value)); });
+
     async function fetchOrder() {
       try {
         // Fetch order by ID (UUID) or order_number
@@ -62,15 +68,16 @@ export default function PaymentPage() {
     setProcessing(true);
     setError(null);
 
+    const url = paymentMethod === 'paystack' ? '/api/payment/paystack' : paymentMethod === 'moolre' ? '/api/payment/moolre' : paymentMethod === 'stripe' ? '/api/payment/stripe' : '/api/payment/paypal';
     try {
-      const paymentRes = await fetch('/api/payment/moolre', {
+      const paymentRes = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           orderId: order.order_number,
           amount: order.total,
-          customerEmail: order.email
-        })
+          customerEmail: order.email,
+        }),
       });
 
       const paymentResult = await paymentRes.json();
@@ -79,9 +86,7 @@ export default function PaymentPage() {
         throw new Error(paymentResult.message || 'Payment initialization failed');
       }
 
-      // Redirect to Moolre payment page
       window.location.href = paymentResult.url;
-
     } catch (err: any) {
       console.error('Payment error:', err);
       setError(err.message || 'Failed to initialize payment. Please try again.');
@@ -93,7 +98,7 @@ export default function PaymentPage() {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-700 rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-gray-200 border-t-gray-700 rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Loading order details...</p>
         </div>
       </main>
@@ -111,7 +116,7 @@ export default function PaymentPage() {
           <p className="text-gray-600 mb-6">{error}</p>
           <Link
             href="/"
-            className="inline-flex items-center px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg font-semibold transition-colors"
+            className="inline-flex items-center px-6 py-3 bg-gray-700 hover:bg-gray-800 text-white rounded-lg font-semibold transition-colors"
           >
             <i className="ri-home-line mr-2"></i>
             Go to Homepage
@@ -130,7 +135,7 @@ export default function PaymentPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block mb-6">
-            <span className="text-2xl font-['Pacifico'] text-blue-700">MultiMey</span>
+            <span className="text-2xl font-bold text-gray-700">{storeName}</span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Complete Your Payment</h1>
           <p className="text-gray-600 mt-2">Hi {customerName}, your order is waiting for payment.</p>
@@ -155,14 +160,14 @@ export default function PaymentPage() {
             {order?.discount_total > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Discount</span>
-                <span className="text-green-600">-GH₵ {order?.discount_total?.toFixed(2)}</span>
+                <span className="text-gray-600">-GH₵ {order?.discount_total?.toFixed(2)}</span>
               </div>
             )}
           </div>
 
           <div className="flex justify-between items-center pt-4 border-t border-gray-200">
             <span className="text-lg font-semibold text-gray-900">Total</span>
-            <span className="text-2xl font-bold text-blue-700">GH₵ {order?.total?.toFixed(2)}</span>
+            <span className="text-2xl font-bold text-gray-700">GH₵ {order?.total?.toFixed(2)}</span>
           </div>
         </div>
 
@@ -201,11 +206,62 @@ export default function PaymentPage() {
           </div>
         )}
 
+        {/* Payment method choice - all 4 options in one card */}
+        <div className="mb-6 bg-white rounded-xl shadow-sm p-6">
+          <h2 className="text-base font-bold text-gray-900 mb-4">Choose payment method</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setPaymentMethod('paystack')}
+              className={`flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-colors cursor-pointer ${paymentMethod === 'paystack' ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'}`}
+            >
+              <i className="ri-bank-card-line text-2xl text-gray-700 flex-shrink-0"></i>
+              <div>
+                <span className="font-semibold text-gray-900 block">Paystack</span>
+                <span className="text-xs text-gray-600">Card & Mobile Money</span>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPaymentMethod('moolre')}
+              className={`flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-colors cursor-pointer ${paymentMethod === 'moolre' ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'}`}
+            >
+              <i className="ri-smartphone-line text-2xl text-gray-700 flex-shrink-0"></i>
+              <div>
+                <span className="font-semibold text-gray-900 block">Moolre</span>
+                <span className="text-xs text-gray-600">Mobile Money</span>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPaymentMethod('stripe')}
+              className={`flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-colors cursor-pointer ${paymentMethod === 'stripe' ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'}`}
+            >
+              <i className="ri-bank-card-2-line text-2xl text-gray-700 flex-shrink-0"></i>
+              <div>
+                <span className="font-semibold text-gray-900 block">Stripe</span>
+                <span className="text-xs text-gray-600">Card (Visa, Mastercard)</span>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPaymentMethod('paypal')}
+              className={`flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-colors cursor-pointer ${paymentMethod === 'paypal' ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'}`}
+            >
+              <i className="ri-paypal-line text-2xl text-gray-700 flex-shrink-0"></i>
+              <div>
+                <span className="font-semibold text-gray-900 block">PayPal</span>
+                <span className="text-xs text-gray-600">PayPal balance</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
         {/* Pay Button */}
         <button
           onClick={handlePayNow}
           disabled={processing}
-          className="w-full bg-blue-700 hover:bg-blue-800 text-white py-4 rounded-xl font-semibold text-lg transition-colors disabled:opacity-70 flex items-center justify-center cursor-pointer"
+          className="w-full bg-gray-700 hover:bg-gray-800 text-white py-4 rounded-xl font-semibold text-lg transition-colors disabled:opacity-70 flex items-center justify-center cursor-pointer"
         >
           {processing ? (
             <>
@@ -218,7 +274,7 @@ export default function PaymentPage() {
           ) : (
             <>
               <i className="ri-secure-payment-line mr-2"></i>
-              Pay GH₵ {order?.total?.toFixed(2)} with Mobile Money
+              Pay GH₵ {order?.total?.toFixed(2)} with {paymentMethod === 'paystack' ? 'Paystack' : paymentMethod === 'moolre' ? 'Moolre' : paymentMethod === 'stripe' ? 'Stripe' : 'PayPal'}
             </>
           )}
         </button>
@@ -227,14 +283,14 @@ export default function PaymentPage() {
         <div className="mt-6 text-center">
           <p className="text-xs text-gray-500 flex items-center justify-center">
             <i className="ri-lock-line mr-1"></i>
-            Secure payment powered by Moolre
+            Secure payment · Paystack, Moolre, Stripe & PayPal
           </p>
         </div>
 
         {/* Help Link */}
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
-            Having issues? <Link href="/contact" className="text-blue-700 hover:underline">Contact Support</Link>
+            Having issues? <Link href="/contact" className="text-gray-700 hover:underline">Contact Support</Link>
           </p>
         </div>
       </div>

@@ -6,6 +6,7 @@ import PageHero from '@/components/PageHero';
 import { useWishlist } from '@/context/WishlistContext';
 import ProductCard from '@/components/ProductCard';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import AnimatedSection from '@/components/AnimatedSection';
 
 export default function WishlistPage() {
   usePageTitle('Wishlist');
@@ -33,14 +34,14 @@ export default function WishlistPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <PageHero title="My Wishlist" />
+      <PageHero title="My Wishlist" backgroundImage="/hero10.jpeg" />
 
       <section className="py-8 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div>
               <nav className="flex items-center space-x-2 text-sm mb-2">
-                <Link href="/" className="text-gray-600 hover:text-blue-700 transition-colors">Home</Link>
+                <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">Home</Link>
                 <i className="ri-arrow-right-s-line text-gray-400"></i>
                 <span className="text-gray-900 font-medium">Wishlist</span>
               </nav>
@@ -51,7 +52,7 @@ export default function WishlistPage() {
             {wishlistItems.length > 0 && (
               <button
                 onClick={addAllToCart}
-                className="bg-gray-900 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap"
+                className="bg-gray-900 hover:bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap"
               >
                 Add All to Cart
               </button>
@@ -61,24 +62,24 @@ export default function WishlistPage() {
       </section>
 
       {wishlistItems.length === 0 ? (
-        <section className="py-20">
+        <AnimatedSection className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
             <div className="w-24 h-24 flex items-center justify-center mx-auto mb-6 bg-gray-200 rounded-full">
               <i className="ri-heart-line text-5xl text-gray-400"></i>
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Your wishlist is empty</h2>
             <p className="text-gray-600 mb-8 text-lg">Save your favourite items here to easily find them later</p>
-            <Link href="/shop" className="inline-block bg-gray-900 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors whitespace-nowrap">
+            <Link href="/shop" className="inline-block bg-gray-900 hover:bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold transition-all hover:-translate-y-1 hover:shadow-lg whitespace-nowrap">
               Explore Products
             </Link>
           </div>
-        </section>
+        </AnimatedSection>
       ) : (
-        <section className="py-12">
+        <AnimatedSection direction="up" delay={0.05} className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {wishlistItems.map((product) => (
-                <div key={product.id} className="relative">
+                <div key={product.id} className="relative hover-lift rounded-xl">
                   <ProductCard {...product} slug={product.slug || product.id} />
                   <button
                     onClick={() => removeFromWishlist(product.id)}
@@ -90,14 +91,14 @@ export default function WishlistPage() {
               ))}
             </div>
           </div>
-        </section>
+        </AnimatedSection>
       )}
 
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl p-12 text-center text-white">
+          <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-12 text-center text-white">
             <h2 className="text-3xl font-bold mb-4">Share Your Wishlist</h2>
-            <p className="text-blue-100 mb-8 text-lg">Let friends and family know what you love</p>
+            <p className="text-gray-100 mb-8 text-lg">Let friends and family know what you love</p>
             <div className="flex justify-center space-x-4">
               <button className="w-12 h-12 flex items-center justify-center bg-white/20 hover:bg-white/30 rounded-lg transition-colors">
                 <i className="ri-facebook-fill text-xl"></i>

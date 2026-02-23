@@ -4,11 +4,11 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import ProductCard, { type ColorVariant } from '@/components/ProductCard';
-import ProductCardSkeleton from '@/components/skeletons/ProductCardSkeleton';
 import { getColorHex } from '@/components/ProductCard';
 import { supabase } from '@/lib/supabase';
 import { cachedQuery } from '@/lib/query-cache';
 import PageHero from '@/components/PageHero';
+import AnimatedSection from '@/components/AnimatedSection';
 
 function ShopContent() {
   usePageTitle('Shop All Products');
@@ -202,6 +202,7 @@ function ShopContent() {
       <PageHero
         title="Shop All Products"
         subtitle="Browse our range of dresses, electronics, bags, shoes and more"
+        backgroundImage="/hero8.jpeg"
       />
 
       {/* Mobile Filter Toggle */}
@@ -218,9 +219,9 @@ function ShopContent() {
         </div>
       </div>
 
-      <section className="py-12">
+      <AnimatedSection direction="up" className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex gap-8">
             <aside className={`${isFilterOpen ? 'fixed inset-0 z-50 bg-white overflow-y-auto' : 'hidden'} lg:block lg:w-64 lg:flex-shrink-0`}>
               <div className="lg:sticky lg:top-24">
                 <div className="bg-white lg:bg-transparent p-6 lg:p-0">
@@ -246,7 +247,7 @@ function ShopContent() {
                             setIsFilterOpen(false);
                           }}
                           className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${selectedCategory === 'all'
-                            ? 'bg-blue-100 text-blue-700 font-medium'
+                            ? 'bg-gray-100 text-gray-900 font-medium'
                             : 'text-gray-700 hover:bg-gray-100'
                             }`}
                         >
@@ -269,7 +270,7 @@ function ShopContent() {
                                   // Don't close filter immediately if exploring hierarchy
                                 }}
                                 className={`w-full text-left px-4 py-2 rounded-lg transition-colors flex justify-between items-center ${isSelected
-                                  ? 'bg-blue-50 text-blue-700 font-medium'
+                                  ? 'bg-gray-50 text-gray-900 font-medium'
                                   : 'text-gray-700 hover:bg-gray-100'
                                   }`}
                               >
@@ -288,7 +289,7 @@ function ShopContent() {
                                         setIsFilterOpen(false);
                                       }}
                                       className={`w-full text-left px-4 py-1.5 rounded-lg text-sm transition-colors ${selectedCategory === child.slug
-                                        ? 'text-blue-700 font-medium bg-blue-50'
+                                        ? 'text-gray-900 font-medium bg-gray-50'
                                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                         }`}
                                     >
@@ -317,7 +318,7 @@ function ShopContent() {
                             setPriceRange([0, parseInt(e.target.value)]);
                             setPage(1);
                           }}
-                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-700"
+                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-900"
                         />
                         <div className="flex items-center justify-between text-sm text-gray-600">
                           <span>GH₵0</span>
@@ -338,7 +339,7 @@ function ShopContent() {
                               setPage(1);
                             }}
                             className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${selectedRating === rating
-                              ? 'bg-blue-100 text-blue-700'
+                              ? 'bg-gray-100 text-gray-900'
                               : 'text-gray-700 hover:bg-gray-100'
                               }`}
                           >
@@ -361,7 +362,7 @@ function ShopContent() {
                         // Re-fetch handled by effect dependencies
                         setIsFilterOpen(false);
                       }}
-                      className="w-full bg-gray-900 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors whitespace-nowrap"
+                      className="w-full bg-gray-900 hover:bg-gray-900 text-white py-3 rounded-lg font-medium transition-colors whitespace-nowrap"
                     >
                       Show Results
                     </button>
@@ -384,7 +385,7 @@ function ShopContent() {
                       setSortBy(e.target.value);
                       setPage(1);
                     }}
-                    className="px-4 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white cursor-pointer"
+                    className="px-4 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 text-sm bg-white cursor-pointer"
                   >
                     <option value="popular">Most Popular</option>
                     <option value="new">Newest</option>
@@ -396,9 +397,9 @@ function ShopContent() {
               </div>
 
               {loading ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-4 gap-y-8 md:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                   {[...Array(6)].map((_, i) => (
-                    <ProductCardSkeleton key={i} />
+                    <div key={i} className="bg-gray-100 rounded-xl aspect-[4/5] animate-pulse"></div>
                   ))}
                 </div>
               ) : (
@@ -423,7 +424,7 @@ function ShopContent() {
                           setSelectedRating(0);
                           setPage(1);
                         }}
-                        className="inline-flex items-center bg-gray-900 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors whitespace-nowrap"
+                        className="inline-flex items-center bg-gray-900 hover:bg-gray-900 text-white px-6 py-3 rounded-lg font-medium transition-colors whitespace-nowrap"
                       >
                         Clear All Filters
                       </button>
@@ -462,14 +463,14 @@ function ShopContent() {
             </div>
           </div>
         </div>
-      </section>
+      </AnimatedSection>
     </main>
   );
 }
 
 export default function ShopPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-12 h-12 border-4 border-blue-700 border-t-transparent rounded-full animate-spin"></div></div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-12 h-12 border-4 border-gray-900 border-t-transparent rounded-full animate-spin"></div></div>}>
       <ShopContent />
     </Suspense>
   );

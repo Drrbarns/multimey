@@ -21,6 +21,8 @@ export default function AdminLayout({
 
   // Module Filtering State
   const [enabledModules, setEnabledModules] = useState<string[]>([]);
+  const [storeName, setStoreName] = useState('MultiMey Supplies');
+  const [storeLogo, setStoreLogo] = useState<string | null>(null);
 
   useEffect(() => {
     async function checkAuth() {
@@ -35,9 +37,6 @@ export default function AdminLayout({
         router.push('/admin/login');
         return;
       }
-
-      // Ensure auth cookie is set (in case user already had a session from before)
-      document.cookie = `sb-access-token=${session.access_token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax; Secure`;
 
       // Check user role from profiles table
       const { data: profile, error: profileError } = await supabase
@@ -55,7 +54,6 @@ export default function AdminLayout({
       // Only allow admin and staff roles
       if (profile.role !== 'admin' && profile.role !== 'staff') {
         console.warn('User does not have admin/staff role');
-        document.cookie = 'sb-access-token=; path=/; max-age=0; SameSite=Lax; Secure';
         await supabase.auth.signOut();
         router.push('/admin/login?error=unauthorized');
         return;
@@ -68,19 +66,6 @@ export default function AdminLayout({
     }
 
     checkAuth();
-
-    // Keep cookie in sync when session refreshes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'TOKEN_REFRESHED' && session) {
-        document.cookie = `sb-access-token=${session.access_token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax; Secure`;
-      }
-      if (event === 'SIGNED_OUT') {
-        document.cookie = 'sb-access-token=; path=/; max-age=0; SameSite=Lax; Secure';
-        document.cookie = 'sb-refresh-token=; path=/; max-age=0; SameSite=Lax; Secure';
-      }
-    });
-
-    return () => subscription.unsubscribe();
   }, [pathname, router]);
 
   useEffect(() => {
@@ -112,6 +97,15 @@ export default function AdminLayout({
       }
     }
     fetchModules();
+
+    // Fetch store name and logo
+    supabase.from('store_settings').select('key, value').in('key', ['site_name', 'site_logo']).then(({ data }) => {
+      data?.forEach((row: { key: string; value: unknown }) => {
+        const v = row.value != null ? String(row.value) : '';
+        if (row.key === 'site_name' && v) setStoreName(v);
+        if (row.key === 'site_logo' && v) setStoreLogo(v);
+      });
+    });
   }, []);
 
   // Screen size check for initial state
@@ -132,9 +126,6 @@ export default function AdminLayout({
   }, []);
 
   const handleLogout = async () => {
-    // Clear auth cookies set during login
-    document.cookie = 'sb-access-token=; path=/; max-age=0; SameSite=Lax; Secure';
-    document.cookie = 'sb-refresh-token=; path=/; max-age=0; SameSite=Lax; Secure';
     await supabase.auth.signOut();
     router.push('/admin/login');
   };
@@ -225,6 +216,11 @@ export default function AdminLayout({
       icon: 'ri-puzzle-line',
       path: '/admin/modules'
     },
+    {
+      title: 'Settings',
+      icon: 'ri-settings-3-line',
+      path: '/admin/settings'
+    },
   ];
 
   const visibleMenuItems = menuItems.filter(item => {
@@ -260,9 +256,17 @@ export default function AdminLayout({
         `}
       >
         <div className="h-full px-4 py-6 overflow-y-auto">
-          <Link href="/admin" className="flex items-center mb-8 px-2 cursor-pointer">
-            <span className="text-xl font-['Pacifico'] text-blue-700">MultiMey</span>
-            <span className="ml-3 text-sm font-semibold text-gray-500">ADMIN</span>
+          <Link href="/admin" className="flex items-center gap-3 mb-8 px-2 cursor-pointer">
+            {storeLogo ? (
+              <img
+                src={storeLogo}
+                alt={storeName}
+                className="h-9 w-auto object-contain max-w-[140px]"
+                onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden'); }}
+              />
+            ) : null}
+            <span className={`text-xl font-bold text-gray-900 ${storeLogo ? 'hidden' : ''}`}>{storeName}</span>
+            <span className="text-sm font-semibold text-gray-500 shrink-0">ADMIN</span>
           </Link>
 
           <nav className="space-y-1">
@@ -274,7 +278,7 @@ export default function AdminLayout({
                   href={item.path}
                   onClick={() => window.innerWidth < 1024 && setIsSidebarOpen(false)} // Close on mobile click
                   className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors cursor-pointer ${isActive
-                    ? 'bg-blue-50 text-blue-700 font-semibold'
+                    ? 'bg-gray-50 text-gray-900 font-semibold'
                     : 'text-gray-700 hover:bg-gray-50'
                     }`}
                 >
@@ -328,7 +332,7 @@ export default function AdminLayout({
                   onClick={() => setShowUserMenu(!showUserMenu)}
                   className="flex items-center space-x-2 lg:space-x-3 px-2 lg:px-3 py-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
                 >
-                  <div className="w-8 h-8 lg:w-9 lg:h-9 flex items-center justify-center bg-blue-100 text-blue-700 rounded-full font-semibold">
+                  <div className="w-8 h-8 lg:w-9 lg:h-9 flex items-center justify-center bg-gray-100 text-gray-900 rounded-full font-semibold">
                     {user?.email?.charAt(0).toUpperCase() || 'A'}
                   </div>
                   <div className="text-left hidden md:block">
