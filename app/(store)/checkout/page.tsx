@@ -19,9 +19,8 @@ export default function CheckoutPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [checkoutType, setCheckoutType] = useState<'guest' | 'account'>('guest');
   const [saveAddress, setSaveAddress] = useState(false);
-  const [savePayment, setSavePayment] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const { getToken, verifying } = useRecaptcha();
+  const { getToken } = useRecaptcha();
 
   const [shippingData, setShippingData] = useState({
     firstName: '',
@@ -404,46 +403,50 @@ export default function CheckoutPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
 
         {currentStep === 1 && (
-          <div className="mb-8 bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Checkout As</h2>
-            <div className="grid md:grid-cols-2 gap-4">
+          <div className="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+            <h2 className="text-2xl font-serif text-gray-900 mb-6">How would you like to checkout?</h2>
+            <div className="grid md:grid-cols-2 gap-5">
               <button
                 onClick={() => !user && setCheckoutType('guest')}
-                className={`p-6 rounded-xl border-2 transition-all text-left cursor-pointer ${checkoutType === 'guest'
-                  ? 'border-gray-900 bg-gray-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                className={`p-6 rounded-2xl border-2 transition-all text-left cursor-pointer relative overflow-hidden group ${checkoutType === 'guest'
+                  ? 'border-gray-900 bg-gray-50/50'
+                  : 'border-gray-100 hover:border-gray-300 bg-white'
                   } ${user ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={!!user}
               >
-                <div className="flex items-center justify-between mb-3">
-                  <i className="ri-user-line text-3xl text-gray-900"></i>
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${checkoutType === 'guest' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
+                    <i className="ri-user-line text-2xl"></i>
+                  </div>
+                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
                     }`}>
                     {checkoutType === 'guest' && <i className="ri-check-line text-white text-sm"></i>}
                   </div>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Guest Checkout</h3>
-                <p className="text-sm text-gray-600">Quick checkout without creating an account</p>
-                {user && <p className="text-xs text-gray-700 mt-2">You are logged in</p>}
+                <p className="text-sm text-gray-500 leading-relaxed">Fast and easy checkout without creating an account.</p>
+                {user && <p className="text-xs font-semibold text-amber-600 mt-3 flex items-center"><i className="ri-error-warning-fill mr-1"></i> You are logged in</p>}
               </button>
 
               <button
                 onClick={() => setCheckoutType('account')}
-                className={`p-6 rounded-xl border-2 transition-all text-left cursor-pointer ${checkoutType === 'account'
-                  ? 'border-gray-900 bg-gray-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                className={`p-6 rounded-2xl border-2 transition-all text-left cursor-pointer relative overflow-hidden group ${checkoutType === 'account'
+                  ? 'border-gray-900 bg-gray-50/50'
+                  : 'border-gray-100 hover:border-gray-300 bg-white'
                   }`}
               >
-                <div className="flex items-center justify-between mb-3">
-                  <i className="ri-account-circle-line text-3xl text-gray-900"></i>
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${checkoutType === 'account' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
+                    <i className="ri-account-circle-line text-2xl"></i>
+                  </div>
+                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
                     }`}>
                     {checkoutType === 'account' && <i className="ri-check-line text-white text-sm"></i>}
                   </div>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{user ? 'My Account' : 'Create Account'}</h3>
-                <p className="text-sm text-gray-600">
-                  {user ? `Logged in as ${user.email}` : 'Save info, track orders & earn loyalty points'}
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  {user ? `Logged in as ${user.email}` : 'Save your details for faster checkout next time.'}
                 </p>
               </button>
             </div>
@@ -452,304 +455,263 @@ export default function CheckoutPage() {
 
         <CheckoutSteps currentStep={currentStep} />
 
-        <div className="grid lg:grid-cols-3 gap-8 mt-8">
-          <div className="lg:col-span-2">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 mt-10">
+          <div className="lg:col-span-7 xl:col-span-8">
             {currentStep === 1 && (
               <>
-                <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-                  <h2 className="text-xl font-bold text-gray-900 mb-6">Shipping Information</h2>
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-6">
+                  <h2 className="text-2xl font-serif text-gray-900 mb-8">Shipping Information</h2>
 
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                           First Name *
                         </label>
                         <input
                           type="text"
                           value={shippingData.firstName}
                           onChange={(e) => setShippingData({ ...shippingData, firstName: e.target.value })}
-                          className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 ${errors.firstName ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.firstName ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                             }`}
                           placeholder="John"
                         />
-                        {errors.firstName && <p className="text-sm text-red-600 mt-1">{errors.firstName}</p>}
+                        {errors.firstName && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.firstName}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                           Last Name *
                         </label>
                         <input
                           type="text"
                           value={shippingData.lastName}
                           onChange={(e) => setShippingData({ ...shippingData, lastName: e.target.value })}
-                          className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 ${errors.lastName ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.lastName ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                             }`}
                           placeholder="Doe"
                         />
-                        {errors.lastName && <p className="text-sm text-red-600 mt-1">{errors.lastName}</p>}
+                        {errors.lastName && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.lastName}</p>}
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                         Email Address *
                       </label>
                       <input
                         type="email"
                         value={shippingData.email}
-                        readOnly={!!user} // Make read-only if logged in (optional, but safer)
+                        readOnly={!!user}
                         onChange={(e) => setShippingData({ ...shippingData, email: e.target.value })}
-                        className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 ${errors.email ? 'border-red-500' : 'border-gray-300'
-                          } ${user ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                        className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.email ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
+                          } ${user ? 'bg-gray-100 cursor-not-allowed text-gray-500' : ''}`}
                         placeholder="you@example.com"
                       />
-                      {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
+                      {errors.email && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.email}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                         Phone Number *
                       </label>
                       <input
                         type="tel"
                         value={shippingData.phone}
                         onChange={(e) => setShippingData({ ...shippingData, phone: e.target.value })}
-                        className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 ${errors.phone ? 'border-red-500' : 'border-gray-300'
+                        className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.phone ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                           }`}
                         placeholder="+233 XX XXX XXXX"
                       />
-                      {errors.phone && <p className="text-sm text-red-600 mt-1">{errors.phone}</p>}
+                      {errors.phone && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.phone}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                         Street Address *
                       </label>
                       <input
                         type="text"
                         value={shippingData.address}
                         onChange={(e) => setShippingData({ ...shippingData, address: e.target.value })}
-                        className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 ${errors.address ? 'border-red-500' : 'border-gray-300'
+                        className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.address ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                           }`}
                         placeholder="House number and street name"
                       />
-                      {errors.address && <p className="text-sm text-red-600 mt-1">{errors.address}</p>}
+                      {errors.address && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.address}</p>}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                           City *
                         </label>
                         <input
                           type="text"
                           value={shippingData.city}
                           onChange={(e) => setShippingData({ ...shippingData, city: e.target.value })}
-                          className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 ${errors.city ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm ${errors.city ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
                             }`}
                           placeholder="Accra"
                         />
-                        {errors.city && <p className="text-sm text-red-600 mt-1">{errors.city}</p>}
+                        {errors.city && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.city}</p>}
                       </div>
                       <div>
-                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
                           Region *
                         </label>
-                        <select
-                          value={shippingData.region}
-                          onChange={(e) => setShippingData({ ...shippingData, region: e.target.value })}
-                          className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 bg-white ${errors.region ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        >
-                          <option value="">Select Region</option>
-                          {ghanaRegions.map((region) => (
-                            <option key={region} value={region}>{region}</option>
-                          ))}
-                        </select>
-                        {errors.region && <p className="text-sm text-red-600 mt-1">{errors.region}</p>}
+                        <div className="relative">
+                          <select
+                            value={shippingData.region}
+                            onChange={(e) => setShippingData({ ...shippingData, region: e.target.value })}
+                            className={`w-full px-5 py-4 bg-gray-50/50 border rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-gray-900 transition-all text-sm appearance-none ${errors.region ? 'border-red-500 bg-red-50/30' : 'border-gray-200'
+                              }`}
+                          >
+                            <option value="">Select Region</option>
+                            {ghanaRegions.map((region) => (
+                              <option key={region} value={region}>{region}</option>
+                            ))}
+                          </select>
+                          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                            <i className="ri-arrow-down-s-line text-lg"></i>
+                          </div>
+                        </div>
+                        {errors.region && <p className="text-xs text-red-500 mt-2 font-medium flex items-center"><i className="ri-error-warning-line mr-1"></i>{errors.region}</p>}
                       </div>
                     </div>
 
                     {checkoutType === 'account' && (
-                      <label className="flex items-center space-x-3 cursor-pointer">
+                      <label className="flex items-center space-x-3 cursor-pointer mt-4 p-4 border border-gray-100 rounded-xl bg-gray-50/50 hover:bg-gray-50 transition-colors">
                         <input
                           type="checkbox"
                           checked={saveAddress}
                           onChange={(e) => setSaveAddress(e.target.checked)}
-                          className="w-5 h-5 text-gray-900 rounded border-gray-300 focus:ring-gray-600"
+                          className="w-5 h-5 text-gray-900 rounded border-gray-300 focus:ring-gray-900"
                         />
-                        <span className="text-sm text-gray-700">Save this address for future orders</span>
+                        <span className="text-sm font-medium text-gray-700">Save this address for future orders</span>
                       </label>
                     )}
                   </div>
 
                   <button
                     onClick={handleContinueToDelivery}
-                    className="w-full mt-6 bg-gray-900 hover:bg-gray-800 text-white py-4 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer"
+                    className="w-full mt-8 bg-gray-900 hover:bg-gray-800 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center text-[15px]"
                   >
-                    Continue to Delivery
+                    Continue to Delivery <i className="ri-arrow-right-line ml-2 text-lg"></i>
                   </button>
                 </div>
-
-
               </>
             )}
 
             {currentStep === 2 && (
               <>
-                <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-                  <h2 className="text-xl font-bold text-gray-900 mb-6">Delivery Method</h2>
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-6">
+                  <h2 className="text-2xl font-serif text-gray-900 mb-8">Delivery Method</h2>
                   <div className="space-y-4">
-                    <label className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer transition-colors ${deliveryMethod === 'pickup' ? 'border-gray-900 bg-gray-50' : 'border-gray-300 hover:border-gray-400'
+                    <label className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'pickup' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'
                       }`}>
                       <div className="flex items-center space-x-4">
-                        <input
-                          type="radio"
-                          name="delivery"
-                          value="pickup"
-                          checked={deliveryMethod === 'pickup'}
-                          onChange={(e) => setDeliveryMethod(e.target.value)}
-                          className="w-5 h-5 text-gray-900"
-                        />
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'pickup' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'}`}>
+                           {deliveryMethod === 'pickup' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                        </div>
                         <div>
-                          <p className="font-semibold text-gray-900">Store Pickup</p>
-                          <p className="text-sm text-gray-600">Pick up from our store — Ready in 24 hours</p>
+                          <p className="font-bold text-gray-900 text-[15px]">Store Pickup</p>
+                          <p className="text-sm text-gray-500 mt-0.5">Pick up from our store — Ready in 24 hours</p>
                         </div>
                       </div>
-                      <p className="font-bold text-gray-900">FREE</p>
+                      <p className="font-bold text-gray-900 bg-white px-3 py-1 rounded-lg border border-gray-200 text-xs tracking-wider uppercase shadow-sm">FREE</p>
                     </label>
 
-                    <label className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer transition-colors ${deliveryMethod === 'doorstep' ? 'border-gray-900 bg-gray-50' : 'border-gray-300 hover:border-gray-400'
+                    <label className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'doorstep' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'
                       }`}>
                       <div className="flex items-center space-x-4">
-                        <input
-                          type="radio"
-                          name="delivery"
-                          value="doorstep"
-                          checked={deliveryMethod === 'doorstep'}
-                          onChange={(e) => setDeliveryMethod(e.target.value)}
-                          className="w-5 h-5 text-gray-900"
-                        />
+                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'doorstep' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'}`}>
+                           {deliveryMethod === 'doorstep' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                        </div>
                         <div>
-                          <p className="font-semibold text-gray-900">Doorstep Delivery</p>
-                          <p className="text-sm text-gray-600">We will contact you with the delivery cost</p>
+                          <p className="font-bold text-gray-900 text-[15px]">Doorstep Delivery</p>
+                          <p className="text-sm text-gray-500 mt-0.5">We will contact you with the delivery cost</p>
                         </div>
                       </div>
-                      <p className="font-semibold text-amber-600 text-sm">At a Cost</p>
+                      <p className="font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200 text-xs tracking-wider uppercase shadow-sm">Variable</p>
                     </label>
-
-                    {/* Comprehensive delivery options - to be re-enabled later
-                    <label className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer transition-colors ${deliveryMethod === 'accra' ? 'border-gray-900 bg-gray-50' : 'border-gray-300 hover:border-gray-400'
-                      }`}>
-                      <div className="flex items-center space-x-4">
-                        <input type="radio" name="delivery" value="accra" checked={deliveryMethod === 'accra'} onChange={(e) => setDeliveryMethod(e.target.value)} className="w-5 h-5 text-gray-900" />
-                        <div>
-                          <p className="font-semibold text-gray-900">Accra Delivery</p>
-                          <p className="text-sm text-gray-600">Delivery within Accra</p>
-                        </div>
-                      </div>
-                      <p className="font-bold text-gray-900">GH₵ 40.00</p>
-                    </label>
-                    <label className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer transition-colors ${deliveryMethod === 'outside-accra' ? 'border-gray-900 bg-gray-50' : 'border-gray-300 hover:border-gray-400'
-                      }`}>
-                      <div className="flex items-center space-x-4">
-                        <input type="radio" name="delivery" value="outside-accra" checked={deliveryMethod === 'outside-accra'} onChange={(e) => setDeliveryMethod(e.target.value)} className="w-5 h-5 text-gray-900" />
-                        <div>
-                          <p className="font-semibold text-gray-900">Outside Accra Delivery</p>
-                          <p className="text-sm text-gray-600">Delivery to bus stations (VIP, OA, STC, etc.)</p>
-                        </div>
-                      </div>
-                      <p className="font-bold text-gray-900">GH₵ 30.00</p>
-                    </label>
-                    */}
                   </div>
 
-                  <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">Payment Method</h2>
-                  <p className="text-sm text-gray-600 mb-4">Select how you’d like to pay. Paystack, Moolre, Stripe, or PayPal — choose one.</p>
-                  <div className="grid grid-cols-2 gap-3">
+                  <h2 className="text-2xl font-serif text-gray-900 mt-12 mb-6">Payment Method</h2>
+                  <p className="text-sm text-gray-500 mb-6">Select your preferred payment method.</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <label
-                      className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-colors ${paymentMethod === 'paystack' ? 'border-gray-900 bg-gray-50' : 'border-gray-300 hover:border-gray-400'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paystack' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="paystack"
-                        checked={paymentMethod === 'paystack'}
-                        onChange={() => setPaymentMethod('paystack')}
-                        className="w-5 h-5 text-gray-900 flex-shrink-0"
-                      />
-                      <i className="ri-bank-card-line text-xl text-gray-600 flex-shrink-0"></i>
-                      <div className="min-w-0">
-                        <p className="font-semibold text-gray-900">Paystack</p>
-                        <p className="text-xs text-gray-600 truncate">Card & Mobile Money</p>
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paystack' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                           {paymentMethod === 'paystack' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                      </div>
+                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
+                         <i className="ri-bank-card-line text-2xl text-gray-700"></i>
+                      </div>
+                      <div className="min-w-0 z-10">
+                        <p className="font-bold text-gray-900 text-[15px]">Paystack</p>
+                        <p className="text-xs text-gray-500 mt-0.5 truncate">Card & Mobile Money</p>
                       </div>
                     </label>
+
                     <label
-                      className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-colors ${paymentMethod === 'moolre' ? 'border-gray-900 bg-gray-50' : 'border-gray-300 hover:border-gray-400'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'moolre' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="moolre"
-                        checked={paymentMethod === 'moolre'}
-                        onChange={() => setPaymentMethod('moolre')}
-                        className="w-5 h-5 text-gray-900 flex-shrink-0"
-                      />
-                      <i className="ri-smartphone-line text-xl text-gray-600 flex-shrink-0"></i>
-                      <div className="min-w-0">
-                        <p className="font-semibold text-gray-900">Moolre</p>
-                        <p className="text-xs text-gray-600 truncate">Mobile Money</p>
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'moolre' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                           {paymentMethod === 'moolre' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                      </div>
+                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
+                         <i className="ri-smartphone-line text-2xl text-gray-700"></i>
+                      </div>
+                      <div className="min-w-0 z-10">
+                        <p className="font-bold text-gray-900 text-[15px]">Moolre</p>
+                        <p className="text-xs text-gray-500 mt-0.5 truncate">Mobile Money Only</p>
                       </div>
                     </label>
+
                     <label
-                      className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-colors ${paymentMethod === 'stripe' ? 'border-gray-900 bg-gray-50' : 'border-gray-300 hover:border-gray-400'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'stripe' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="stripe"
-                        checked={paymentMethod === 'stripe'}
-                        onChange={() => setPaymentMethod('stripe')}
-                        className="w-5 h-5 text-gray-900 flex-shrink-0"
-                      />
-                      <i className="ri-bank-card-2-line text-xl text-gray-600 flex-shrink-0"></i>
-                      <div className="min-w-0">
-                        <p className="font-semibold text-gray-900">Stripe</p>
-                        <p className="text-xs text-gray-600 truncate">Card (Visa, Mastercard)</p>
+                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'stripe' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                           {paymentMethod === 'stripe' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                      </div>
+                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
+                         <i className="ri-bank-card-2-line text-2xl text-gray-700"></i>
+                      </div>
+                      <div className="min-w-0 z-10">
+                        <p className="font-bold text-gray-900 text-[15px]">Stripe</p>
+                        <p className="text-xs text-gray-500 mt-0.5 truncate">Credit/Debit Cards</p>
                       </div>
                     </label>
+
                     <label
-                      className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-colors ${paymentMethod === 'paypal' ? 'border-gray-900 bg-gray-50' : 'border-gray-300 hover:border-gray-400'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paypal' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="paypal"
-                        checked={paymentMethod === 'paypal'}
-                        onChange={() => setPaymentMethod('paypal')}
-                        className="w-5 h-5 text-gray-900 flex-shrink-0"
-                      />
-                      <i className="ri-paypal-line text-xl text-gray-600 flex-shrink-0"></i>
-                      <div className="min-w-0">
-                        <p className="font-semibold text-gray-900">PayPal</p>
-                        <p className="text-xs text-gray-600 truncate">PayPal balance</p>
+                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paypal' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                           {paymentMethod === 'paypal' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                      </div>
+                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
+                         <i className="ri-paypal-line text-2xl text-gray-700"></i>
+                      </div>
+                      <div className="min-w-0 z-10">
+                        <p className="font-bold text-gray-900 text-[15px]">PayPal</p>
+                        <p className="text-xs text-gray-500 mt-0.5 truncate">PayPal Balance</p>
                       </div>
                     </label>
                   </div>
 
-                  <div className="flex flex-col-reverse md:flex-row gap-4 mt-6">
+                  <div className="flex flex-col-reverse md:flex-row gap-4 mt-10">
                     <button
                       onClick={() => setCurrentStep(1)}
                       disabled={isLoading}
-                      className="flex-1 border-2 border-gray-300 hover:border-gray-400 text-gray-700 py-4 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50"
+                      className="md:flex-1 border-2 border-gray-200 hover:border-gray-900 hover:bg-gray-50 text-gray-900 h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer disabled:opacity-50 text-[15px]"
                     >
-                      Back
+                      Back to Shipping
                     </button>
                     <button
                       onClick={handleContinueToPayment}
                       disabled={isLoading}
-                      className="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-4 rounded-lg font-semibold transition-colors whitespace-nowrap cursor-pointer disabled:opacity-70 flex items-center justify-center"
+                      className="md:flex-[2] bg-gray-900 hover:bg-gray-800 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer disabled:opacity-70 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center text-[15px]"
                     >
                       {isLoading ? (
                         <>
@@ -760,27 +722,27 @@ export default function CheckoutPage() {
                           Processing...
                         </>
                       ) : (
-                        paymentMethod === 'paystack' ? 'Pay with Paystack' : paymentMethod === 'moolre' ? 'Pay with Moolre' : paymentMethod === 'stripe' ? 'Pay with Stripe' : 'Pay with PayPal'
+                        <>
+                          Complete Order <i className="ri-secure-payment-line ml-2 text-lg"></i>
+                        </>
                       )}
                     </button>
                   </div>
                 </div>
-
-
               </>
             )}
-
-            {/* Step 3 removed - payment now initiates directly from step 2 */}
           </div>
 
-          <div className="lg:col-span-1">
-            <OrderSummary
-              items={cart}
-              subtotal={subtotal}
-              shipping={shippingCost}
-              tax={tax}
-              total={total}
-            />
+          <div className="lg:col-span-5 xl:col-span-4">
+            <div className="sticky top-24">
+              <OrderSummary
+                items={cart}
+                subtotal={subtotal}
+                shipping={shippingCost}
+                tax={tax}
+                total={total}
+              />
+            </div>
           </div>
         </div>
       </div>
