@@ -377,7 +377,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   )}
                 </div>
 
-                <p className="text-gray-600 leading-relaxed mb-6 text-base font-light">{product.description}</p>
+                <p className="text-gray-600 leading-relaxed mb-8 text-[15px]">{product.description}</p>
 
                 {/* Color Selector */}
                 {hasVariants && product.colors.length > 0 && (
