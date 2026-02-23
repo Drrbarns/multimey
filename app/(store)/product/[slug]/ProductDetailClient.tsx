@@ -610,38 +610,38 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                     )}
                   </div>
 
-                <div className="pt-6 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex items-start text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                    <i className="ri-store-2-line text-blue-600 mr-3 text-xl"></i>
-                    <div>
-                      <p className="font-semibold text-gray-900 mb-0.5">Free Store Pickup</p>
-                      <p className="text-xs">At our Accra location</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                    <i className="ri-arrow-left-right-line text-green-600 mr-3 text-xl"></i>
-                    <div>
-                      <p className="font-semibold text-gray-900 mb-0.5">Easy Returns</p>
-                      <p className="text-xs">24-hour return policy</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                    <i className="ri-shield-check-line text-purple-600 mr-3 text-xl"></i>
-                    <div>
-                      <p className="font-semibold text-gray-900 mb-0.5">Secure Payment</p>
-                      <p className="text-xs">100% buyer protection</p>
-                    </div>
-                  </div>
-                  {product.sku && (
-                    <div className="flex items-start text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                      <i className="ri-barcode-box-line text-gray-600 mr-3 text-xl"></i>
+                  <div className="pt-6 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="flex items-start text-sm text-gray-600 bg-gray-50/80 p-3.5 rounded-xl border border-gray-100/50">
+                      <i className="ri-store-2-line text-blue-600 mr-3 text-lg mt-0.5"></i>
                       <div>
-                        <p className="font-semibold text-gray-900 mb-0.5">SKU</p>
-                        <p className="text-xs">{product.sku}</p>
+                        <p className="font-semibold text-gray-900 mb-0.5 text-[13px]">Free Store Pickup</p>
+                        <p className="text-[12px] text-gray-500">At our Accra location</p>
                       </div>
                     </div>
-                  )}
-                </div>
+                    <div className="flex items-start text-sm text-gray-600 bg-gray-50/80 p-3.5 rounded-xl border border-gray-100/50">
+                      <i className="ri-arrow-left-right-line text-green-600 mr-3 text-lg mt-0.5"></i>
+                      <div>
+                        <p className="font-semibold text-gray-900 mb-0.5 text-[13px]">Easy Returns</p>
+                        <p className="text-[12px] text-gray-500">24-hour return policy</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start text-sm text-gray-600 bg-gray-50/80 p-3.5 rounded-xl border border-gray-100/50">
+                      <i className="ri-shield-check-line text-purple-600 mr-3 text-lg mt-0.5"></i>
+                      <div>
+                        <p className="font-semibold text-gray-900 mb-0.5 text-[13px]">Secure Payment</p>
+                        <p className="text-[12px] text-gray-500">100% buyer protection</p>
+                      </div>
+                    </div>
+                    {product.sku && (
+                      <div className="flex items-start text-sm text-gray-600 bg-gray-50/80 p-3.5 rounded-xl border border-gray-100/50">
+                        <i className="ri-barcode-box-line text-gray-500 mr-3 text-lg mt-0.5"></i>
+                        <div>
+                          <p className="font-semibold text-gray-900 mb-0.5 text-[13px]">SKU</p>
+                          <p className="text-[12px] text-gray-500">{product.sku}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
               </div>
             </div>
           </div>
