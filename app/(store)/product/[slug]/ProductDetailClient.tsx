@@ -366,7 +366,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   </div>
                 </div>
 
-                  <div className="flex items-baseline space-x-3 pb-6 border-b border-gray-100">
+                  <div className="flex items-baseline space-x-3 pb-6 mb-6 border-b border-gray-100">
                     {hasVariants && !selectedVariant ? (
                       <span className="text-3xl sm:text-[34px] font-bold text-gray-900 tracking-tight">
                         <span className="text-lg text-gray-500 font-normal mr-2">From</span>
@@ -380,7 +380,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                     )}
                   </div>
 
-                <div className="mt-6 mb-8">
+                <div className="mt-2 mb-8">
                   <p className="text-gray-600 leading-relaxed text-[15px]">{product.description}</p>
                 </div>
 
