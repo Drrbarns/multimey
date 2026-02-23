@@ -297,7 +297,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
               {/* Left Column - Image Gallery */}
               <div className="w-full lg:w-1/2">
                 <div className="sticky top-24">
-                  <div className="relative aspect-[4/5] sm:aspect-square rounded-2xl overflow-hidden bg-gray-100 mb-4 group">
+                  <div className="relative aspect-[4/5] sm:aspect-square md:aspect-[3/4] lg:aspect-square rounded-2xl overflow-hidden bg-gray-100 mb-4 group">
                     <Image
                       src={product.images[selectedImage]}
                       alt={product.name}
