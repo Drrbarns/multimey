@@ -292,10 +292,10 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
         </section>
 
         <section className="py-12">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
               {/* Left Column - Image Gallery */}
-              <div className="w-full lg:w-1/2">
+              <div className="w-full lg:w-[45%]">
                 <div className="sticky top-24">
                   <div className="relative aspect-[4/5] sm:aspect-square md:aspect-[3/4] lg:aspect-square rounded-2xl overflow-hidden bg-gray-100 mb-4 group">
                     <Image
@@ -339,7 +339,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
               </div>
 
               {/* Right Column - Product Info */}
-              <div className="w-full lg:w-1/2 flex flex-col">
+              <div className="w-full lg:w-[55%] flex flex-col pt-2 lg:pt-0">
                 <div className="flex flex-col mb-4">
                   <div className="flex items-start justify-between">
                     <div>
