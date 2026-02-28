@@ -132,24 +132,24 @@ export default function Header() {
     <>
       <AnnouncementBar />
 
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             {/* Left: mobile menu + logo */}
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
-                className="lg:hidden p-2 -ml-2 text-gray-600 hover:text-gray-900"
+                className="lg:hidden p-2 -ml-2 text-gray-600 hover:text-brand-violet transition-colors"
                 onClick={() => setIsMobileMenuOpen(true)}
                 aria-label="Open menu"
               >
-                <i className="ri-menu-line text-xl" aria-hidden />
+                <i className="ri-menu-line text-2xl" aria-hidden />
               </button>
-              <Link href="/" className="flex items-center shrink-0" aria-label={`${siteName} home`}>
+              <Link href="/" className="flex items-center shrink-0 group" aria-label={`${siteName} home`}>
                 <img
                   src={siteLogo}
                   alt={siteName}
-                  className="h-8 w-auto object-contain"
+                  className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                   style={{ maxHeight: `${logoHeight}px` }}
                 />
               </Link>
@@ -161,7 +161,7 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900 tracking-wide"
+                  className="text-[15px] font-medium text-gray-700 hover:text-brand-violet transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -169,11 +169,11 @@ export default function Header() {
             </nav>
 
             {/* Right: search, wishlist, account, cart */}
-            <div className="flex items-center gap-1 sm:gap-2">
+            <div className="flex items-center gap-2 sm:gap-4">
               {showSearch && (
                 <button
                   type="button"
-                  className="p-2 text-gray-600 hover:text-gray-900"
+                  className="p-2 text-gray-600 hover:text-brand-violet transition-colors"
                   onClick={() => setIsSearchOpen(true)}
                   aria-label="Search"
                 >
@@ -183,12 +183,12 @@ export default function Header() {
               {showWishlist && (
                 <Link
                   href="/wishlist"
-                  className="p-2 text-gray-600 hover:text-gray-900 relative"
+                  className="p-2 text-gray-600 hover:text-brand-violet transition-colors relative"
                   aria-label={wishlistCount > 0 ? `Wishlist, ${wishlistCount} items` : 'Wishlist'}
                 >
                   <i className="ri-heart-line text-xl" aria-hidden />
                   {wishlistCount > 0 && (
-                    <span className="absolute top-1 right-0.5 min-w-[18px] h-[18px] px-1 bg-gray-900 text-white text-[10px] font-medium rounded-full flex items-center justify-center">
+                    <span className="absolute top-1 right-0.5 min-w-[18px] h-[18px] px-1 bg-brand-pink text-brand-violet text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
                       {wishlistCount}
                     </span>
                   )}
@@ -198,7 +198,7 @@ export default function Header() {
                 user ? (
                   <Link
                     href="/account"
-                    className="p-2 text-gray-600 hover:text-gray-900 hidden sm:block"
+                    className="p-2 text-gray-600 hover:text-brand-violet transition-colors hidden sm:block"
                     aria-label="Account"
                   >
                     <i className="ri-user-line text-xl" aria-hidden />
@@ -206,7 +206,7 @@ export default function Header() {
                 ) : (
                   <Link
                     href="/auth/login"
-                    className="p-2 text-gray-600 hover:text-gray-900 hidden sm:block"
+                    className="p-2 text-gray-600 hover:text-brand-violet transition-colors hidden sm:block"
                     aria-label="Log in"
                   >
                     <i className="ri-user-line text-xl" aria-hidden />
@@ -217,15 +217,15 @@ export default function Header() {
                 <div className="relative">
                   <button
                     type="button"
-                    className="p-2 text-gray-600 hover:text-gray-900 relative"
+                    className="p-2 text-gray-600 hover:text-brand-violet transition-colors relative"
                     onClick={() => setIsCartOpen(!isCartOpen)}
                     aria-label={cartCount > 0 ? `Cart, ${cartCount} items` : 'Cart'}
                     aria-expanded={isCartOpen}
                     aria-controls="mini-cart"
                   >
-                    <i className="ri-shopping-cart-line text-xl" aria-hidden />
+                    <i className="ri-shopping-bag-line text-xl" aria-hidden />
                     {cartCount > 0 && (
-                      <span className="absolute top-1 right-0.5 min-w-[18px] h-[18px] px-1 bg-gray-900 text-white text-[10px] font-medium rounded-full flex items-center justify-center">
+                      <span className="absolute top-1 right-0.5 min-w-[18px] h-[18px] px-1 bg-brand-violet text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
                         {cartCount}
                       </span>
                     )}
