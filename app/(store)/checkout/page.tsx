@@ -409,16 +409,16 @@ export default function CheckoutPage() {
               <button
                 onClick={() => !user && setCheckoutType('guest')}
                 className={`p-5 rounded-2xl border-2 transition-all text-left cursor-pointer relative overflow-hidden group ${checkoutType === 'guest'
-                  ? 'border-gray-900 bg-gray-50/50'
+                  ? 'border-brand-violet bg-brand-pink/5'
                   : 'border-gray-100 hover:border-gray-300 bg-white'
                   } ${user ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={!!user}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'bg-brand-violet text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
                     <i className="ri-user-line text-xl"></i>
                   </div>
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300'
                     }`}>
                     {checkoutType === 'guest' && <i className="ri-check-line text-white text-xs"></i>}
                   </div>
@@ -431,15 +431,15 @@ export default function CheckoutPage() {
               <button
                 onClick={() => setCheckoutType('account')}
                 className={`p-5 rounded-2xl border-2 transition-all text-left cursor-pointer relative overflow-hidden group ${checkoutType === 'account'
-                  ? 'border-gray-900 bg-gray-50/50'
+                  ? 'border-brand-violet bg-brand-pink/5'
                   : 'border-gray-100 hover:border-gray-300 bg-white'
                   }`}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'bg-brand-violet text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
                     <i className="ri-account-circle-line text-xl"></i>
                   </div>
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300'
                     }`}>
                     {checkoutType === 'account' && <i className="ri-check-line text-white text-xs"></i>}
                   </div>
@@ -559,12 +559,12 @@ export default function CheckoutPage() {
                     </div>
 
                     {checkoutType === 'account' && (
-                      <label className="flex items-center space-x-3 cursor-pointer mt-4 p-4 border border-gray-100 rounded-xl bg-gray-50/50 hover:bg-gray-50 transition-colors">
+                      <label className="flex items-center space-x-3 cursor-pointer mt-4 p-4 border border-brand-pink/30 rounded-xl bg-brand-pink/5 hover:bg-brand-pink/10 transition-colors">
                         <input
                           type="checkbox"
                           checked={saveAddress}
                           onChange={(e) => setSaveAddress(e.target.checked)}
-                          className="w-5 h-5 text-gray-900 rounded border-gray-300 focus:ring-gray-900"
+                          className="w-5 h-5 text-brand-violet rounded border-gray-300 focus:ring-brand-violet"
                         />
                         <span className="text-sm font-medium text-gray-700">Save this address for future orders</span>
                       </label>
@@ -573,7 +573,7 @@ export default function CheckoutPage() {
 
                   <button
                     onClick={handleContinueToDelivery}
-                    className="w-full mt-8 bg-gray-900 hover:bg-gray-800 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center text-[15px]"
+                    className="w-full mt-8 bg-brand-violet hover:bg-brand-violet/90 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center text-[15px]"
                   >
                     Continue to Delivery <i className="ri-arrow-right-line ml-2 text-lg"></i>
                   </button>
@@ -586,10 +586,10 @@ export default function CheckoutPage() {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-6">
                   <h2 className="text-2xl font-serif text-gray-900 mb-8">Delivery Method</h2>
                   <div className="space-y-4">
-                    <label className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'pickup' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'
+                    <label className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'pickup' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'
                       }`}>
                       <div className="flex items-center space-x-4">
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'pickup' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'}`}>
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'pickup' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300'}`}>
                            {deliveryMethod === 'pickup' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                         </div>
                         <div>
@@ -597,13 +597,13 @@ export default function CheckoutPage() {
                           <p className="text-sm text-gray-500 mt-0.5">Pick up from our store — Ready in 24 hours</p>
                         </div>
                       </div>
-                      <p className="font-bold text-gray-900 bg-white px-3 py-1 rounded-lg border border-gray-200 text-xs tracking-wider uppercase shadow-sm">FREE</p>
+                      <p className="font-bold text-brand-violet bg-brand-pink/20 px-3 py-1 rounded-lg border border-brand-pink/30 text-xs tracking-wider uppercase shadow-sm">FREE</p>
                     </label>
 
-                    <label className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'doorstep' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'
+                    <label className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'doorstep' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'
                       }`}>
                       <div className="flex items-center space-x-4">
-                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'doorstep' ? 'border-gray-900 bg-gray-900' : 'border-gray-300'}`}>
+                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'doorstep' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300'}`}>
                            {deliveryMethod === 'doorstep' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                         </div>
                         <div>
@@ -619,7 +619,7 @@ export default function CheckoutPage() {
                   <p className="text-sm text-gray-500 mb-6">Select your preferred payment method.</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <label
-                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paystack' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paystack' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
                       <input
                         type="radio"
@@ -629,7 +629,7 @@ export default function CheckoutPage() {
                         onChange={() => setPaymentMethod('paystack')}
                         className="sr-only"
                       />
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paystack' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paystack' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'paystack' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
                       <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
@@ -642,7 +642,7 @@ export default function CheckoutPage() {
                     </label>
 
                     <label
-                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'moolre' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'moolre' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
                       <input
                         type="radio"
@@ -652,7 +652,7 @@ export default function CheckoutPage() {
                         onChange={() => setPaymentMethod('moolre')}
                         className="sr-only"
                       />
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'moolre' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'moolre' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'moolre' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
                       <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
@@ -665,7 +665,7 @@ export default function CheckoutPage() {
                     </label>
 
                     <label
-                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'stripe' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'stripe' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
                       <input
                         type="radio"
@@ -675,7 +675,7 @@ export default function CheckoutPage() {
                         onChange={() => setPaymentMethod('stripe')}
                         className="sr-only"
                       />
-                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'stripe' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'stripe' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'stripe' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
                       <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
@@ -688,7 +688,7 @@ export default function CheckoutPage() {
                     </label>
 
                     <label
-                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paypal' ? 'border-gray-900 bg-gray-50/50 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paypal' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
                       <input
                         type="radio"
@@ -698,7 +698,7 @@ export default function CheckoutPage() {
                         onChange={() => setPaymentMethod('paypal')}
                         className="sr-only"
                       />
-                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paypal' ? 'border-gray-900 bg-gray-900' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paypal' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'paypal' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
                       <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
@@ -715,14 +715,14 @@ export default function CheckoutPage() {
                     <button
                       onClick={() => setCurrentStep(1)}
                       disabled={isLoading}
-                      className="md:flex-1 border-2 border-gray-200 hover:border-gray-900 hover:bg-gray-50 text-gray-900 h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer disabled:opacity-50 text-[15px]"
+                      className="md:flex-1 border-2 border-gray-200 hover:border-brand-violet hover:bg-brand-pink/5 text-gray-900 h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer disabled:opacity-50 text-[15px]"
                     >
                       Back to Shipping
                     </button>
                     <button
                       onClick={handleContinueToPayment}
                       disabled={isLoading}
-                      className="md:flex-[2] bg-gray-900 hover:bg-gray-800 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer disabled:opacity-70 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center text-[15px]"
+                      className="md:flex-[2] bg-brand-violet hover:bg-brand-violet/90 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer disabled:opacity-70 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center text-[15px]"
                     >
                       {isLoading ? (
                         <>

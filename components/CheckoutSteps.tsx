@@ -15,7 +15,7 @@ export default function CheckoutSteps({ currentStep }: CheckoutStepsProps) {
       
       {/* Active Line (Progress) */}
       <div 
-        className="absolute left-[15%] top-6 h-0.5 bg-gray-900 transition-all duration-500 ease-in-out -z-10"
+        className="absolute left-[15%] top-6 h-0.5 bg-brand-violet transition-all duration-500 ease-in-out -z-10"
         style={{ width: currentStep === 1 ? '0%' : '70%' }}
       ></div>
 
@@ -27,9 +27,9 @@ export default function CheckoutSteps({ currentStep }: CheckoutStepsProps) {
           <div key={step.number} className="flex flex-col items-center relative z-0">
             <div className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 shadow-sm border-4 ${
               isActive
-                ? 'bg-gray-900 text-white border-white scale-110'
+                ? 'bg-brand-violet text-white border-white scale-110'
                 : isCompleted
-                  ? 'bg-gray-900 text-white border-white'
+                  ? 'bg-brand-violet text-white border-white'
                   : 'bg-white text-gray-400 border-gray-100'
             }`}>
               {isCompleted ? (
