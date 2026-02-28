@@ -146,22 +146,22 @@ export default function Home() {
     <main className="flex-col items-center justify-between min-h-screen bg-white">
       {renderBanners()}
 
-      {/* Hero Section — Slider with popup transition (3s), no white flash */}
-      <section className="relative w-full min-h-[70vh] xs:min-h-[80vh] sm:min-h-[85vh] lg:min-h-[90vh] flex flex-col justify-end overflow-hidden group bg-black">
-        <div className="absolute inset-0 z-0 bg-black">
+      {/* Hero Section */}
+      <section className="relative w-full min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex flex-col justify-center items-center overflow-hidden bg-gradient-to-br from-brand-violet/90 to-brand-pink/20">
+        <div className="absolute inset-0 z-0">
           <AnimatePresence initial={false} mode="sync">
             <motion.div
               key={heroIndex}
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1.05 }}
-              exit={{ opacity: 0, scale: 1.08 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
               className="absolute inset-0"
             >
               <Image
                 src={HERO_SLIDES[heroIndex]}
                 fill
-                className="object-cover object-center"
+                className="object-cover object-center mix-blend-overlay opacity-40"
                 alt={`Hero slide ${heroIndex + 1}`}
                 priority={heroIndex === 0}
                 sizes="100vw"
@@ -169,99 +169,100 @@ export default function Home() {
               />
             </motion.div>
           </AnimatePresence>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30 pointer-events-none" aria-hidden />
         </div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-16 sm:pb-20 lg:pb-24 pt-24 text-center">
-          {heroTagText && (
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-white/90 text-sm font-bold tracking-[0.2em] uppercase mb-6 inline-block px-4 py-1 border border-white/30 rounded-full backdrop-blur-sm"
-            >
-              {heroTagText}
-            </motion.p>
-          )}
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center mt-16">
           <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight mb-6 lg:mb-8 max-w-5xl mx-auto drop-shadow-2xl"
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6"
           >
             {heroHeadlineDisplay}
           </motion.h1>
           <motion.p 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto mb-10 lg:mb-12 font-light leading-relaxed"
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="text-lg sm:text-xl text-white/90 mb-10 font-medium max-w-2xl mx-auto"
           >
             {heroSubheadlineDisplay}
           </motion.p>
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <Link
               href={heroPrimaryLink}
-              className="inline-flex items-center justify-center bg-white text-gray-900 hover:bg-gray-100 px-10 py-4 rounded-full font-bold text-lg transition-all hover:scale-105 shadow-lg hover:shadow-white/20"
+              className="w-full sm:w-auto inline-flex items-center justify-center bg-brand-violet text-white hover:bg-brand-violet/90 px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
               {heroPrimaryText}
             </Link>
             {heroSecondaryText && (
               <Link
                 href={heroSecondaryLink}
-                className="inline-flex items-center justify-center border border-white/40 bg-white/10 backdrop-blur-sm text-white hover:bg-white hover:text-gray-900 px-10 py-4 rounded-full font-bold text-lg transition-all hover:scale-105"
+                className="w-full sm:w-auto inline-flex items-center justify-center bg-brand-pink text-brand-violet hover:bg-brand-pink/90 px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
                 {heroSecondaryText}
               </Link>
             )}
           </motion.div>
-          
-          {/* Stats — desktop */}
-          {showHeroStats && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 1 }}
-            className="mt-16 pt-8 border-t border-white/10 hidden lg:flex justify-center gap-16"
-          >
-            <div className="text-center">
-              <p className="font-serif font-bold text-white text-2xl mb-1">{stat1Title}</p>
-              <p className="text-sm text-white/60 uppercase tracking-wider">{stat1Desc}</p>
-            </div>
-            <div className="text-center">
-              <p className="font-serif font-bold text-white text-2xl mb-1">{stat2Title}</p>
-              <p className="text-sm text-white/60 uppercase tracking-wider">{stat2Desc}</p>
-            </div>
-            <div className="text-center">
-              <p className="font-serif font-bold text-white text-2xl mb-1">{stat3Title}</p>
-              <p className="text-sm text-white/60 uppercase tracking-wider">{stat3Desc}</p>
-            </div>
-          </motion.div>
-          )}
         </div>
-
-        {/* Optional floating badge (desktop only) */}
-        {showHeroBadge && heroBadgeLabel && (
-          <motion.div 
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 1, duration: 0.8 }}
-            className="hidden md:block absolute bottom-12 left-12 z-20 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-2xl max-w-[240px]"
-          >
-            <p className="font-serif text-white/80 text-sm italic mb-1">{heroBadgeLabel}</p>
-            <p className="text-3xl font-bold text-white mb-1">{heroBadgeText}</p>
-            <p className="text-xs text-white/60 uppercase tracking-wider">{heroBadgeSubtext}</p>
-          </motion.div>
-        )}
       </section>
 
-      {/* Categories Section removed per user request */}
+      {/* Value Props / Features */}
+      <section className="py-12 bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-gray-100">
+            <div className="p-4">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">100% Authentic</h3>
+              <p className="text-gray-500">All products are genuine and certified</p>
+            </div>
+            <div className="p-4">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Fast Delivery</h3>
+              <p className="text-gray-500">Get your products within 2-3 days</p>
+            </div>
+            <div className="p-4">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Secure Payment</h3>
+              <p className="text-gray-500">Safe and secure mobile money payments</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Categories Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shop by Category</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Browse our premium collection of products tailored for you</p>
+          </div>
+
+          <AnimatedGrid className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {categories.map((category) => (
+              <Link href={`/shop?category=${category.slug}`} key={category.id} className="group cursor-pointer block">
+                <div className="aspect-square rounded-2xl overflow-hidden mb-4 relative shadow-sm hover:shadow-xl transition-all duration-300 bg-white">
+                  <Image
+                    src={category.image || category.image_url || 'https://via.placeholder.com/600x600?text=' + encodeURIComponent(category.name)}
+                    alt={category.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    quality={75}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-5 text-white text-center">
+                    <h3 className="font-bold text-lg md:text-xl">{category.name}</h3>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </AnimatedGrid>
+        </div>
+      </section>
       
       {/* Featured Products */}
       <section className="py-24 bg-stone-50">
@@ -332,7 +333,7 @@ export default function Home() {
           <div className="text-center mt-20">
             <Link
               href="/shop"
-              className="inline-flex items-center justify-center bg-gray-900 text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1"
+              className="inline-flex items-center justify-center bg-brand-violet text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-brand-violet/90 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1"
             >
               Shop All Products
             </Link>
@@ -346,7 +347,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
             {features.map((feature, i) => (
               <AnimatedSection key={i} delay={i * 0.1} className="flex flex-col items-center text-center group">
-                <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6 text-gray-900 group-hover:bg-gray-900 group-hover:text-white transition-colors duration-500">
+                <div className="w-20 h-20 bg-brand-pink/20 rounded-full flex items-center justify-center mb-6 text-brand-violet group-hover:bg-brand-violet group-hover:text-white transition-colors duration-500">
                   <i className={`${feature.icon} text-3xl`}></i>
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2 text-lg">{feature.title}</h3>
@@ -354,6 +355,28 @@ export default function Home() {
               </AnimatedSection>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-24 bg-brand-pink/10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Stay Updated</h2>
+          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">Subscribe to our newsletter for exclusive deals, beauty tips, and new arrivals.</p>
+          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={(e) => e.preventDefault()}>
+            <input 
+              type="email" 
+              placeholder="Enter your email" 
+              className="flex-1 px-6 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-violet"
+              required
+            />
+            <button 
+              type="submit" 
+              className="bg-brand-violet text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-violet/90 transition-colors shadow-md hover:shadow-lg"
+            >
+              Subscribe
+            </button>
+          </form>
         </div>
       </section>
     </main>
