@@ -246,9 +246,9 @@ function ShopContent() {
                             setPage(1);
                             setIsFilterOpen(false);
                           }}
-                          className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${selectedCategory === 'all'
-                            ? 'bg-gray-100 text-gray-900 font-medium'
-                            : 'text-gray-700 hover:bg-gray-100'
+                          className={`w-full text-left px-4 py-2 rounded-xl transition-colors ${selectedCategory === 'all'
+                            ? 'bg-brand-pink/20 text-brand-violet font-bold'
+                            : 'text-gray-700 hover:bg-gray-50'
                             }`}
                         >
                           All Products
@@ -269,9 +269,9 @@ function ShopContent() {
                                   setPage(1);
                                   // Don't close filter immediately if exploring hierarchy
                                 }}
-                                className={`w-full text-left px-4 py-2 rounded-lg transition-colors flex justify-between items-center ${isSelected
-                                  ? 'bg-gray-50 text-gray-900 font-medium'
-                                  : 'text-gray-700 hover:bg-gray-100'
+                                className={`w-full text-left px-4 py-2 rounded-xl transition-colors flex justify-between items-center ${isSelected
+                                  ? 'bg-brand-pink/20 text-brand-violet font-bold'
+                                  : 'text-gray-700 hover:bg-gray-50'
                                   }`}
                               >
                                 <span>{parent.name}</span>
@@ -279,7 +279,7 @@ function ShopContent() {
 
                               {/* Subcategories */}
                               {subcategories.length > 0 && (
-                                <div className="ml-4 border-l-2 border-gray-100 pl-2 space-y-1">
+                                <div className="ml-4 border-l-2 border-brand-pink/30 pl-2 space-y-1 mt-1">
                                   {subcategories.map(child => (
                                     <button
                                       key={child.id}
@@ -289,8 +289,8 @@ function ShopContent() {
                                         setIsFilterOpen(false);
                                       }}
                                       className={`w-full text-left px-4 py-1.5 rounded-lg text-sm transition-colors ${selectedCategory === child.slug
-                                        ? 'text-gray-900 font-medium bg-gray-50'
-                                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                        ? 'text-brand-violet font-bold bg-brand-pink/10'
+                                        : 'text-gray-600 hover:text-brand-violet hover:bg-gray-50'
                                         }`}
                                     >
                                       {child.name}
@@ -362,7 +362,7 @@ function ShopContent() {
                         // Re-fetch handled by effect dependencies
                         setIsFilterOpen(false);
                       }}
-                      className="w-full bg-gray-900 hover:bg-gray-900 text-white py-3 rounded-lg font-medium transition-colors whitespace-nowrap"
+                      className="w-full bg-brand-violet hover:bg-brand-violet/90 text-white py-3 rounded-xl font-bold transition-all whitespace-nowrap shadow-md hover:shadow-lg"
                     >
                       Show Results
                     </button>
@@ -385,7 +385,7 @@ function ShopContent() {
                       setSortBy(e.target.value);
                       setPage(1);
                     }}
-                    className="px-4 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 text-sm bg-white cursor-pointer"
+                    className="px-4 py-2 pr-8 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-violet focus:border-brand-violet text-sm bg-white cursor-pointer transition-all"
                   >
                     <option value="popular">Most Popular</option>
                     <option value="new">Newest</option>
