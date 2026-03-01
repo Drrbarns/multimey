@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import ScrollReveal from '@/components/ScrollReveal';
-import Image from 'next/image';
 
 export const revalidate = 0;
 
@@ -48,11 +47,10 @@ export default async function CategoriesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         {categories.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-            {categories.map((category, index) => (
+            {categories.map((category) => (
               <ScrollReveal 
                 key={category.id} 
-                direction="up" 
-                delay={index * 0.1}
+                direction="up"
               >
                 <Link
                   href={`/shop?category=${category.slug}`}
