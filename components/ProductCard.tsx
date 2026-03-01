@@ -158,10 +158,12 @@ export default function ProductCard({
                 if (inStock) {
                   addToCart({
                     id,
+                    slug,
                     name,
                     price: displayPrice,
                     image,
                     quantity: moq,
+                    maxStock: maxStock ?? 999,
                   });
                 }
               }}
