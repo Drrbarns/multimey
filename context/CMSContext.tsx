@@ -274,9 +274,8 @@ export const defaultSettings: SiteSettings = {
     // Header
     header_logo_height: '56',
     header_nav_links_json: JSON.stringify([
-        { label: 'Shop', href: '/shop' },
+        { label: 'Products', href: '/shop' },
         { label: 'Categories', href: '/categories' },
-        { label: 'About', href: '/about' },
         { label: 'Contact', href: '/contact' }
     ]),
     header_show_search: 'true',

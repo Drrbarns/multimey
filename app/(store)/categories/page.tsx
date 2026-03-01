@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import ScrollReveal from '@/components/ScrollReveal';
+import Image from 'next/image';
 
-export const revalidate = 0; // Ensure fresh data on every visit
+export const revalidate = 0;
 
 export default async function CategoriesPage() {
   const { data: categoriesData } = await supabase
@@ -18,133 +19,106 @@ export default async function CategoriesPage() {
     .eq('status', 'active')
     .order('position', { ascending: true });
 
-  // Palette to cycle through for visual variety since DB doesn't have colors
-  const palette = [
-    { color: 'from-stone-800 to-stone-900', icon: 'ri-store-2-line', accent: 'bg-stone-100 text-stone-900' },
-    { color: 'from-neutral-800 to-neutral-900', icon: 'ri-shopping-bag-3-line', accent: 'bg-neutral-100 text-neutral-900' },
-    { color: 'from-zinc-800 to-zinc-900', icon: 'ri-t-shirt-line', accent: 'bg-zinc-100 text-zinc-900' },
-    { color: 'from-slate-800 to-slate-900', icon: 'ri-home-smile-line', accent: 'bg-slate-100 text-slate-900' },
-    { color: 'from-gray-800 to-gray-900', icon: 'ri-heart-line', accent: 'bg-gray-100 text-gray-900' },
-    { color: 'from-ash-800 to-ash-900', icon: 'ri-star-smile-line', accent: 'bg-gray-100 text-gray-900' },
-  ];
-
-  const categories = categoriesData?.map((c, i) => {
-    const style = palette[i % palette.length];
+  const categories = categoriesData?.map((c) => {
     return {
       ...c,
       image: c.image_url || 'https://images.unsplash.com/photo-1560869713-7d0a29430803?q=80&w=2626&auto=format&fit=crop',
-      color: style.color,
-      icon: style.icon,
-      accent: style.accent,
-      productCount: 'Browse',
     };
   }) || [];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gray-900 text-white pb-32 lg:pb-48 pt-24 lg:pt-32 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-35">
-           <img 
-            src="https://images.unsplash.com/photo-1560869713-7d0a29430803?q=80&w=2626&auto=format&fit=crop" 
-            alt="Categories Background" 
-            className="w-full h-full object-cover"
-          />
+    <div className="min-h-screen bg-brand-light">
+      {/* Hero Section */}
+      <div className="bg-brand-blue text-white py-20 lg:py-28 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 to-gray-900"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">Shop by Category</h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-light">
-            Browse dresses, electronics, bags, shoes and everything in between
+          <span className="text-brand-gold font-bold tracking-widest uppercase text-xs mb-4 block">Collections</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">Shop by Category</h1>
+          <div className="w-24 h-1 bg-brand-gold mx-auto mb-6 rounded-full"></div>
+          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+            Curated selections of our finest products, organized just for you.
           </p>
         </div>
       </div>
 
-      <ScrollReveal direction="up" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 lg:-mt-32 relative z-20 pb-24">
+      {/* Categories Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         {categories.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             {categories.map((category, index) => (
-              <Link
-                key={category.id}
-                href={`/shop?category=${category.slug}`}
-                className={`group relative overflow-hidden rounded-3xl aspect-[4/5] cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500 hover-lift ${index % 3 === 1 ? 'lg:translate-y-12' : ''}`}
+              <ScrollReveal 
+                key={category.id} 
+                direction="up" 
+                delay={index * 0.1}
               >
-                <div className="absolute inset-0 bg-gray-200">
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
-                </div>
-                
-                <div className="absolute inset-0 p-8 flex flex-col justify-end text-white">
-                  <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <div className="flex items-center gap-3 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                      <span className={`inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-md`}>
-                        <i className={`${category.icon} text-xl`}></i>
-                      </span>
-                      <span className="text-sm font-medium tracking-wide uppercase text-gray-200">Collection</span>
-                    </div>
+                <Link
+                  href={`/shop?category=${category.slug}`}
+                  className="group block"
+                >
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 shadow-md group-hover:shadow-xl transition-all duration-500">
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-brand-blue/0 group-hover:bg-brand-blue/20 transition-colors duration-500"></div>
                     
-                    <h3 className="text-3xl font-bold mb-3 leading-tight">{category.name}</h3>
-                    
-                    <p className="text-gray-300 line-clamp-2 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200 text-sm leading-relaxed max-w-[90%]">
-                      {category.description || 'Discover our exclusive range of products in this category, designed for quality and style.'}
-                    </p>
-                    
-                    <div className="flex items-center gap-2 font-medium text-sm border-b border-white/30 pb-1 w-fit group-hover:border-white transition-colors duration-300">
-                      <span>Explore Collection</span>
-                      <i className="ri-arrow-right-line group-hover:translate-x-1 transition-transform"></i>
+                    {/* Floating Badge */}
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-brand-blue text-xs font-bold px-3 py-1.5 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                      Explore
                     </div>
                   </div>
-                </div>
-              </Link>
+                  
+                  <div className="text-center px-4">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-brand-blue transition-colors">
+                      {category.name}
+                    </h3>
+                    <p className="text-gray-500 text-sm line-clamp-2 mb-4">
+                      {category.description || `Discover our premium collection of ${category.name.toLowerCase()}.`}
+                    </p>
+                    <span className="inline-flex items-center text-brand-gold font-bold text-sm uppercase tracking-wider group-hover:text-brand-blue transition-colors">
+                      Shop Now <i className="ri-arrow-right-line ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                  </div>
+                </Link>
+              </ScrollReveal>
             ))}
           </div>
         ) : (
-          <div className="text-center py-32 bg-white rounded-3xl border border-dashed border-gray-200 shadow-xl">
-            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-              <i className="ri-store-2-line text-4xl text-gray-300"></i>
+          <div className="text-center py-32 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm">
+            <div className="w-20 h-20 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-6 text-brand-blue">
+              <i className="ri-store-2-line text-4xl"></i>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">No collections found</h3>
             <p className="text-gray-500">Check back soon for new arrivals.</p>
           </div>
         )}
-      </ScrollReveal>
+      </div>
 
-      <ScrollReveal direction="scale" className="bg-gray-900 text-white py-24 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gray-800 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 w-1/2 h-full bg-gradient-to-r from-gray-800 to-transparent"></div>
-        </div>
-        
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <span className="inline-block py-1 px-3 rounded-full bg-white/10 backdrop-blur-sm text-sm font-medium mb-6 border border-white/10">
-            Need Help?
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">Can't Find What You're Looking For?</h2>
-          <p className="text-xl text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto">
-            Try our advanced search or contact our team for personalised product recommendations
-          </p>
+      {/* Bottom CTA */}
+      <div className="bg-white border-t border-gray-100 py-16">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Can't Find What You're Looking For?</h2>
+          <p className="text-gray-600 mb-8">Try our advanced search or contact our team for personalized recommendations.</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 bg-white text-gray-900 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-all hover:shadow-lg hover:-translate-y-1"
+              className="bg-brand-blue text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-blue/90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
             >
-              <i className="ri-search-line"></i>
               Search All Products
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-transparent border border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-all hover:-translate-y-1"
+              className="bg-white text-brand-blue border-2 border-brand-blue px-8 py-4 rounded-xl font-bold hover:bg-brand-light transition-all"
             >
-              <i className="ri-customer-service-line"></i>
               Contact Support
             </Link>
           </div>
         </div>
-      </ScrollReveal>
+      </div>
     </div>
   );
 }

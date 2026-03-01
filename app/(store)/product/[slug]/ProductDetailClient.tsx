@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { cachedQuery } from '@/lib/query-cache';
 import ProductCard from '@/components/ProductCard';
-import ProductReviews from '@/components/ProductReviews';
 import { StructuredData, generateProductSchema, generateBreadcrumbSchema } from '@/components/SEOHead';
 import { notFound } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
@@ -36,7 +35,6 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState('description');
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
 
@@ -345,7 +343,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                     <div>
                       <h1 className="text-3xl sm:text-[38px] lg:text-[42px] font-bold text-gray-900 mb-2 leading-tight tracking-tight">{product.name}</h1>
                       <div className="flex items-center space-x-3 text-sm">
-                        <p className="text-gray-500 uppercase tracking-widest font-semibold">{product.category}</p>
+                        <p className="text-brand-blue uppercase tracking-widest font-bold">{product.category}</p>
                         <span className="text-gray-300">|</span>
                         <div className="flex items-center space-x-2 text-[13px]">
                           <div className="flex items-center text-amber-400">
@@ -353,27 +351,27 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                             <span className="font-bold text-gray-900">{Number(product.rating).toFixed(1)}</span>
                           </div>
                           <span className="text-gray-300">|</span>
-                          <span className="text-gray-500 hover:text-gray-900 cursor-pointer transition-colors underline decoration-gray-200 underline-offset-4">{product.reviewCount} reviews</span>
+                          <span className="text-gray-500 hover:text-brand-blue cursor-pointer transition-colors underline decoration-gray-200 underline-offset-4">{product.reviewCount} reviews</span>
                         </div>
                       </div>
                     </div>
                     <button
                       onClick={() => setIsWishlisted(!isWishlisted)}
-                      className="w-12 h-12 flex-shrink-0 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 rounded-full transition-all cursor-pointer ml-4 shadow-sm group"
+                      className="w-12 h-12 flex-shrink-0 flex items-center justify-center border border-gray-200 bg-white hover:bg-brand-gold/20 rounded-full transition-all cursor-pointer ml-4 shadow-sm group"
                     >
-                      <i className={`${isWishlisted ? 'ri-heart-fill text-red-500' : 'ri-heart-line text-gray-400 group-hover:text-red-400'} text-xl transition-colors`}></i>
+                      <i className={`${isWishlisted ? 'ri-heart-fill text-brand-blue' : 'ri-heart-line text-gray-400 group-hover:text-brand-blue'} text-xl transition-colors`}></i>
                     </button>
                   </div>
                 </div>
 
                   <div className="flex items-baseline space-x-3 pb-6 border-b border-gray-100">
                     {hasVariants && !selectedVariant ? (
-                      <span className="text-3xl sm:text-[34px] font-bold text-gray-900 tracking-tight">
+                      <span className="text-3xl sm:text-[34px] font-bold text-brand-blue tracking-tight">
                         <span className="text-lg text-gray-500 font-normal mr-2">From</span>
                         GH₵{minVariantPrice.toFixed(2)}
                       </span>
                     ) : (
-                      <span className="text-3xl sm:text-[34px] font-bold text-gray-900 tracking-tight">GH₵{activePrice.toFixed(2)}</span>
+                      <span className="text-3xl sm:text-[34px] font-bold text-brand-blue tracking-tight">GH₵{activePrice.toFixed(2)}</span>
                     )}
                     {product.compare_at_price && product.compare_at_price > activePrice && (
                       <span className="text-xl text-gray-400 line-through decoration-gray-300">GH₵{product.compare_at_price.toFixed(2)}</span>
@@ -416,10 +414,10 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                             }}
                             disabled={isOutOfStock}
                             className={`h-11 px-4 rounded-xl border font-medium transition-all whitespace-nowrap flex items-center gap-2.5 text-[13px] ${isSelected
-                              ? 'border-gray-900 bg-gray-900 text-white shadow-sm ring-1 ring-gray-900'
+                              ? 'border-brand-blue bg-brand-blue text-white shadow-sm ring-1 ring-brand-blue'
                               : isOutOfStock
                                 ? 'border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50'
-                                : 'border-gray-200 text-gray-700 hover:border-gray-900 bg-white cursor-pointer hover:shadow-sm'
+                                : 'border-gray-200 text-gray-700 hover:border-brand-blue bg-white cursor-pointer hover:shadow-sm'
                               }`}
                             title={isOutOfStock ? 'Out of stock' : `Select ${color}`}
                           >
@@ -471,10 +469,10 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                                 }}
                                 disabled={isOutOfStock}
                                 className={`px-5 py-2.5 rounded-xl border font-medium transition-all whitespace-nowrap flex flex-col items-center ${isSelected
-                                  ? 'border-gray-900 bg-gray-900 text-white shadow-sm ring-1 ring-gray-900'
+                                  ? 'border-brand-blue bg-brand-blue text-white shadow-sm ring-1 ring-brand-blue'
                                   : isOutOfStock
                                     ? 'border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50'
-                                    : 'border-gray-200 text-gray-700 hover:border-gray-900 bg-white cursor-pointer hover:shadow-sm'
+                                    : 'border-gray-200 text-gray-700 hover:border-brand-blue bg-white cursor-pointer hover:shadow-sm'
                                   }`}
                               >
                                 <span className="text-[13px]">{variant.name}</span>
@@ -513,10 +511,10 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                                 }}
                                 disabled={isOutOfStock}
                                 className={`px-5 py-2.5 rounded-xl border font-medium transition-all whitespace-nowrap flex flex-col items-center ${isSelected
-                                  ? 'border-gray-900 bg-gray-900 text-white shadow-sm ring-1 ring-gray-900'
+                                  ? 'border-brand-blue bg-brand-blue text-white shadow-sm ring-1 ring-brand-blue'
                                   : isOutOfStock
                                     ? 'border-gray-100 text-gray-400 cursor-not-allowed bg-gray-50'
-                                    : 'border-gray-200 text-gray-700 hover:border-gray-900 bg-white cursor-pointer hover:shadow-sm'
+                                    : 'border-gray-200 text-gray-700 hover:border-brand-blue bg-white cursor-pointer hover:shadow-sm'
                                   }`}
                               >
                                 <span className="text-[13px]">{variant.name}</span>
@@ -594,7 +592,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                   <div className="flex flex-col sm:flex-row gap-3 mb-6 mt-6">
                     <button
                       disabled={activeStock === 0 || needsVariantSelection || needsColorSelection}
-                      className={`flex-1 border-2 border-gray-900 bg-white hover:bg-gray-50 text-gray-900 h-14 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 text-[15px] whitespace-nowrap cursor-pointer ${(activeStock === 0 || needsVariantSelection || needsColorSelection) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      className={`flex-1 border-2 border-brand-blue bg-white hover:bg-brand-gold/20 text-brand-blue h-14 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 text-[15px] whitespace-nowrap cursor-pointer ${(activeStock === 0 || needsVariantSelection || needsColorSelection) ? 'opacity-50 cursor-not-allowed' : ''}`}
                       onClick={handleAddToCart}
                     >
                       <i className="ri-shopping-cart-2-line text-lg"></i>
@@ -603,7 +601,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                     {activeStock > 0 && !needsVariantSelection && !needsColorSelection && (
                       <button
                         onClick={handleBuyNow}
-                        className="flex-1 bg-gray-900 hover:bg-gray-800 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer text-[15px]"
+                        className="flex-1 bg-brand-blue hover:bg-brand-blue/90 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer text-[15px] shadow-lg hover:-translate-y-0.5"
                       >
                         Buy It Now
                       </button>
@@ -647,61 +645,6 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
           </div>
         </section>
 
-        <section className="py-12 bg-white border-t border-gray-100 mt-8">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="mb-10 flex justify-center">
-              <div className="inline-flex bg-gray-50 p-1.5 rounded-xl overflow-x-auto max-w-full no-scrollbar shadow-sm border border-gray-100">
-                {['description', 'features', 'care', 'reviews'].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`px-6 sm:px-8 py-2.5 font-semibold transition-all rounded-lg whitespace-nowrap cursor-pointer text-[13px] uppercase tracking-wider ${activeTab === tab
-                      ? 'bg-white text-gray-900 shadow-sm ring-1 ring-gray-200'
-                      : 'text-gray-500 hover:text-gray-900 hover:bg-white/50'
-                      }`}
-                  >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="max-w-4xl mx-auto min-h-[300px]">
-              {activeTab === 'description' && (
-                <div className="animate-fade-in text-gray-600 space-y-4">
-                  <p className="leading-relaxed text-[15px]">{product.description}</p>
-                </div>
-              )}
-
-              {activeTab === 'features' && (
-                <div className="animate-fade-in grid sm:grid-cols-2 gap-4">
-                  {product.features?.map((feature: string, index: number) => (
-                    <div key={index} className="flex items-start bg-gray-50/50 p-4 rounded-xl border border-gray-100/50">
-                      <i className="ri-checkbox-circle-fill text-green-500 mr-3 text-lg mt-0.5"></i>
-                      <span className="text-gray-700 text-[14px]">{feature}</span>
-                    </div>
-                  )) || <p className="text-gray-500 italic text-[15px] col-span-2 text-center py-8">No specific features listed.</p>}
-                </div>
-              )}
-
-              {activeTab === 'care' && (
-                <div className="animate-fade-in bg-gray-50/50 p-6 rounded-2xl border border-gray-100/50 text-center">
-                  <div className="w-10 h-10 mx-auto bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-3">
-                    <i className="ri-drop-line text-xl"></i>
-                  </div>
-                  <h3 className="text-base font-bold text-gray-900 mb-2">Care & Maintenance</h3>
-                  <p className="text-gray-600 text-[14px] leading-relaxed max-w-2xl mx-auto">{product.care || 'Wipe clean with a damp cloth. Store in a cool, dry place.'}</p>
-                </div>
-              )}
-
-              {activeTab === 'reviews' && (
-                <div id="reviews" className="animate-fade-in">
-                  <ProductReviews productId={product.id} />
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
 
         {relatedProducts.length > 0 && (
           <section className="py-20 bg-white" data-product-shop>

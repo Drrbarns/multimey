@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import CheckoutSteps from '@/components/CheckoutSteps';
 import OrderSummary from '@/components/OrderSummary';
 import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
@@ -15,7 +14,6 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { cart, subtotal: cartSubtotal, clearCart } = useCart();
 
-  const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [checkoutType, setCheckoutType] = useState<'guest' | 'account'>('guest');
   const [saveAddress, setSaveAddress] = useState(false);
@@ -54,7 +52,7 @@ export default function CheckoutPage() {
   ];
 
   const [deliveryMethod, setDeliveryMethod] = useState('pickup');
-  const [paymentMethod, setPaymentMethod] = useState<'paystack' | 'moolre' | 'stripe' | 'paypal'>('paystack');
+  const [paymentMethod, setPaymentMethod] = useState<'paystack' | 'moolre' | 'stripe' | 'paypal'>('moolre');
   const [errors, setErrors] = useState<any>({});
 
 
@@ -81,14 +79,9 @@ export default function CheckoutPage() {
     return () => clearTimeout(timer);
   }, [cart, router, isLoading]);
 
-  // Scroll to top when step changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentStep]);
-
   // Calculate Totals
   const subtotal = cartSubtotal;
-  const shippingCost = 0; // Delivery options temporarily disabled
+  const shippingCost = deliveryMethod === 'doorstep' ? 50 : 0; // 50 GHS for doorstep, 0 for pickup
   const tax = 0; // No Tax
   const total = subtotal + shippingCost + tax;
 
@@ -107,13 +100,12 @@ export default function CheckoutPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleContinueToDelivery = () => {
-    if (validateShipping()) {
-      setCurrentStep(2);
-    }
-  };
-
   const handleContinueToPayment = async () => {
+    if (!validateShipping()) {
+      // Scroll to top smoothly so user can see the errors
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     // Initiate payment with selected method
     await handlePlaceOrder();
   };
@@ -402,23 +394,22 @@ export default function CheckoutPage() {
 
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
 
-        {currentStep === 1 && (
-          <div className="mb-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
-            <h2 className="text-2xl font-serif text-gray-900 mb-6">How would you like to checkout?</h2>
+        <div className="mb-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+          <h2 className="text-2xl font-serif text-gray-900 mb-6">How would you like to checkout?</h2>
             <div className="grid md:grid-cols-2 gap-5">
               <button
                 onClick={() => !user && setCheckoutType('guest')}
                 className={`p-5 rounded-2xl border-2 transition-all text-left cursor-pointer relative overflow-hidden group ${checkoutType === 'guest'
-                  ? 'border-brand-violet bg-brand-pink/5'
+                  ? 'border-brand-blue bg-brand-gold/5'
                   : 'border-gray-100 hover:border-gray-300 bg-white'
                   } ${user ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={!!user}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'bg-brand-violet text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'bg-brand-blue text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
                     <i className="ri-user-line text-xl"></i>
                   </div>
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300'
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'guest' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300'
                     }`}>
                     {checkoutType === 'guest' && <i className="ri-check-line text-white text-xs"></i>}
                   </div>
@@ -431,15 +422,15 @@ export default function CheckoutPage() {
               <button
                 onClick={() => setCheckoutType('account')}
                 className={`p-5 rounded-2xl border-2 transition-all text-left cursor-pointer relative overflow-hidden group ${checkoutType === 'account'
-                  ? 'border-brand-violet bg-brand-pink/5'
+                  ? 'border-brand-blue bg-brand-gold/5'
                   : 'border-gray-100 hover:border-gray-300 bg-white'
                   }`}
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'bg-brand-violet text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'bg-brand-blue text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`}>
                     <i className="ri-account-circle-line text-xl"></i>
                   </div>
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300'
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${checkoutType === 'account' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300'
                     }`}>
                     {checkoutType === 'account' && <i className="ri-check-line text-white text-xs"></i>}
                   </div>
@@ -451,16 +442,11 @@ export default function CheckoutPage() {
               </button>
             </div>
           </div>
-        )}
-
-        <CheckoutSteps currentStep={currentStep} />
 
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 mt-10">
           <div className="lg:col-span-7 xl:col-span-8">
-            {currentStep === 1 && (
-              <>
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-6">
-                  <h2 className="text-2xl font-serif text-gray-900 mb-8">Shipping Information</h2>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-6">
+              <h2 className="text-2xl font-serif text-gray-900 mb-8">Shipping Information</h2>
 
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -559,37 +545,28 @@ export default function CheckoutPage() {
                     </div>
 
                     {checkoutType === 'account' && (
-                      <label className="flex items-center space-x-3 cursor-pointer mt-4 p-4 border border-brand-pink/30 rounded-xl bg-brand-pink/5 hover:bg-brand-pink/10 transition-colors">
+                      <label className="flex items-center space-x-3 cursor-pointer mt-4 p-4 border border-brand-gold/30 rounded-xl bg-brand-gold/5 hover:bg-brand-gold/10 transition-colors">
                         <input
                           type="checkbox"
                           checked={saveAddress}
                           onChange={(e) => setSaveAddress(e.target.checked)}
-                          className="w-5 h-5 text-brand-violet rounded border-gray-300 focus:ring-brand-violet"
+                          className="w-5 h-5 text-brand-blue rounded border-gray-300 focus:ring-brand-blue"
                         />
                         <span className="text-sm font-medium text-gray-700">Save this address for future orders</span>
                       </label>
                     )}
                   </div>
-
-                  <button
-                    onClick={handleContinueToDelivery}
-                    className="w-full mt-8 bg-brand-violet hover:bg-brand-violet/90 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center text-[15px]"
-                  >
-                    Continue to Delivery <i className="ri-arrow-right-line ml-2 text-lg"></i>
-                  </button>
                 </div>
-              </>
-            )}
 
-            {currentStep === 2 && (
-              <>
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-6">
                   <h2 className="text-2xl font-serif text-gray-900 mb-8">Delivery Method</h2>
                   <div className="space-y-4">
-                    <label className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'pickup' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'
+                    <label 
+                      onClick={() => setDeliveryMethod('pickup')}
+                      className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'pickup' ? 'border-brand-blue bg-brand-gold/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'
                       }`}>
                       <div className="flex items-center space-x-4">
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'pickup' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300'}`}>
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'pickup' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300'}`}>
                            {deliveryMethod === 'pickup' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                         </div>
                         <div>
@@ -597,29 +574,32 @@ export default function CheckoutPage() {
                           <p className="text-sm text-gray-500 mt-0.5">Pick up from our store — Ready in 24 hours</p>
                         </div>
                       </div>
-                      <p className="font-bold text-brand-violet bg-brand-pink/20 px-3 py-1 rounded-lg border border-brand-pink/30 text-xs tracking-wider uppercase shadow-sm">FREE</p>
+                      <p className="font-bold text-brand-blue bg-brand-gold/20 px-3 py-1 rounded-lg border border-brand-gold/30 text-xs tracking-wider uppercase shadow-sm">FREE</p>
                     </label>
 
-                    <label className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'doorstep' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'
+                    <label 
+                      onClick={() => setDeliveryMethod('doorstep')}
+                      className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'doorstep' ? 'border-brand-blue bg-brand-gold/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'
                       }`}>
                       <div className="flex items-center space-x-4">
-                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'doorstep' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300'}`}>
+                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'doorstep' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300'}`}>
                            {deliveryMethod === 'doorstep' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                         </div>
                         <div>
                           <p className="font-bold text-gray-900 text-[15px]">Doorstep Delivery</p>
-                          <p className="text-sm text-gray-500 mt-0.5">We will contact you with the delivery cost</p>
+                          <p className="text-sm text-gray-500 mt-0.5">Standard delivery to your address</p>
                         </div>
                       </div>
-                      <p className="font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200 text-xs tracking-wider uppercase shadow-sm">Variable</p>
+                      <p className="font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200 text-xs tracking-wider uppercase shadow-sm">GH₵50.00</p>
                     </label>
                   </div>
 
                   <h2 className="text-2xl font-serif text-gray-900 mt-12 mb-6">Payment Method</h2>
                   <p className="text-sm text-gray-500 mb-6">Select your preferred payment method.</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4">
+                    {/* 
                     <label
-                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paystack' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paystack' ? 'border-brand-blue bg-brand-gold/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
                       <input
                         type="radio"
@@ -629,7 +609,7 @@ export default function CheckoutPage() {
                         onChange={() => setPaymentMethod('paystack')}
                         className="sr-only"
                       />
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paystack' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paystack' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'paystack' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
                       <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
@@ -640,9 +620,11 @@ export default function CheckoutPage() {
                         <p className="text-[11px] text-gray-500 mt-0.5 truncate">Card & Mobile Money</p>
                       </div>
                     </label>
+                    */}
 
                     <label
-                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'moolre' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
+                      onClick={() => setPaymentMethod('moolre')}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'moolre' ? 'border-brand-blue bg-brand-gold/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
                       <input
                         type="radio"
@@ -652,20 +634,21 @@ export default function CheckoutPage() {
                         onChange={() => setPaymentMethod('moolre')}
                         className="sr-only"
                       />
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'moolre' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'moolre' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'moolre' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
                       <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
                          <i className="ri-smartphone-line text-xl text-gray-700"></i>
                       </div>
                       <div className="min-w-0 z-10">
-                        <p className="font-bold text-gray-900 text-[14px]">Moolre</p>
-                        <p className="text-[11px] text-gray-500 mt-0.5 truncate">Mobile Money Only</p>
+                        <p className="font-bold text-gray-900 text-[14px]">Mobile Money</p>
+                        <p className="text-[11px] text-gray-500 mt-0.5 truncate">Pay securely with Mobile Money</p>
                       </div>
                     </label>
 
+                    {/* 
                     <label
-                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'stripe' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'stripe' ? 'border-brand-blue bg-brand-gold/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
                       <input
                         type="radio"
@@ -675,7 +658,7 @@ export default function CheckoutPage() {
                         onChange={() => setPaymentMethod('stripe')}
                         className="sr-only"
                       />
-                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'stripe' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'stripe' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'stripe' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
                       <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
@@ -688,7 +671,7 @@ export default function CheckoutPage() {
                     </label>
 
                     <label
-                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paypal' ? 'border-brand-violet bg-brand-pink/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
+                      className={`flex items-center gap-4 p-5 border-2 rounded-xl cursor-pointer transition-all relative overflow-hidden group ${paymentMethod === 'paypal' ? 'border-brand-blue bg-brand-gold/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'}`}
                     >
                       <input
                         type="radio"
@@ -698,7 +681,7 @@ export default function CheckoutPage() {
                         onChange={() => setPaymentMethod('paypal')}
                         className="sr-only"
                       />
-                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paypal' ? 'border-brand-violet bg-brand-violet' : 'border-gray-300 group-hover:border-gray-400'}`}>
+                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors z-10 ${paymentMethod === 'paypal' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300 group-hover:border-gray-400'}`}>
                            {paymentMethod === 'paypal' && <div className="w-2 h-2 bg-white rounded-full"></div>}
                       </div>
                       <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center flex-shrink-0 z-10">
@@ -709,20 +692,14 @@ export default function CheckoutPage() {
                         <p className="text-[11px] text-gray-500 mt-0.5 truncate">PayPal Balance</p>
                       </div>
                     </label>
+                    */}
                   </div>
 
-                  <div className="flex flex-col-reverse md:flex-row gap-4 mt-10">
-                    <button
-                      onClick={() => setCurrentStep(1)}
-                      disabled={isLoading}
-                      className="md:flex-1 border-2 border-gray-200 hover:border-brand-violet hover:bg-brand-pink/5 text-gray-900 h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer disabled:opacity-50 text-[15px]"
-                    >
-                      Back to Shipping
-                    </button>
+                  <div className="mt-10">
                     <button
                       onClick={handleContinueToPayment}
                       disabled={isLoading}
-                      className="md:flex-[2] bg-brand-violet hover:bg-brand-violet/90 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer disabled:opacity-70 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center text-[15px]"
+                      className="w-full bg-brand-blue hover:bg-brand-blue/90 text-white h-14 rounded-xl font-bold transition-all whitespace-nowrap cursor-pointer disabled:opacity-70 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center text-[15px]"
                     >
                       {isLoading ? (
                         <>
@@ -740,8 +717,6 @@ export default function CheckoutPage() {
                     </button>
                   </div>
                 </div>
-              </>
-            )}
           </div>
 
           <div className="lg:col-span-5 xl:col-span-4">

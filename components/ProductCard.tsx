@@ -83,24 +83,24 @@ export default function ProductCard({
   const formatPrice = (val: number) => `GH₵${val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
   return (
-    <div className="group bg-white h-full flex flex-col">
-      {/* Image: full width, square-ish, no rounded corners */}
+    <div className="group bg-white h-full flex flex-col rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-1">
+      {/* Image */}
       <Link
         href={`/product/${slug}`}
-        className="relative block aspect-[3/4] overflow-hidden bg-gray-100"
+        className="relative block aspect-square overflow-hidden bg-gray-100"
       >
         <LazyImage
           src={image}
           alt={name}
-          className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
+          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
         />
         {badge && (
-          <span className="absolute top-3 left-3 bg-white/90 text-gray-900 text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1">
+          <span className="absolute top-3 left-3 bg-brand-gold text-brand-blue text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full">
             {badge}
           </span>
         )}
-        {discount > 0 && (
-          <span className="absolute top-3 left-3 bg-red-50 text-red-700 text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1">
+        {discount > 0 && !badge && (
+          <span className="absolute top-3 left-3 bg-red-500 text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full">
             -{discount}%
           </span>
         )}
@@ -111,75 +111,72 @@ export default function ProductCard({
         )}
       </Link>
 
-      {/* Product info: left-aligned, serif name/brand, bold price */}
-      <div className="flex flex-col flex-grow pt-4 pb-2 text-left">
-        <Link href={`/product/${slug}`} className="mb-0.5">
-          <h3 className="font-serif text-[1.05rem] leading-snug text-black font-medium line-clamp-2 group-hover:underline">
+      {/* Content */}
+      <div className="p-4 sm:p-5 flex flex-col flex-grow">
+        {brand && (
+          <p className="text-[11px] text-gray-500 uppercase tracking-wider font-semibold mb-1">{brand}</p>
+        )}
+        <Link href={`/product/${slug}`} className="block mb-1">
+          <h3 className="text-[15px] font-semibold text-gray-900 line-clamp-2 group-hover:text-brand-blue transition-colors">
             {name}
           </h3>
         </Link>
-        {brand && (
-          <p className="font-serif text-sm text-black/80 font-normal mb-1.5">
-            {brand}
-          </p>
-        )}
 
-        {colorVariants.length > 0 && (
-          <div className="flex items-center gap-1.5 mb-2">
-            {colorVariants.slice(0, MAX_SWATCHES).map((color) => (
-              <button
-                key={color.name}
-                title={color.name}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setActiveColor(activeColor === color.name ? null : color.name);
-                }}
-                className={`w-4 h-4 rounded-full border transition-all duration-200 flex-shrink-0 ${
-                  activeColor === color.name
-                    ? 'ring-2 ring-offset-1 ring-black'
-                    : 'hover:scale-110'
-                } ${color.hex === '#FFFFFF' ? 'border-gray-300' : 'border-transparent'}`}
-                style={{ backgroundColor: color.hex }}
-              />
+        {/* Rating */}
+        <div className="flex items-center gap-1 mb-3">
+          <div className="flex text-yellow-400 text-xs">
+            {[...Array(5)].map((_, i) => (
+              <i key={i} className={i < Math.floor(rating) ? "ri-star-fill" : "ri-star-line"}></i>
             ))}
-            {colorVariants.length > MAX_SWATCHES && (
-              <span className="text-xs text-gray-400 ml-0.5">+{colorVariants.length - MAX_SWATCHES}</span>
-            )}
           </div>
-        )}
-
-        <div className="mb-3">
-          {hasVariants && minVariantPrice != null ? (
-            <span className="font-sans text-xl font-bold text-black">From {formatPrice(minVariantPrice)}</span>
-          ) : (
-            <span className="font-sans text-xl font-bold text-black">{formatPrice(price)}</span>
-          )}
-          {originalPrice && originalPrice > price && (
-            <span className="font-sans text-sm text-gray-500 line-through ml-2">{formatPrice(originalPrice)}</span>
-          )}
+          <span className="text-xs text-gray-500">({reviewCount})</span>
         </div>
 
-        {/* Add to cart: full width, thin black border, transparent bg */}
-        {hasVariants ? (
-          <Link
-            href={`/product/${slug}`}
-            className="w-full border border-black py-3 px-4 text-center text-black font-medium text-sm hover:bg-black hover:text-white transition-colors"
-          >
-            Select Options
-          </Link>
-        ) : (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              addToCart({ id, name, price, image, quantity: moq, slug, maxStock, moq });
-            }}
-            disabled={!inStock}
-            className="w-full border border-black py-3 px-4 text-center text-black font-medium text-sm hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Add to cart
-          </button>
-        )}
+        {/* Price & Cart */}
+        <div className="mt-auto pt-3 flex items-center justify-between border-t border-gray-50">
+          <div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-lg font-bold text-gray-900">{formatPrice(displayPrice)}</span>
+              {originalPrice && originalPrice > displayPrice && (
+                <span className="text-xs text-gray-400 line-through">{formatPrice(originalPrice)}</span>
+              )}
+            </div>
+            {hasVariants && <p className="text-[10px] text-gray-500">From</p>}
+          </div>
+          
+          {hasVariants ? (
+            <Link
+              href={`/product/${slug}`}
+              className="w-10 h-10 rounded-full bg-gray-100 text-gray-900 flex items-center justify-center hover:bg-brand-blue hover:text-white transition-colors"
+            >
+              <i className="ri-arrow-right-line"></i>
+            </Link>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                if (inStock) {
+                  addToCart({
+                    id,
+                    name,
+                    price: displayPrice,
+                    image,
+                    quantity: moq,
+                    maxQuantity: maxStock
+                  });
+                }
+              }}
+              disabled={!inStock}
+              className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                inStock 
+                  ? 'bg-brand-blue text-white hover:bg-brand-blue/90 active:scale-95' 
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              <i className={inStock ? "ri-shopping-cart-2-line" : "ri-close-circle-line"}></i>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

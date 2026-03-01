@@ -18,8 +18,7 @@ export default function Footer() {
   const socialSnapchat = getSetting('social_snapchat') || '';
 
   const links = [
-    { label: 'Shop', href: '/shop' },
-    { label: 'About', href: '/about' },
+    { label: 'Products', href: '/shop' },
     { label: 'Contact', href: '/contact' },
     { label: 'Shipping', href: '/shipping' },
     { label: 'Returns', href: '/returns' },
@@ -36,7 +35,7 @@ export default function Footer() {
   ].filter((s) => s.link);
 
   return (
-    <footer className="bg-brand-violet text-white relative overflow-hidden">
+    <footer className="bg-brand-blue text-white relative overflow-hidden">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
@@ -54,7 +53,7 @@ export default function Footer() {
                 style={{ maxHeight: `${footerLogoHeight}px` }}
               />
             </Link>
-            <p className="text-brand-pink/80 text-sm leading-relaxed mb-6">
+            <p className="text-brand-gold/80 text-sm leading-relaxed mb-6">
               Premium quality cosmetics and beauty products sourced directly for you. Experience luxury without the markup.
             </p>
             <div className="flex gap-4">
@@ -64,7 +63,7 @@ export default function Footer() {
                   href={link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-brand-pink hover:bg-brand-pink hover:text-brand-violet transition-colors"
+                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-brand-gold hover:bg-brand-gold hover:text-brand-blue transition-colors"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label="Social link"
@@ -77,12 +76,12 @@ export default function Footer() {
 
           {/* Links Column */}
           <div className="col-span-1">
-            <h3 className="font-bold text-lg mb-6 text-brand-pink">Explore</h3>
+            <h3 className="font-bold text-lg mb-6 text-brand-gold">Explore</h3>
             <ul className="space-y-3">
               {links.slice(0, 4).map(({ label, href }) => (
                 <li key={href}>
                   <Link href={href} className="text-white/70 hover:text-white transition-colors text-sm flex items-center gap-2 group">
-                    <span className="w-0 group-hover:w-2 h-px bg-brand-pink transition-all duration-300"></span>
+                    <span className="w-0 group-hover:w-2 h-px bg-brand-gold transition-all duration-300"></span>
                     {label}
                   </Link>
                 </li>
@@ -92,12 +91,12 @@ export default function Footer() {
 
           {/* Support Column */}
           <div className="col-span-1">
-            <h3 className="font-bold text-lg mb-6 text-brand-pink">Support</h3>
+            <h3 className="font-bold text-lg mb-6 text-brand-gold">Support</h3>
             <ul className="space-y-3">
               {links.slice(4).map(({ label, href }) => (
                 <li key={href}>
                   <Link href={href} className="text-white/70 hover:text-white transition-colors text-sm flex items-center gap-2 group">
-                    <span className="w-0 group-hover:w-2 h-px bg-brand-pink transition-all duration-300"></span>
+                    <span className="w-0 group-hover:w-2 h-px bg-brand-gold transition-all duration-300"></span>
                     {label}
                   </Link>
                 </li>
@@ -107,11 +106,11 @@ export default function Footer() {
 
           {/* Contact Column */}
           <div className="col-span-1">
-            <h3 className="font-bold text-lg mb-6 text-brand-pink">Contact</h3>
+            <h3 className="font-bold text-lg mb-6 text-brand-gold">Contact</h3>
             <ul className="space-y-4 text-sm text-white/70">
               {contactEmail && (
                 <li className="flex items-start gap-3">
-                  <i className="ri-mail-line mt-0.5 text-brand-pink"></i>
+                  <i className="ri-mail-line mt-0.5 text-brand-gold"></i>
                   <a href={`mailto:${contactEmail}`} className="hover:text-white transition-colors">
                     {contactEmail}
                   </a>
@@ -119,14 +118,14 @@ export default function Footer() {
               )}
               {contactPhone && (
                 <li className="flex items-start gap-3">
-                  <i className="ri-phone-line mt-0.5 text-brand-pink"></i>
+                  <i className="ri-phone-line mt-0.5 text-brand-gold"></i>
                   <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="hover:text-white transition-colors">
                     {contactPhone}
                   </a>
                 </li>
               )}
               <li className="flex items-start gap-3">
-                <i className="ri-map-pin-line mt-0.5 text-brand-pink"></i>
+                <i className="ri-map-pin-line mt-0.5 text-brand-gold"></i>
                 <span>Accra, Ghana</span>
               </li>
             </ul>
@@ -134,7 +133,21 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/50">
-          <p>© {new Date().getFullYear()} {siteName}. All rights reserved.</p>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+            <p>© {new Date().getFullYear()} {siteName}. All rights reserved.</p>
+            <span className="hidden sm:inline text-white/30">|</span>
+            <p>
+              Powered By{' '}
+              <a 
+                href="https://doctorbarns.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-brand-gold hover:text-white transition-colors font-medium"
+              >
+                Doctor Barns Tech
+              </a>
+            </p>
+          </div>
           <div className="flex flex-wrap gap-6">
             <Link href="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link>
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>

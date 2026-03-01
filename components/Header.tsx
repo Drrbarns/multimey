@@ -17,9 +17,9 @@ type MobileNavItem =
   | MobileNavLink
   | { label: string; children: ShopSectionItem[] };
 
-/** Static nav items after Shop (not from categories DB) */
+/** Static nav items after Categories (not from categories DB) */
 const STATIC_MOBILE_NAV_ITEMS: MobileNavItem[] = [
-  { label: 'Academia (online classes)', href: '/academia' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 function buildMobileNavFromCategories(categories: { id: string; name: string; slug: string; parent_id: string | null }[]): MobileNavItem[] {
@@ -32,7 +32,7 @@ function buildMobileNavFromCategories(categories: { id: string; name: string; sl
   });
   const getChildren = (id: string) => (byParent.get(id) ?? []).sort((a, b) => a.name.localeCompare(b.name));
 
-  const shopChildren: ShopSectionItem[] = roots.map((root) => {
+  const categoryChildren: ShopSectionItem[] = roots.map((root) => {
     const children = getChildren(root.id);
     if (children.length === 0) {
       return { label: root.name, href: `/shop?category=${root.slug}` };
@@ -43,11 +43,16 @@ function buildMobileNavFromCategories(categories: { id: string; name: string; sl
     };
   });
 
-  const shopItem: MobileNavItem =
-    shopChildren.length > 0
-      ? { label: 'Shop', children: shopChildren }
-      : { label: 'Shop', href: '/shop' };
-  return [shopItem, ...STATIC_MOBILE_NAV_ITEMS];
+  const categoriesItem: MobileNavItem =
+    categoryChildren.length > 0
+      ? { label: 'Categories', children: categoryChildren }
+      : { label: 'Categories', href: '/categories' };
+      
+  return [
+    { label: 'Products', href: '/shop' },
+    categoriesItem, 
+    ...STATIC_MOBILE_NAV_ITEMS
+  ];
 }
 
 function isNavItemWithChildren(item: MobileNavItem): item is { label: string; children: ShopSectionItem[] } {
@@ -77,11 +82,10 @@ export default function Header() {
   const showCart = getSetting('header_show_cart') !== 'false';
   const showAccount = getSetting('header_show_account') !== 'false';
   const navLinks = getSettingJSON<{ label: string; href: string }[]>('header_nav_links_json', [
-    { label: 'Shop', href: '/shop' },
+    { label: 'Products', href: '/shop' },
     { label: 'Categories', href: '/categories' },
-    { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' }
-  ]);
+  ]).filter(link => link.href !== '/about');
 
   useEffect(() => {
     const updateWishlistCount = () => {
@@ -132,14 +136,14 @@ export default function Header() {
     <>
       <AnnouncementBar />
 
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-20">
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
             {/* Left: mobile menu + logo */}
-            <div className="flex items-center gap-3 min-w-0">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-[1.5] sm:flex-1">
               <button
                 type="button"
-                className="lg:hidden p-2 -ml-2 text-gray-600 hover:text-brand-violet transition-colors"
+                className="lg:hidden p-1 -ml-1 text-gray-900 hover:text-brand-gold transition-colors"
                 onClick={() => setIsMobileMenuOpen(true)}
                 aria-label="Open menu"
               >
@@ -149,46 +153,46 @@ export default function Header() {
                 <img
                   src={siteLogo}
                   alt={siteName}
-                  className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                  style={{ maxHeight: `${logoHeight}px` }}
+                  className="h-10 sm:h-12 md:h-16 w-auto object-contain transition-transform duration-500 group-hover:opacity-80"
                 />
               </Link>
             </div>
 
             {/* Center: nav (desktop) */}
-            <nav className="hidden lg:flex items-center justify-center gap-8" aria-label="Main navigation">
+            <nav className="hidden lg:flex items-center justify-center gap-10 flex-[2]" aria-label="Main navigation">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-[15px] font-medium text-gray-700 hover:text-brand-violet transition-colors"
+                  className="text-[13px] uppercase tracking-[0.2em] font-bold text-gray-900 hover:text-brand-gold transition-colors relative group py-2"
                 >
                   {link.label}
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-brand-gold transition-all duration-300 group-hover:w-full"></span>
                 </Link>
               ))}
             </nav>
 
             {/* Right: search, wishlist, account, cart */}
-            <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center justify-end gap-3 sm:gap-6 flex-1">
               {showSearch && (
                 <button
                   type="button"
-                  className="p-2 text-gray-600 hover:text-brand-violet transition-colors"
+                  className="text-gray-900 hover:text-brand-gold transition-colors"
                   onClick={() => setIsSearchOpen(true)}
                   aria-label="Search"
                 >
-                  <i className="ri-search-line text-xl" aria-hidden />
+                  <i className="ri-search-line text-[20px] sm:text-[22px]" aria-hidden />
                 </button>
               )}
               {showWishlist && (
                 <Link
                   href="/wishlist"
-                  className="p-2 text-gray-600 hover:text-brand-violet transition-colors relative"
+                  className="text-gray-900 hover:text-brand-gold transition-colors relative"
                   aria-label={wishlistCount > 0 ? `Wishlist, ${wishlistCount} items` : 'Wishlist'}
                 >
-                  <i className="ri-heart-line text-xl" aria-hidden />
+                  <i className="ri-heart-line text-[20px] sm:text-[22px]" aria-hidden />
                   {wishlistCount > 0 && (
-                    <span className="absolute top-1 right-0.5 min-w-[18px] h-[18px] px-1 bg-brand-pink text-brand-violet text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
+                    <span className="absolute -top-1.5 -right-2 min-w-[16px] sm:min-w-[18px] h-[16px] sm:h-[18px] px-1 bg-brand-blue text-white text-[9px] sm:text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
                       {wishlistCount}
                     </span>
                   )}
@@ -198,34 +202,34 @@ export default function Header() {
                 user ? (
                   <Link
                     href="/account"
-                    className="p-2 text-gray-600 hover:text-brand-violet transition-colors hidden sm:block"
+                    className="text-gray-900 hover:text-brand-gold transition-colors hidden sm:block"
                     aria-label="Account"
                   >
-                    <i className="ri-user-line text-xl" aria-hidden />
+                    <i className="ri-user-line text-[22px]" aria-hidden />
                   </Link>
                 ) : (
                   <Link
                     href="/auth/login"
-                    className="p-2 text-gray-600 hover:text-brand-violet transition-colors hidden sm:block"
+                    className="text-gray-900 hover:text-brand-gold transition-colors hidden sm:block"
                     aria-label="Log in"
                   >
-                    <i className="ri-user-line text-xl" aria-hidden />
+                    <i className="ri-user-line text-[22px]" aria-hidden />
                   </Link>
                 )
               )}
               {showCart && (
-                <div className="relative">
+                <div className="relative flex items-center">
                   <button
                     type="button"
-                    className="p-2 text-gray-600 hover:text-brand-violet transition-colors relative"
+                    className="text-gray-900 hover:text-brand-gold transition-colors relative flex items-center gap-2"
                     onClick={() => setIsCartOpen(!isCartOpen)}
                     aria-label={cartCount > 0 ? `Cart, ${cartCount} items` : 'Cart'}
                     aria-expanded={isCartOpen}
                     aria-controls="mini-cart"
                   >
-                    <i className="ri-shopping-bag-line text-xl" aria-hidden />
+                    <i className="ri-shopping-bag-line text-[20px] sm:text-[22px]" aria-hidden />
                     {cartCount > 0 && (
-                      <span className="absolute top-1 right-0.5 min-w-[18px] h-[18px] px-1 bg-brand-violet text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
+                      <span className="absolute -top-1.5 -right-2 min-w-[16px] sm:min-w-[18px] h-[16px] sm:h-[18px] px-1 bg-brand-blue text-white text-[9px] sm:text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
                         {cartCount}
                       </span>
                     )}
