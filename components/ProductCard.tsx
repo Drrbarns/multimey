@@ -162,7 +162,6 @@ export default function ProductCard({
                     price: displayPrice,
                     image,
                     quantity: moq,
-                    maxQuantity: maxStock
                   });
                 }
               }}
