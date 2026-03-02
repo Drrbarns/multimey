@@ -279,9 +279,22 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                 ? variants.reduce((sum, v) => sum + (parseInt(v.stock) || 0), 0)
                 : parseInt(stock) || 0;
 
+            // Generate a unique slug — append timestamp suffix if slug already exists
+            const baseSlug = urlSlug || productName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+            let finalSlug = baseSlug;
+            if (!isEditMode) {
+                const { data: existingSlugs } = await supabase
+                    .from('products')
+                    .select('slug')
+                    .like('slug', `${baseSlug}%`);
+                if (existingSlugs && existingSlugs.length > 0) {
+                    finalSlug = `${baseSlug}-${Date.now().toString(36)}`;
+                }
+            }
+
             const productData = {
                 name: productName,
-                slug: urlSlug || productName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
+                slug: finalSlug,
                 description,
                 category_id: categoryId || null,
                 price: parseFloat(price) || 0,
