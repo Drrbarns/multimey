@@ -27,6 +27,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
     const [status, setStatus] = useState(initialData?.status || 'Active');
     const [featured, setFeatured] = useState(initialData?.featured || false);
     const [preorderShipping, setPreorderShipping] = useState(initialData?.metadata?.preorder_shipping || '');
+    const [classification, setClassification] = useState<'retail' | 'closet' | ''>(initialData?.metadata?.classification || '');
     const [activeTab, setActiveTab] = useState('general');
 
     // Auto-generate SKU function
@@ -309,7 +310,8 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                 tags: (keywords as string).split(',').map((k: string) => k.trim()).filter(Boolean),
                 metadata: {
                     low_stock_threshold: parseInt(lowStockThreshold) || 5,
-                    preorder_shipping: preorderShipping.trim() || null
+                    preorder_shipping: preorderShipping.trim() || null,
+                    classification: classification || null
                 }
             };
 
@@ -554,6 +556,36 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                                     className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-600 focus:border-transparent transition-all"
                                 />
                                 <p className="text-xs text-gray-500 mt-1">Leave empty if product ships immediately. Otherwise, enter estimated shipping time.</p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-900 mb-3">
+                                    Product Classification
+                                </label>
+                                <p className="text-xs text-gray-500 mb-3">Choose where this product appears on the homepage hero buttons.</p>
+                                <div className="grid grid-cols-3 gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setClassification('')}
+                                        className={`py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all ${classification === '' ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-200 text-gray-600 hover:border-gray-400'}`}
+                                    >
+                                        None
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setClassification('retail')}
+                                        className={`py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all ${classification === 'retail' ? 'border-blue-700 bg-blue-700 text-white' : 'border-gray-200 text-gray-600 hover:border-blue-400'}`}
+                                    >
+                                        🛍️ Retail Items
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setClassification('closet')}
+                                        className={`py-3 px-4 rounded-xl border-2 font-semibold text-sm transition-all ${classification === 'closet' ? 'border-purple-700 bg-purple-700 text-white' : 'border-gray-200 text-gray-600 hover:border-purple-400'}`}
+                                    >
+                                        👗 Closet Sales
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}

@@ -62,9 +62,10 @@ function ShopContent() {
       setLoading(true);
       try {
         const search = searchParams.get('search');
+        const classification = searchParams.get('type'); // 'retail' or 'closet'
 
         // Build cache key from all filter params
-        const cacheKey = `shop:${selectedCategory}:${search || ''}:${priceRange.join('-')}:${selectedRating}:${sortBy}:${page}`;
+        const cacheKey = `shop:${selectedCategory}:${search || ''}:${classification || ''}:${priceRange.join('-')}:${selectedRating}:${sortBy}:${page}`;
 
         const { data, count, error } = await cachedQuery<{ data: any; count: any; error: any }>(
           cacheKey,
@@ -82,6 +83,11 @@ function ShopContent() {
             // Search
             if (search) {
               query = query.ilike('name', `%${search}%`);
+            }
+
+            // Classification Filter (Retail Items / Closet Sales)
+            if (classification === 'retail' || classification === 'closet') {
+              query = query.eq('metadata->>classification', classification);
             }
 
             // Category Filter with Subcategories
@@ -197,11 +203,20 @@ function ShopContent() {
 
   const totalPages = Math.ceil(totalProducts / productsPerPage);
 
+  const classificationParam = searchParams.get('type');
+  const classificationLabel = classificationParam === 'retail' ? 'Retail Items' : classificationParam === 'closet' ? 'Closet Sales' : null;
+
   return (
     <main className="min-h-screen bg-white">
       <PageHero
-        title="Shop All Products"
-        subtitle="Browse our range of dresses, electronics, bags, shoes and more"
+        title={classificationLabel || "Shop All Products"}
+        subtitle={
+          classificationParam === 'retail'
+            ? "Browse our curated selection of retail products"
+            : classificationParam === 'closet'
+            ? "Discover amazing closet sale deals"
+            : "Browse our range of dresses, electronics, bags, shoes and more"
+        }
         backgroundImage="/hero8.jpeg"
       />
 
