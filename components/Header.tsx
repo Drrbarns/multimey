@@ -303,51 +303,27 @@ export default function Header() {
               </Link>
               {mobileNavItems.map((item) => {
                 if (isNavItemWithChildren(item)) {
-                  const isExpanded = expandedMobileSection === item.label;
                   return (
                     <div key={item.label} className="border-b border-gray-100 last:border-b-0">
-                      <button
-                        type="button"
-                        className="flex w-full items-center justify-between px-4 py-3 text-base font-medium text-gray-900"
-                        onClick={() => setExpandedMobileSection(isExpanded ? null : item.label)}
-                        aria-expanded={isExpanded}
-                        aria-controls={`mobile-nav-${item.label.replace(/\s+/g, '-')}`}
-                      >
-                        {item.label}
-                        <i className={`ri-arrow-down-s-line text-xl text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} aria-hidden />
-                      </button>
-                      <div
-                        id={`mobile-nav-${item.label.replace(/\s+/g, '-')}`}
-                        className={isExpanded ? 'block' : 'hidden'}
-                      >
+                      {/* Label — not clickable, always expanded */}
+                      <div className="flex w-full items-center px-4 py-3">
+                        <span className="text-base font-bold text-brand-blue uppercase tracking-wider text-xs">{item.label}</span>
+                      </div>
+                      <div className="pb-2">
                         {item.children.map((sub) => {
                           if (isShopSectionWithSubs(sub)) {
-                            const subExpanded = expandedMobileSection === `${item.label}-${sub.label}`;
                             return (
-                              <div key={sub.label} className="border-t border-gray-50">
-                                <button
-                                  type="button"
-                                  className="flex w-full items-center justify-between px-4 py-2.5 pl-6 text-sm font-medium text-gray-700"
-                                  onClick={() => setExpandedMobileSection(subExpanded ? null : `${item.label}-${sub.label}`)}
-                                  aria-expanded={subExpanded}
-                                >
-                                  {sub.label}
-                                  <i className={`ri-arrow-down-s-line text-lg text-gray-400 transition-transform ${subExpanded ? 'rotate-180' : ''}`} aria-hidden />
-                                </button>
-                                {subExpanded && (
-                                  <div className="bg-gray-50/80 pb-1">
-                                    {sub.children.map((leaf) => (
-                                      <Link
-                                        key={leaf.href + leaf.label}
-                                        href={leaf.href}
-                                        className="block px-4 py-2 pl-8 text-sm text-gray-600 hover:text-gray-900"
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                      >
-                                        {leaf.label}
-                                      </Link>
-                                    ))}
-                                  </div>
-                                )}
+                              <div key={sub.label}>
+                                {sub.children.map((leaf) => (
+                                  <Link
+                                    key={leaf.href + leaf.label}
+                                    href={leaf.href}
+                                    className="block px-4 py-2.5 pl-6 text-sm font-medium text-gray-700 hover:text-brand-blue hover:bg-brand-light transition-colors"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                  >
+                                    {leaf.label}
+                                  </Link>
+                                ))}
                               </div>
                             );
                           }
@@ -355,7 +331,7 @@ export default function Header() {
                             <Link
                               key={sub.href}
                               href={sub.href}
-                              className="block px-4 py-2.5 pl-6 text-sm font-medium text-gray-700 hover:text-gray-900"
+                              className="block px-4 py-2.5 pl-6 text-sm font-medium text-gray-700 hover:text-brand-blue hover:bg-brand-light transition-colors"
                               onClick={() => setIsMobileMenuOpen(false)}
                             >
                               {sub.label}
