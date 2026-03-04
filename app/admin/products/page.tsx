@@ -108,27 +108,41 @@ export default function ProductsPage() {
     }
   };
 
+  const deleteProductsById = async (ids: string[]): Promise<string | null> => {
+    // Nullify order_items references to preserve order history
+    await supabase.from('order_items').update({ product_id: null }).in('product_id', ids);
+
+    // Delete all other related records
+    for (const table of ['product_images', 'product_variants', 'cart_items', 'wishlist_items', 'reviews']) {
+      const { error } = await supabase.from(table).delete().in('product_id', ids);
+      if (error) console.warn(`Could not delete from ${table}:`, error.message);
+    }
+
+    const { error } = await supabase.from('products').delete().in('id', ids);
+    return error ? error.message : null;
+  };
+
   const handleDeleteProduct = async (productId: string) => {
     if (confirm('Are you sure you want to delete this product?')) {
-      const { error } = await supabase.from('products').delete().eq('id', productId);
+      const error = await deleteProductsById([productId]);
       if (!error) {
         setProducts(products.filter(p => p.id !== productId));
         alert('Product deleted successfully');
       } else {
-        alert('Error deleting product');
+        alert('Error deleting product: ' + error);
       }
     }
   };
 
   const handleBulkDelete = async () => {
     if (confirm(`Are you sure you want to delete ${selectedProducts.length} products?`)) {
-      const { error } = await supabase.from('products').delete().in('id', selectedProducts);
+      const error = await deleteProductsById(selectedProducts);
       if (!error) {
         setProducts(products.filter(p => !selectedProducts.includes(p.id)));
         setSelectedProducts([]);
         alert('Products deleted successfully');
       } else {
-        alert('Error deleting products');
+        alert('Error deleting products: ' + error);
       }
     }
   };
