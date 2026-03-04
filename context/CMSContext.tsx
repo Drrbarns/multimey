@@ -191,7 +191,7 @@ export const defaultSettings: SiteSettings = {
     site_favicon: '/favicon.ico',
     contact_email: 'info@multimeysupplies.com',
     contact_phone: '+233209597443',
-    contact_address: 'Accra, Ghana',
+    contact_address: 'Dzowulu, Accra, Ghana',
     social_facebook: '',
     social_instagram: '',
     social_twitter: '',

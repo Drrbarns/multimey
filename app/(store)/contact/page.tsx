@@ -113,7 +113,7 @@ export default function ContactPage() {
       title: 'Visit Us',
       value: contactAddress,
       link: contactMapLink,
-      description: contactVisitHours
+      description: 'Sat-Sun'
     }
   ];
 
