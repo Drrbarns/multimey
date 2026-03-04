@@ -25,7 +25,7 @@ export default function ImportationClassPage() {
     if (!form.fullName.trim()) newErrors.fullName = 'Full name is required';
     if (!form.email.trim()) newErrors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = 'Invalid email address';
-    if (!form.phone.trim()) newErrors.phone = 'Phone number is required';
+    if (!form.phone.trim()) newErrors.phone = 'WhatsApp number is required';
     if (!form.location.trim()) newErrors.location = 'Location is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -150,7 +150,7 @@ export default function ImportationClassPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">WhatsApp Number *</label>
               <input
                 type="tel"
                 value={form.phone}
