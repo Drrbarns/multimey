@@ -200,6 +200,11 @@ export default function AdminLayout({
       moduleId: 'notifications'
     },
     {
+      title: 'Course Registrations',
+      icon: 'ri-graduation-cap-line',
+      path: '/admin/courses'
+    },
+    {
       title: 'SMS Debugger',
       icon: 'ri-message-2-line',
       path: '/admin/test-sms'

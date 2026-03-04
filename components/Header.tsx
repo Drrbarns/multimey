@@ -20,6 +20,7 @@ type MobileNavItem =
 /** Static nav items after Categories (not from categories DB) */
 const STATIC_MOBILE_NAV_ITEMS: MobileNavItem[] = [
   { label: 'Contact', href: '/contact' },
+  { label: 'Register for 1v1 Online Importation Class', href: '/importation-class' },
 ];
 
 function buildMobileNavFromCategories(categories: { id: string; name: string; slug: string; parent_id: string | null }[]): MobileNavItem[] {
@@ -84,7 +85,8 @@ export default function Header() {
   const navLinks = getSettingJSON<{ label: string; href: string }[]>('header_nav_links_json', [
     { label: 'Products', href: '/shop' },
     { label: 'Categories', href: '/categories' },
-    { label: 'Contact', href: '/contact' }
+    { label: 'Contact', href: '/contact' },
+    { label: 'Importation Class', href: '/importation-class' }
   ]).filter(link => link.href !== '/about');
 
   useEffect(() => {
