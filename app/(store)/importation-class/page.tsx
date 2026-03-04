@@ -90,7 +90,7 @@ export default function ImportationClassPage() {
           <span className="text-brand-gold font-bold tracking-widest uppercase text-xs mb-4 block">Exclusive Course</span>
           <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">1v1 Online Importation Class</h1>
           <div className="w-20 h-1 bg-brand-gold mx-auto mb-6 rounded-full"></div>
-          <p className="text-white/80 text-lg max-w-xl mx-auto">Learn how to import goods directly and build a profitable business. Personalised, one-on-one coaching just for you.</p>
+          <p className="text-white/80 text-lg max-w-xl mx-auto">Learn how to start a business, run a business, build a brand, and import your own goods directly. Register for our one-on-one coaching class, just for you!</p>
         </div>
       </div>
 
