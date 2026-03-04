@@ -13,6 +13,7 @@ export default function ImportationClassPage() {
     email: '',
     phone: '',
     location: '',
+    snapchat: '',
   });
   const [errors, setErrors] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +49,7 @@ export default function ImportationClassPage() {
           email: form.email,
           phone: form.phone,
           location: form.location,
+          snapchat_handle: form.snapchat || null,
           course_title: COURSE_TITLE,
           amount: COURSE_PRICE,
           payment_status: 'pending',
@@ -171,6 +173,22 @@ export default function ImportationClassPage() {
                 className={`w-full px-4 py-3.5 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all text-sm ${errors.location ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
               />
               {errors.location && <p className="text-xs text-red-500 mt-1.5 flex items-center gap-1"><i className="ri-error-warning-line"></i>{errors.location}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Snapchat Handle <span className="text-gray-400 font-normal">(optional)</span>
+              </label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">@</span>
+                <input
+                  type="text"
+                  value={form.snapchat}
+                  onChange={(e) => setForm({ ...form, snapchat: e.target.value })}
+                  placeholder="yoursnapchathandle"
+                  className="w-full pl-8 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all text-sm"
+                />
+              </div>
             </div>
 
             <button

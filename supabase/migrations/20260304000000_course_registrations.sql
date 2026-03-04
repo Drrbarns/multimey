@@ -33,3 +33,6 @@ CREATE POLICY "Allow payment status update" ON course_registrations
 CREATE INDEX IF NOT EXISTS idx_course_registrations_registration_id ON course_registrations(registration_id);
 CREATE INDEX IF NOT EXISTS idx_course_registrations_payment_status ON course_registrations(payment_status);
 CREATE INDEX IF NOT EXISTS idx_course_registrations_created_at ON course_registrations(created_at DESC);
+
+-- Add optional Snapchat handle field
+ALTER TABLE course_registrations ADD COLUMN IF NOT EXISTS snapchat_handle TEXT;
