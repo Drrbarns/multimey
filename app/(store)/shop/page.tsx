@@ -215,7 +215,7 @@ function ShopContent() {
             ? "Browse our curated selection of retail products"
             : classificationParam === 'closet'
             ? "Discover amazing closet sale deals"
-            : "Browse our range of dresses, electronics, bags, shoes and more"
+            : "Here, you have access to all products I have used that have given me an excellent experience!"
         }
         backgroundImage="/hero8.jpeg"
       />
