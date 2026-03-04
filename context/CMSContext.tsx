@@ -276,7 +276,8 @@ export const defaultSettings: SiteSettings = {
     header_nav_links_json: JSON.stringify([
         { label: 'Products', href: '/shop' },
         { label: 'Categories', href: '/categories' },
-        { label: 'Contact', href: '/contact' }
+        { label: 'Contact', href: '/contact' },
+        { label: 'Importation Class', href: '/importation-class' }
     ]),
     header_show_search: 'true',
     header_show_wishlist: 'true',
