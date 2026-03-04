@@ -88,11 +88,11 @@ export default function ContactPage() {
 
   const contactMethods = [
     {
-      icon: 'ri-phone-line',
-      title: 'Call Us',
-      value: contactPhone,
-      link: `tel:${(contactPhone || '').replace(/\s/g, '')}`,
-      description: contactHours
+      icon: 'ri-snapchat-line',
+      title: 'Snapchat',
+      value: '@saftlyf',
+      link: 'https://www.snapchat.com/add/saftlyf',
+      description: 'Streak us your packages!!'
     },
     {
       icon: 'ri-mail-line',
