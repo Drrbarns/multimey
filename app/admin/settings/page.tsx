@@ -395,7 +395,8 @@ export default function SettingsPage() {
                     <div className="space-y-6">
                         <SectionCard title="Header" icon="ri-layout-top-line" description="Configure the site header navigation and logo">
                             <div className="grid md:grid-cols-2 gap-5">
-                                <FieldGroup label="Logo Height (px)"><input type="number" value={val('header_logo_height')} onChange={e => set('header_logo_height', e.target.value)} className={inputClass} placeholder="40" /></FieldGroup>
+                                <ImageUpload label="Header Logo" description="Logo shown in the top navigation bar" value={val('site_logo')} onChange={(url) => set('site_logo', url)} folder="branding" previewHeight={80} />
+                                <FieldGroup label="Logo Height (px)" description="Controls the display height of the header logo"><input type="number" value={val('header_logo_height')} onChange={e => set('header_logo_height', e.target.value)} className={inputClass} placeholder="40" /></FieldGroup>
                             </div>
                             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
                                 {[
