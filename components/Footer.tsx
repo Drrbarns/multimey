@@ -8,7 +8,7 @@ export default function Footer() {
   const { getSetting } = useCMS();
 
   const siteName = getSetting('site_name') || 'MultiMey Supplies';
-  const footerLogo = getSetting('footer_logo') || getSetting('site_logo') || '/logo.png';
+  const footerLogo = getSetting('footer_logo') || getSetting('site_logo') || '';
   const footerLogoHeight = getSetting('footer_logo_height') || '40';
   const contactEmail = getSetting('contact_email') || '';
   const contactPhone = getSetting('contact_phone') || '';
@@ -45,14 +45,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           {/* Brand Column */}
           <div className="col-span-1 lg:col-span-1">
-            <Link href="/" className="inline-block mb-6 bg-white/10 p-3 rounded-xl backdrop-blur-sm">
-              <img
-                src={footerLogo}
-                alt={siteName}
-                className="h-12 w-auto object-contain brightness-0 invert"
-                style={{ maxHeight: `${footerLogoHeight}px` }}
-              />
-            </Link>
+            {footerLogo && (
+              <Link href="/" className="inline-block mb-6">
+                <img
+                  src={footerLogo}
+                  alt={siteName}
+                  className="w-auto object-contain"
+                  style={{ maxHeight: `${footerLogoHeight}px`, height: '48px' }}
+                />
+              </Link>
+            )}
             <p className="text-brand-gold/80 text-sm leading-relaxed mb-6">
               Premium quality cosmetics and beauty products sourced directly for you. Experience luxury without the markup.
             </p>

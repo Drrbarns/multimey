@@ -187,7 +187,7 @@ export const defaultSettings: SiteSettings = {
     // General
     site_name: 'MultiMey Supplies',
     site_tagline: 'Your tagline here.',
-    site_logo: '/logo.png',
+    site_logo: '',
     site_favicon: '/favicon.ico',
     contact_email: 'info@multimeysupplies.com',
     contact_phone: '+233209597443',
@@ -285,7 +285,7 @@ export const defaultSettings: SiteSettings = {
     header_show_account: 'true',
 
     // Footer
-    footer_logo: '/logo.png',
+    footer_logo: '',
     footer_logo_height: '56',
     footer_newsletter_title: 'Join Our Community',
     footer_newsletter_subtitle: 'Get exclusive access to new arrivals, secret sales, and more.',

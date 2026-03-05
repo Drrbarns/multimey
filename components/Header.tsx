@@ -76,7 +76,7 @@ export default function Header() {
   const { getSetting, getSettingJSON } = useCMS();
 
   const siteName = getSetting('site_name') || 'MultiMey Supplies';
-  const siteLogo = getSetting('site_logo') || '/logo.png';
+  const siteLogo = getSetting('site_logo') || '';
   const logoHeight = getSetting('header_logo_height') || '36';
   const showSearch = getSetting('header_show_search') !== 'false';
   const showWishlist = getSetting('header_show_wishlist') !== 'false';
