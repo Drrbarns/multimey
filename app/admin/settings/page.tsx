@@ -13,12 +13,12 @@ interface TeamContact { name: string; phone: string; role: string; }
 
 const TABS: { id: TabId; label: string; icon: string }[] = [
     { id: 'general', label: 'General', icon: 'ri-store-2-line' },
-    { id: 'appearance', label: 'Appearance', icon: 'ri-palette-line' },
-    { id: 'homepage', label: 'Homepage', icon: 'ri-home-4-line' },
-    { id: 'pages', label: 'Pages', icon: 'ri-pages-line' },
-    { id: 'header-footer', label: 'Header & Footer', icon: 'ri-layout-top-2-line' },
-    { id: 'seo', label: 'SEO', icon: 'ri-search-eye-line' },
-    { id: 'integrations', label: 'Integrations', icon: 'ri-plug-line' },
+    // { id: 'appearance', label: 'Appearance', icon: 'ri-palette-line' },
+    // { id: 'homepage', label: 'Homepage', icon: 'ri-home-4-line' },
+    // { id: 'pages', label: 'Pages', icon: 'ri-pages-line' },
+    // { id: 'header-footer', label: 'Header & Footer', icon: 'ri-layout-top-2-line' },
+    // { id: 'seo', label: 'SEO', icon: 'ri-search-eye-line' },
+    // { id: 'integrations', label: 'Integrations', icon: 'ri-plug-line' },
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────
