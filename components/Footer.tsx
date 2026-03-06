@@ -22,6 +22,8 @@ export default function Footer() {
     { label: 'Contact', href: '/contact' },
     { label: 'Shipping', href: '/shipping' },
     { label: 'Returns', href: '/returns' },
+    { label: 'FAQs', href: '/faqs' },
+    { label: 'Help Center', href: '/help' },
     { label: 'Refund Policy', href: '/refund-policy' },
     { label: 'Privacy', href: '/privacy' },
     { label: 'Terms', href: '/terms' },
@@ -80,7 +82,7 @@ export default function Footer() {
           <div className="col-span-1">
             <h3 className="font-bold text-lg mb-6 text-brand-gold">Explore</h3>
             <ul className="space-y-3">
-              {links.slice(0, 4).map(({ label, href }) => (
+              {links.slice(0, 5).map(({ label, href }) => (
                 <li key={href}>
                   <Link href={href} className="text-white/70 hover:text-white transition-colors text-sm flex items-center gap-2 group">
                     <span className="w-0 group-hover:w-2 h-px bg-brand-gold transition-all duration-300"></span>
@@ -95,7 +97,7 @@ export default function Footer() {
           <div className="col-span-1">
             <h3 className="font-bold text-lg mb-6 text-brand-gold">Support</h3>
             <ul className="space-y-3">
-              {links.slice(4).map(({ label, href }) => (
+              {links.slice(5).map(({ label, href }) => (
                 <li key={href}>
                   <Link href={href} className="text-white/70 hover:text-white transition-colors text-sm flex items-center gap-2 group">
                     <span className="w-0 group-hover:w-2 h-px bg-brand-gold transition-all duration-300"></span>

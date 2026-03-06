@@ -235,7 +235,7 @@ export default function FAQsPage() {
               Contact Support
             </Link>
             <a
-              href="https://wa.me/233595211414"
+              href={`https://wa.me/${(contactPhone || '').replace(/\D/g, '')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-gray-700 text-white px-8 py-4 rounded-full font-medium hover:bg-gray-600 transition-colors whitespace-nowrap"

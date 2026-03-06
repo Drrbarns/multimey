@@ -87,7 +87,7 @@ export default function Header() {
     { label: 'Categories', href: '/categories' },
     { label: 'Contact', href: '/contact' },
     { label: 'Importation Class', href: '/importation-class' }
-  ]).filter(link => link.href !== '/about');
+  ]);
 
   useEffect(() => {
     const updateWishlistCount = () => {

@@ -16,7 +16,7 @@ export default function TermsPage() {
             <p className="text-xl text-gray-600 leading-relaxed">
               Please read these terms carefully before using our website and services.
             </p>
-            <p className="text-sm text-gray-500 mt-4">Last updated: December 2024</p>
+            <p className="text-sm text-gray-500 mt-4">Last updated: February 2026</p>
           </div>
         </div>
       </div>
@@ -300,7 +300,7 @@ export default function TermsPage() {
                   <i className="ri-mail-line text-gray-900 text-xl mt-1"></i>
                   <div>
                     <p className="font-medium text-gray-900">Email</p>
-                    <a href="mailto:contact@example.com" className="text-gray-900 hover:underline">contact@example.com</a>
+                    <a href={`mailto:${contactEmail}`} className="text-gray-900 hover:underline">{contactEmail}</a>
                   </div>
                 </div>
 
@@ -308,7 +308,7 @@ export default function TermsPage() {
                   <i className="ri-phone-line text-gray-900 text-xl mt-1"></i>
                   <div>
                     <p className="font-medium text-gray-900">Phone</p>
-                    <a href="tel:" className="text-gray-900 hover:underline">Contact</a>
+                    <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="text-gray-900 hover:underline">{contactPhone}</a>
                   </div>
                 </div>
 

@@ -1,4 +1,12 @@
+'use client';
+
+import { useCMS } from '@/context/CMSContext';
+
 export default function PrivacyPage() {
+  const { getSetting } = useCMS();
+  const contactEmail = getSetting('contact_email') || 'info@multimeysupplies.com';
+  const contactPhone = getSetting('contact_phone') || '+233209597443';
+
   return (
     <div className="min-h-screen bg-white">
       <div className="bg-gradient-to-br from-gray-50 via-white to-amber-50 py-16">
@@ -8,7 +16,7 @@ export default function PrivacyPage() {
             <p className="text-xl text-gray-600 leading-relaxed">
               Your privacy matters to us. Learn how we collect, use, and protect your personal information.
             </p>
-            <p className="text-sm text-gray-500 mt-4">Last updated: December 2024</p>
+            <p className="text-sm text-gray-500 mt-4">Last updated: February 2026</p>
           </div>
         </div>
       </div>
@@ -384,7 +392,7 @@ export default function PrivacyPage() {
                   <i className="ri-mail-line text-gray-900 text-xl mt-1"></i>
                   <div>
                     <p className="font-medium text-gray-900">Email</p>
-                    <a href="mailto:support@multimeysupplies.com" className="text-gray-900 hover:underline">support@multimeysupplies.com</a>
+                    <a href={`mailto:${contactEmail}`} className="text-gray-900 hover:underline">{contactEmail}</a>
                   </div>
                 </div>
 
@@ -392,7 +400,7 @@ export default function PrivacyPage() {
                   <i className="ri-phone-line text-gray-900 text-xl mt-1"></i>
                   <div>
                     <p className="font-medium text-gray-900">Phone</p>
-                    <a href="tel:" className="text-gray-900 hover:underline">Contact</a>
+                    <a href={`tel:${contactPhone.replace(/\\s/g, '')}`} className="text-gray-900 hover:underline">{contactPhone}</a>
                   </div>
                 </div>
 
