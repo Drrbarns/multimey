@@ -74,11 +74,13 @@ export default function MaintenancePage() {
               WhatsApp
             </a>
             <a
-              href="tel:+233209597443"
+              href="https://www.snapchat.com/add/saftlyf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-white text-gray-900 px-6 py-3 rounded-full font-medium hover:bg-gray-50 transition-colors border border-gray-200 whitespace-nowrap"
             >
-              <i className="ri-phone-line"></i>
-              Call Us
+              <i className="ri-snapchat-line"></i>
+              Snapchat
             </a>
           </div>
         </div>

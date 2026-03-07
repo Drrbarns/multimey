@@ -397,10 +397,10 @@ export default function PrivacyPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <i className="ri-phone-line text-gray-900 text-xl mt-1"></i>
+                  <i className="ri-whatsapp-line text-gray-900 text-xl mt-1"></i>
                   <div>
-                    <p className="font-medium text-gray-900">Phone</p>
-                    <a href={`tel:${contactPhone.replace(/\\s/g, '')}`} className="text-gray-900 hover:underline">{contactPhone}</a>
+                    <p className="font-medium text-gray-900">WhatsApp</p>
+                    <a href={`https://wa.me/${(contactPhone || '').replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-gray-900 hover:underline">{contactPhone}</a>
                   </div>
                 </div>
 

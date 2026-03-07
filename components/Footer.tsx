@@ -122,8 +122,8 @@ export default function Footer() {
               )}
               {contactPhone && (
                 <li className="flex items-start gap-3">
-                  <i className="ri-phone-line mt-0.5 text-brand-gold"></i>
-                  <a href={`tel:${contactPhone.replace(/\s/g, '')}`} className="hover:text-white transition-colors">
+                  <i className="ri-whatsapp-line mt-0.5 text-brand-gold"></i>
+                  <a href={`https://wa.me/${contactPhone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
                     {contactPhone}
                   </a>
                 </li>

@@ -43,7 +43,7 @@ ${body}
 <tr><td style="background-color:#f9fafb;padding:24px 40px;border-top:1px solid #e5e7eb;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr><td style="text-align:center;">
-<p style="margin:0 0 8px;color:#6b7280;font-size:13px;">Need help? Contact us at <a href="tel:${BRAND.phone}" style="color:${BRAND.color};text-decoration:none;">${BRAND.phone}</a></p>
+<p style="margin:0 0 8px;color:#6b7280;font-size:13px;">Need help? Message us on <a href="https://wa.me/${BRAND.phone.replace(/\D/g, '')}" style="color:${BRAND.color};text-decoration:none;">WhatsApp</a></p>
 <p style="margin:0 0 12px;color:#6b7280;font-size:13px;"><a href="${BRAND.url}" style="color:${BRAND.color};text-decoration:none;">Visit our store</a> &nbsp;·&nbsp; <a href="${BRAND.url}/order-tracking" style="color:${BRAND.color};text-decoration:none;">Track order</a></p>
 <p style="margin:0;color:#9ca3af;font-size:11px;">&copy; ${new Date().getFullYear()} ${BRAND.name}. All rights reserved.</p>
 </td></tr>

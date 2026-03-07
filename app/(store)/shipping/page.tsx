@@ -10,7 +10,7 @@ export default function ShippingPage() {
   const contactPhone = getSetting('contact_phone') || '+233209597443';
   const contactEmail = getSetting('contact_email') || 'info@multimeysupplies.com';
   const whatsappNum = toWhatsAppNumber(contactPhone);
-  const telHref = whatsappNum ? `tel:+${whatsappNum}` : '#';
+  const whatsappHref = whatsappNum ? `https://wa.me/${whatsappNum}` : '#';
 
   return (
     <div className="min-h-screen bg-white">
@@ -124,8 +124,8 @@ export default function ShippingPage() {
               Delays &amp; Issues
             </h2>
             <p className="text-gray-700 leading-relaxed">
-              If your package is not delivered on time for reasons beyond our control (weather, external partnership issues, etc.), please call us immediately on{' '}
-              <a href={telHref} className="text-gray-900 font-semibold hover:underline">{contactPhone}</a>{' '}
+              If your package is not delivered on time for reasons beyond our control (weather, external partnership issues, etc.), please message us immediately on{' '}
+              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="text-gray-900 font-semibold hover:underline">WhatsApp</a>{' '}
               or email{' '}
               <a href={`mailto:${contactEmail}`} className="text-gray-900 font-semibold hover:underline">{contactEmail}</a>{' '}
               and we will do everything we can to find a suitable solution.

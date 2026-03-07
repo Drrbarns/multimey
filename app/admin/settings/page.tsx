@@ -380,7 +380,7 @@ export default function SettingsPage() {
                                 <FieldGroup label="Hero Subtitle"><input type="text" value={val('contact_hero_subtitle')} onChange={e => set('contact_hero_subtitle', e.target.value)} className={inputClass} /></FieldGroup>
                             </div>
                             <div className="grid md:grid-cols-2 gap-5">
-                                <FieldGroup label="Business Hours (Call Us)"><input type="text" value={val('contact_hours')} onChange={e => set('contact_hours', e.target.value)} className={inputClass} placeholder="Mon-Fri, 8am-6pm GMT" /></FieldGroup>
+                                <FieldGroup label="Business Hours (WhatsApp)"><input type="text" value={val('contact_hours')} onChange={e => set('contact_hours', e.target.value)} className={inputClass} placeholder="Mon-Fri, 8am-6pm GMT" /></FieldGroup>
                                 <FieldGroup label="Visit Hours (Visit Us)"><input type="text" value={val('contact_visit_hours')} onChange={e => set('contact_visit_hours', e.target.value)} className={inputClass} placeholder="Mon-Sat, 9am-6pm" /></FieldGroup>
                                 <FieldGroup label="Google Maps Link"><input type="url" value={val('contact_map_link')} onChange={e => set('contact_map_link', e.target.value)} className={inputClass} /></FieldGroup>
                             </div>

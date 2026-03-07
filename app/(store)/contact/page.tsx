@@ -189,9 +189,6 @@ export default function ContactPage() {
                         <p className="text-xs text-gray-400">{contact.role}</p>
                       </div>
                       <div className="flex gap-2">
-                        <a href={`tel:${contact.phone}`} className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white hover:text-gray-900 transition-colors">
-                          <i className="ri-phone-line text-sm"></i>
-                        </a>
                         <a href={`https://wa.me/233${contact.phone.replace(/^0/, '')}`} className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white hover:text-gray-900 transition-colors">
                           <i className="ri-whatsapp-line text-sm"></i>
                         </a>
