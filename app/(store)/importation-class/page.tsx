@@ -12,7 +12,6 @@ export default function ImportationClassPage() {
     fullName: '',
     email: '',
     phone: '',
-    location: '',
     snapchat: '',
   });
   const [errors, setErrors] = useState<any>({});
@@ -27,7 +26,6 @@ export default function ImportationClassPage() {
     if (!form.email.trim()) newErrors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = 'Invalid email address';
     if (!form.phone.trim()) newErrors.phone = 'WhatsApp number is required';
-    if (!form.location.trim()) newErrors.location = 'Location is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -48,7 +46,7 @@ export default function ImportationClassPage() {
           full_name: form.fullName,
           email: form.email,
           phone: form.phone,
-          location: form.location,
+          location: '', // no longer collected on form; DB column still exists
           snapchat_handle: form.snapchat || null,
           course_title: COURSE_TITLE,
           amount: COURSE_PRICE,
@@ -161,18 +159,6 @@ export default function ImportationClassPage() {
                 className={`w-full px-4 py-3.5 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all text-sm ${errors.phone ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
               />
               {errors.phone && <p className="text-xs text-red-500 mt-1.5 flex items-center gap-1"><i className="ri-error-warning-line"></i>{errors.phone}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Location *</label>
-              <input
-                type="text"
-                value={form.location}
-                onChange={(e) => setForm({ ...form, location: e.target.value })}
-                placeholder="e.g. Accra, Kumasi, Takoradi..."
-                className={`w-full px-4 py-3.5 bg-gray-50 border rounded-xl focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all text-sm ${errors.location ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
-              />
-              {errors.location && <p className="text-xs text-red-500 mt-1.5 flex items-center gap-1"><i className="ri-error-warning-line"></i>{errors.location}</p>}
             </div>
 
             <div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import ProductCard, { type ColorVariant } from '@/components/ProductCard';
 import { getColorHex } from '@/components/ProductCard';
@@ -13,6 +13,8 @@ import AnimatedSection from '@/components/AnimatedSection';
 function ShopContent() {
   usePageTitle('Shop All Products');
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   // State
   const [products, setProducts] = useState<any[]>([]);
@@ -33,12 +35,21 @@ function ShopContent() {
   useEffect(() => {
     const category = searchParams.get('category');
     const sort = searchParams.get('sort');
-    const search = searchParams.get('search');
+    const type = searchParams.get('type');
 
     if (category) setSelectedCategory(category);
     if (sort) setSortBy(sort);
-    // Search is handled in the fetch function via searchParams directly or we could add a state for it
+    // type (retail/closet) is read from searchParams in fetch and classificationParam below
   }, [searchParams]);
+
+  const setSection = (type: 'all' | 'retail' | 'closet') => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (type === 'all') params.delete('type');
+    else params.set('type', type);
+    params.delete('page'); // reset to page 1
+    setPage(1);
+    router.push(`${pathname}${params.toString() ? `?${params.toString()}` : ''}`);
+  };
 
   // Fetch Categories from cached API
   useEffect(() => {
@@ -251,8 +262,36 @@ function ShopContent() {
                   </div>
 
                   <div className="space-y-8">
-                    {/* Categories */}
+                    {/* Section: Retail / Closet */}
                     <div>
+                      <h3 className="font-semibold text-gray-900 mb-4">Section</h3>
+                      <div className="space-y-1">
+                        <button
+                          onClick={() => { setSection('all'); setIsFilterOpen(false); }}
+                          className={`w-full text-left px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${!classificationParam ? 'bg-brand-gold/20 text-brand-blue font-bold' : 'text-gray-700 hover:bg-gray-50'}`}
+                        >
+                          <i className="ri-store-3-line text-lg"></i>
+                          All Products
+                        </button>
+                        <button
+                          onClick={() => { setSection('retail'); setIsFilterOpen(false); }}
+                          className={`w-full text-left px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${classificationParam === 'retail' ? 'bg-brand-gold/20 text-brand-blue font-bold' : 'text-gray-700 hover:bg-gray-50'}`}
+                        >
+                          <i className="ri-shopping-bag-3-line text-lg"></i>
+                          Retail Items
+                        </button>
+                        <button
+                          onClick={() => { setSection('closet'); setIsFilterOpen(false); }}
+                          className={`w-full text-left px-4 py-2 rounded-xl transition-colors flex items-center gap-2 ${classificationParam === 'closet' ? 'bg-brand-gold/20 text-brand-blue font-bold' : 'text-gray-700 hover:bg-gray-50'}`}
+                        >
+                          <i className="ri-t-shirt-2-line text-lg"></i>
+                          Closet Sales
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Categories */}
+                    <div className="border-t border-gray-200 pt-8">
                       <h3 className="font-semibold text-gray-900 mb-4">Categories</h3>
                       <div className="space-y-1">
                         <button
@@ -266,7 +305,7 @@ function ShopContent() {
                             : 'text-gray-700 hover:bg-gray-50'
                             }`}
                         >
-                          All Products
+                          All Categories
                         </button>
 
                         {/* Parent Categories */}
@@ -438,6 +477,7 @@ function ShopContent() {
                           setPriceRange([0, 5000]);
                           setSelectedRating(0);
                           setPage(1);
+                          setSection('all');
                         }}
                         className="inline-flex items-center bg-gray-900 hover:bg-gray-900 text-white px-6 py-3 rounded-lg font-medium transition-colors whitespace-nowrap"
                       >
