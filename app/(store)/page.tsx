@@ -8,7 +8,7 @@ import { useCMS } from '@/context/CMSContext';
 import ProductCard, { type ColorVariant, getColorHex } from '@/components/ProductCard';
 import AnimatedSection, { AnimatedGrid } from '@/components/AnimatedSection';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   usePageTitle('');
@@ -92,9 +92,10 @@ export default function Home() {
     }, // slide 1: hero-2.png
   ];
   const HERO_INTERVAL_MS = 3000;
+  const HERO_SLIDE_COUNT = 2; // Slide 0: Beauty (hero-1), Slide 1: Electronics (hero-2)
   const [heroIndex, setHeroIndex] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setHeroIndex((i) => (i + 1) % HERO_SLIDES.length), HERO_INTERVAL_MS);
+    const t = setInterval(() => setHeroIndex((i) => (i + 1) % HERO_SLIDE_COUNT), HERO_INTERVAL_MS);
     return () => clearInterval(t);
   }, []);
   const slideContent = HERO_SLIDE_CONTENT[heroIndex];
@@ -149,26 +150,29 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative w-full min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex flex-col justify-center items-center overflow-hidden bg-gradient-to-br from-brand-blue/95 to-brand-blue/70">
         <div className="absolute inset-0 z-0">
-          <AnimatePresence initial={false} mode="sync">
+          {/* Both slides always in DOM so both images load; only active one visible */}
+          {HERO_SLIDES.map((src, index) => (
             <motion.div
-              key={heroIndex}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
+              key={src}
+              initial={false}
+              animate={{
+                opacity: heroIndex === index ? 1 : 0,
+                scale: heroIndex === index ? 1 : 1.05,
+              }}
+              transition={{ duration: 0.8, ease: 'easeInOut' }}
               className="absolute inset-0"
             >
               <Image
-                src={HERO_SLIDES[heroIndex]}
+                src={src}
                 fill
                 className="object-cover object-center mix-blend-overlay opacity-40"
-                alt={`Hero slide ${heroIndex + 1}`}
-                priority={heroIndex === 0}
+                alt={index === 0 ? 'Premium Beauty & Supplies' : 'Electronics & Gadgets'}
+                priority={index === 0}
                 sizes="100vw"
                 quality={85}
               />
             </motion.div>
-          </AnimatePresence>
+          ))}
         </div>
 
         {/* Content */}
