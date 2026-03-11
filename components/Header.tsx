@@ -36,22 +36,24 @@ function buildMobileNavFromCategories(categories: { id: string; name: string; sl
   const categoryChildren: ShopSectionItem[] = roots.map((root) => {
     const children = getChildren(root.id);
     if (children.length === 0) {
-      return { label: root.name, href: `/shop?category=${root.slug}` };
+      return { label: root.name, href: `/shop?type=retail&category=${root.slug}` };
     }
     return {
       label: root.name,
-      children: children.map((c) => ({ label: c.name, href: `/shop?category=${c.slug}` })),
+      children: children.map((c) => ({ label: c.name, href: `/shop?type=retail&category=${c.slug}` })),
     };
   });
 
-  const categoriesItem: MobileNavItem =
+  const retailItem: MobileNavItem =
     categoryChildren.length > 0
-      ? { label: 'Categories', children: categoryChildren }
-      : { label: 'Categories', href: '/categories' };
-      
+      ? { label: 'Retail', children: categoryChildren }
+      : { label: 'Retail', href: '/shop?type=retail' };
+
+  const closetItem: MobileNavItem = { label: 'Closet Sales', href: '/shop?type=closet' };
+
   return [
-    { label: 'Products', href: '/shop' },
-    categoriesItem, 
+    retailItem,
+    closetItem,
     ...STATIC_MOBILE_NAV_ITEMS
   ];
 }
@@ -83,8 +85,8 @@ export default function Header() {
   const showCart = getSetting('header_show_cart') !== 'false';
   const showAccount = getSetting('header_show_account') !== 'false';
   const navLinks = getSettingJSON<{ label: string; href: string }[]>('header_nav_links_json', [
-    { label: 'Products', href: '/shop' },
-    { label: 'Categories', href: '/categories' },
+    { label: 'Retail', href: '/shop?type=retail' },
+    { label: 'Closet Sales', href: '/shop?type=closet' },
     { label: 'Contact', href: '/contact' },
     { label: 'Importation Class', href: '/importation-class' }
   ]);

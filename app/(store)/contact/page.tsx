@@ -120,7 +120,7 @@ export default function ContactPage() {
   const faqs = [
     {
       question: 'What are your delivery times?',
-      answer: 'Standard delivery takes 2-5 business days. Express delivery is available for next-day service in major cities.'
+      answer: 'Standard delivery takes 2-5 business days. Express delivery (next-day) is available for Accra only.'
     },
     {
       question: 'Do you offer international shipping?',

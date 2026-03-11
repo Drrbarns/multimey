@@ -612,8 +612,8 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                     <div className="flex items-start text-sm text-gray-600 bg-gray-50/80 p-3.5 rounded-xl border border-gray-100/50">
                       <i className="ri-store-2-line text-blue-600 mr-3 text-lg mt-0.5"></i>
                       <div>
-                        <p className="font-semibold text-gray-900 mb-0.5 text-[13px]">Free Store Pickup</p>
-                        <p className="text-[12px] text-gray-500">At our Accra location</p>
+                        <p className="font-semibold text-gray-900 mb-0.5 text-[13px]">Freebies on big orders</p>
+                        <p className="text-[12px] text-gray-500">Free gifts when you spend big</p>
                       </div>
                     </div>
                     <div className="flex items-start text-sm text-gray-600 bg-gray-50/80 p-3.5 rounded-xl border border-gray-100/50">

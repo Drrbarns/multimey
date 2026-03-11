@@ -233,8 +233,8 @@ export const defaultSettings: SiteSettings = {
 
     // Trust Features
     feature1_icon: 'ri-store-2-line',
-    feature1_title: 'Free Store Pickup',
-    feature1_desc: 'Pick up at our store',
+    feature1_title: 'Freebies on big orders',
+    feature1_desc: 'Free gifts when you spend big',
     feature2_icon: 'ri-arrow-left-right-line',
     feature2_title: 'Easy Returns',
     feature2_desc: '24-hour return policy for faulty/damaged/wrong items',

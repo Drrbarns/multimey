@@ -85,17 +85,13 @@ export const getArticles = (contactPhone: string, contactEmail: string) => ({
     updated: 'February 1, 2026',
     content: `
       <h2>Changing Your Delivery Address</h2>
-      <p>You can change your delivery address within <strong>1 hour</strong> of placing your order, before it enters processing.</p>
+      <p>Orders cannot be modified once payment has been made. You can only change your delivery address <strong>before</strong> you complete payment — double-check your address at checkout.</p>
 
-      <h3>How to Change Your Address</h3>
-      <ol>
-        <li>Contact us immediately via WhatsApp at ${contactPhone}</li>
-        <li>Provide your order number and the new delivery address</li>
-        <li>We'll confirm the change and update your order</li>
-      </ol>
+      <h3>Before You Pay</h3>
+      <p>If you haven't paid yet and need to change the address, go back in checkout and select or add the correct address. You can also message us on WhatsApp at ${contactPhone} if you need help.</p>
 
-      <h3>After Processing Begins</h3>
-      <p>Once your order has been processed and dispatched, we cannot change the delivery address. If the package is returned to us, we can reship to the new address (additional shipping fees may apply).</p>
+      <h3>After Payment</h3>
+      <p>Once payment is complete, we cannot change the delivery address or cancel the order. If the package is returned to us undelivered, we may be able to reship to a new address (additional shipping fees may apply).</p>
 
       <h3>Saving Multiple Addresses</h3>
       <p>To avoid last-minute changes, you can save multiple delivery addresses in your account. During checkout, simply select the address you want to use.</p>

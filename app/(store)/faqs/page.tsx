@@ -31,7 +31,7 @@ export default function FAQsPage() {
     {
       category: 'orders',
       question: 'Can I modify or cancel my order?',
-      answer: 'You can modify or cancel your order within 1 hour of placing it. Contact customer service via the contact page. Once an order is processed, modifications may not be possible.'
+      answer: 'Orders cannot be cancelled or modified once payment has been made. Please review your order and delivery details carefully before completing checkout. If you have not yet paid and need to change something, message us on WhatsApp or use the contact page before proceeding to payment.'
     },
     {
       category: 'orders',
@@ -46,7 +46,7 @@ export default function FAQsPage() {
     {
       category: 'shipping',
       question: 'What are your delivery times?',
-      answer: 'Standard delivery takes 2-5 business days within Ghana. Express delivery (next-day) is available for Accra and Kumasi. Orders placed before 2pm are dispatched same day. Remote areas may take 5-7 business days.'
+      answer: 'Standard delivery takes 2-5 business days within Ghana. Express delivery (next-day) is available for Accra only. Orders placed before 2pm are dispatched same day. Remote areas may take 5-7 business days.'
     },
     {
       category: 'shipping',
@@ -61,17 +61,12 @@ export default function FAQsPage() {
     {
       category: 'shipping',
       question: 'What if nobody is home for delivery?',
-      answer: 'Our delivery partner will attempt delivery twice. If unsuccessful, the package will be held at the nearest collection point for 5 days. You\'ll receive SMS and email notifications with collection instructions.'
+      answer: 'If no one is home, the courier will keep it and deliver it at a convenient time for you.'
     },
     {
       category: 'returns',
       question: 'What is your return policy?',
       answer: `We have a 24-hour return policy: you have 24 hours after receiving your item to request a return if it’s faulty, damaged, or not what you requested. Due to hygiene reasons we cannot accept refunds for other reasons. Items must be unworn/unused, with tags and original packaging; you’ll need the receipt or proof of purchase. Contact us first on WhatsApp ${contactPhone} or ${contactEmail}—we’ll send a return label and instructions if accepted. See our Refund Policy page for full details.`
-    },
-    {
-      category: 'returns',
-      question: 'Which items cannot be returned?',
-      answer: 'For hygiene reasons, we cannot accept returns on opened cosmetics, intimate apparel, earrings, or perishable goods. Custom or personalised items are also non-returnable unless defective.'
     },
     {
       category: 'returns',
@@ -86,7 +81,7 @@ export default function FAQsPage() {
     {
       category: 'payment',
       question: 'What payment methods do you accept?',
-      answer: 'We accept MTN Mobile Money, Vodafone Cash, AirtelTigo Money, Visa/Mastercard credit and debit cards, and Cash on Delivery (available for orders under GHS 1,000). All payments are processed securely.'
+      answer: 'All orders are placed and paid for on the website. We accept MTN Mobile Money, Vodafone Cash, AirtelTigo Money, and Visa/Mastercard credit and debit cards. No cash on delivery — payment is completed at checkout. All payments are processed securely.'
     },
     {
       category: 'payment',
@@ -95,13 +90,8 @@ export default function FAQsPage() {
     },
     {
       category: 'payment',
-      question: 'Can I pay in instalments?',
-      answer: 'Yes! We offer payment plans through our partners for purchases over GHS 500. Select "Pay in Instalments" at checkout to see available options. Approval is instant and no interest is charged.'
-    },
-    {
-      category: 'payment',
       question: 'When will my payment be charged?',
-      answer: 'For card and mobile money payments, you\'re charged immediately. For Cash on Delivery, you pay when you receive your order. If an item is out of stock, we\'ll refund you within 24 hours.'
+      answer: 'You\'re charged when you complete checkout on the website. If an item is out of stock, we\'ll refund you within 24 hours.'
     },
     {
       category: 'payment',
@@ -127,11 +117,6 @@ export default function FAQsPage() {
       category: 'account',
       question: 'How do I update my account information?',
       answer: 'Log in to your account and go to "Account Settings". You can update your name, email, phone number, password, and saved addresses. Changes are saved instantly and you\'ll receive a confirmation email.'
-    },
-    {
-      category: 'account',
-      question: 'What are loyalty points and how do they work?',
-      answer: 'Earn 1 point for every GHS 10 spent. 100 points = GHS 10 discount on your next purchase. Points are automatically added to your account after each order. Check your points balance in your account dashboard.'
     }
   ];
 
