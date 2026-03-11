@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.png',
+    icon: [{ url: '/favicon.png', type: 'image/png', sizes: '32x32' }, { url: '/favicon.png', type: 'image/png', sizes: 'any' }],
     apple: '/favicon.png',
     shortcut: '/favicon.png',
   },
@@ -83,6 +83,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
         <link
           href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
           rel="stylesheet"

@@ -56,7 +56,7 @@ export default function Home() {
   // ── CMS-driven config ────────────────────────────────────────────
   const heroHeadline = getSetting('hero_headline') || 'Welcome to MultiMey Supplies';
   const heroSubheadline = getSetting('hero_subheadline') || 'Premium quality, crafted for you.';
-  const HERO_SLIDES = ['/hero-1.png', '/image.jpg'];
+  const HERO_SLIDES = ['/hero-1.png', '/hero-2.png'];
   const HERO_SLIDE_CONTENT: Array<{
     tag?: string;
     headline?: string;
@@ -69,6 +69,17 @@ export default function Home() {
     showStats?: boolean;
   } | null> = [
     {
+      tag: 'BEAUTY & SUPPLIES',
+      headline: 'Premium Beauty & Supplies',
+      subheadline: 'Quality cosmetics, beauty products, and more — tried and tested for an excellent experience.',
+      primaryText: 'Retail Items',
+      primaryLink: '/shop?type=retail',
+      secondaryText: 'Closet Sales',
+      secondaryLink: '/shop?type=closet',
+      showBadge: false,
+      showStats: false,
+    }, // slide 0: hero-1.png
+    {
       tag: 'ELECTRONICS & APPLIANCES',
       headline: 'Top-Quality Electronics & Gadgets',
       subheadline: 'From smart kitchen appliances to everyday electronics — imported directly and priced to move.',
@@ -78,18 +89,7 @@ export default function Home() {
       secondaryLink: '/shop?type=closet',
       showBadge: false,
       showStats: false,
-    }, // slide 0: hero-1.png
-    {
-      tag: 'FASHION & DRESSES',
-      headline: 'Stunning African Print Dresses',
-      subheadline: 'Beautiful locally sourced dresses and fashion pieces – bold prints, perfect fits, unbeatable prices.',
-      primaryText: 'Retail Items',
-      primaryLink: '/shop?type=retail',
-      secondaryText: 'Closet Sales',
-      secondaryLink: '/shop?type=closet',
-      showBadge: false,
-      showStats: false,
-    }, // slide 1: image.jpg
+    }, // slide 1: hero-2.png
   ];
   const HERO_INTERVAL_MS = 3000;
   const [heroIndex, setHeroIndex] = useState(0);
