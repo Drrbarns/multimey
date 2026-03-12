@@ -160,12 +160,12 @@ export default function Home() {
                 scale: heroIndex === index ? 1 : 1.05,
               }}
               transition={{ duration: 0.8, ease: 'easeInOut' }}
-              className="absolute inset-0"
+              className={`absolute inset-0 ${heroIndex === index ? 'z-10' : 'z-0'}`}
             >
               <Image
                 src={src}
                 fill
-                className="object-cover object-center mix-blend-overlay opacity-40"
+                className="object-cover object-center opacity-50"
                 alt={index === 0 ? 'Curated Personal Essentials' : 'Electronics & Gadgets'}
                 priority={index === 0}
                 sizes="100vw"

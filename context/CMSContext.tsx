@@ -189,7 +189,7 @@ export const defaultSettings: SiteSettings = {
     site_tagline: 'Your tagline here.',
     site_logo: '',
     site_favicon: '/favicon.ico',
-    contact_email: 'info@multimeysupplies.com',
+    contact_email: 'contact@example.com',
     contact_phone: '+233209597443',
     contact_address: 'Dzowulu, Accra, Ghana',
     social_facebook: '',
@@ -410,7 +410,11 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     };
 
     const getSetting = (key: string): string => {
-        return settings[key] || defaultSettings[key] || '';
+        let value = settings[key] || defaultSettings[key] || '';
+        if (key === 'contact_email' && value === 'info@doctorbarns.com') {
+            value = 'contact@example.com';
+        }
+        return value;
     };
 
     const getSettingJSON = <T = any,>(key: string, fallback: T): T => {
