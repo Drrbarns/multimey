@@ -236,31 +236,36 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
     }, [isEditMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        setUploading(true);
         try {
-            if (!e.target.files || e.target.files.length === 0) return;
+            let nextImages = [...images];
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Math.random()}.${fileExt}`;
+                const filePath = `${fileName}`;
 
-            setUploading(true);
-            const file = e.target.files[0];
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Math.random()}.${fileExt}`;
-            const filePath = `${fileName}`;
+                const { error: uploadError } = await supabase.storage
+                    .from('products')
+                    .upload(filePath, file);
 
-            const { error: uploadError } = await supabase.storage
-                .from('products')
-                .upload(filePath, file);
+                if (uploadError) throw uploadError;
 
-            if (uploadError) throw uploadError;
+                const { data: { publicUrl } } = supabase.storage
+                    .from('products')
+                    .getPublicUrl(filePath);
 
-            const { data: { publicUrl } } = supabase.storage
-                .from('products')
-                .getPublicUrl(filePath);
-
-            setImages([...images, { url: publicUrl, position: images.length }]);
-
+                nextImages = [...nextImages, { url: publicUrl, position: nextImages.length }];
+            }
+            setImages(nextImages);
         } catch (error: any) {
             alert('Error uploading image: ' + error.message);
         } finally {
             setUploading(false);
+            e.target.value = '';
         }
     };
 
@@ -1019,16 +1024,18 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                                                 Primary
                                             </span>
                                         )}
-                                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-2 rounded-xl">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveImage(index)}
+                                            className="absolute top-2 right-2 w-9 h-9 flex items-center justify-center bg-red-500 text-white rounded-lg hover:bg-red-600 active:bg-red-700 shadow-md touch-manipulation z-10"
+                                            title="Remove image"
+                                        >
+                                            <i className="ri-delete-bin-line text-lg"></i>
+                                        </button>
+                                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl pointer-events-none sm:pointer-events-auto">
                                             <a href={img.url} target="_blank" rel="noreferrer" className="w-9 h-9 flex items-center justify-center bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                                                 <i className="ri-eye-line"></i>
                                             </a>
-                                            <button
-                                                onClick={() => handleRemoveImage(index)}
-                                                className="w-9 h-9 flex items-center justify-center bg-white text-red-600 rounded-lg hover:bg-red-50 transition-colors cursor-pointer"
-                                            >
-                                                <i className="ri-delete-bin-line"></i>
-                                            </button>
                                         </div>
                                     </div>
                                 ))}
@@ -1039,10 +1046,11 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                                     ) : (
                                         <i className="ri-upload-2-line text-3xl"></i>
                                     )}
-                                    <span className="text-sm font-semibold">{uploading ? 'Uploading...' : 'Upload Image'}</span>
+                                    <span className="text-sm font-semibold">{uploading ? 'Uploading...' : 'Upload Images'}</span>
                                     <input
                                         type="file"
                                         accept="image/*"
+                                        multiple
                                         className="hidden"
                                         onChange={handleImageUpload}
                                         disabled={uploading}

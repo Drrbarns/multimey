@@ -51,7 +51,7 @@ export default function FAQsPage() {
     {
       category: 'shipping',
       question: 'How much does shipping cost?',
-      answer: 'Standard shipping costs GHS 20. Express delivery costs GHS 40. Orders over GHS 300 qualify for FREE standard shipping. Store pickup is also available at no charge from our Accra location.'
+      answer: 'Delivery prices are not fixed. It depends on your location. We have partnered with a logistics company that will always call you and make you aware of the cost before setting off. Don\'t worry, you can always bargain!'
     },
     {
       category: 'shipping',
@@ -81,7 +81,7 @@ export default function FAQsPage() {
     {
       category: 'payment',
       question: 'What payment methods do you accept?',
-      answer: 'All orders are placed and paid for on the website. We accept MTN Mobile Money, Vodafone Cash, AirtelTigo Money, and Visa/Mastercard credit and debit cards. No cash on delivery — payment is completed at checkout. All payments are processed securely.'
+      answer: 'All orders are placed and paid for on the website. We accept MTN Mobile Money, Vodafone Cash, and AirtelTigo Money. No cash on delivery — payment is completed at checkout. All payments are processed securely.'
     },
     {
       category: 'payment',
