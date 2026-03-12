@@ -52,6 +52,7 @@ function buildMobileNavFromCategories(categories: { id: string; name: string; sl
   const closetItem: MobileNavItem = { label: 'Closet Sales', href: '/shop?type=closet' };
 
   return [
+    { label: 'Home', href: '/' },
     retailItem,
     closetItem,
     ...STATIC_MOBILE_NAV_ITEMS
@@ -85,6 +86,7 @@ export default function Header() {
   const showCart = getSetting('header_show_cart') !== 'false';
   const showAccount = getSetting('header_show_account') !== 'false';
   const navLinks = getSettingJSON<{ label: string; href: string }[]>('header_nav_links_json', [
+    { label: 'Home', href: '/' },
     { label: 'Retail', href: '/shop?type=retail' },
     { label: 'Closet Sales', href: '/shop?type=closet' },
     { label: 'Contact', href: '/contact' },
