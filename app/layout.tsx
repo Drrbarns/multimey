@@ -52,9 +52,7 @@ export const metadata: Metadata = {
     siteName: siteName,
     images: [
       {
-        url: "/logo-large.png",
-        width: 1200,
-        height: 630,
+        url: "/logo.png",
         alt: siteName,
       },
     ],
@@ -63,7 +61,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteName,
     description: siteDescription,
-    images: ["/logo-large.png"],
+    images: ["/logo.png"],
   },
   alternates: {
     canonical: siteUrl,

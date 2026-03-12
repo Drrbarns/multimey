@@ -70,8 +70,8 @@ export default function Home() {
   } | null> = [
     {
       tag: 'BEAUTY & SUPPLIES',
-      headline: 'Premium Beauty & Supplies',
-      subheadline: 'Quality cosmetics, beauty products, and more — tried and tested for an excellent experience.',
+      headline: 'Curated Personal Essentials',
+      subheadline: 'Thoughtfully Sourced for You, to improve the quality of your everyday life.',
       primaryText: 'Retail Items',
       primaryLink: '/shop?type=retail',
       secondaryText: 'Closet Sales',
@@ -166,7 +166,7 @@ export default function Home() {
                 src={src}
                 fill
                 className="object-cover object-center mix-blend-overlay opacity-40"
-                alt={index === 0 ? 'Premium Beauty & Supplies' : 'Electronics & Gadgets'}
+                alt={index === 0 ? 'Curated Personal Essentials' : 'Electronics & Gadgets'}
                 priority={index === 0}
                 sizes="100vw"
                 quality={85}

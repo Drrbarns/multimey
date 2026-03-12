@@ -22,7 +22,7 @@ export function generateMetadata({
   title = `${typeof SITE_NAME !== 'undefined' ? SITE_NAME : 'MultiMey Supplies'} - Online Store`,
   description = 'Discover curated products with secure payment and delivery.',
   keywords = [],
-  ogImage = '/logo-large.png',
+  ogImage = '/logo.png',
   ogType = 'website',
   price,
   currency = 'GHS',
@@ -56,7 +56,7 @@ export function generateMetadata({
     openGraph: {
       title: fullTitle,
       description,
-      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
+      images: [{ url: ogImage, alt: title }],
       type: ogType as any,
       siteName: SITE_NAME,
       locale: 'en_GH'

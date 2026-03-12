@@ -135,12 +135,10 @@ export default function ContactPage() {
   const content = (() =>
     <div className="min-h-screen bg-gray-50 font-sans">
       <div className="bg-gray-900 text-white pb-32 lg:pb-48 pt-24 lg:pt-32 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <img
-            src="/hero7.jpeg"
-            alt="Contact Background"
-            className="w-full h-full object-cover"
-          />
+        <div className="absolute inset-0 grid grid-cols-3">
+          <img src="/hero-1.png" alt="" className="w-full h-full object-cover object-center" />
+          <img src="/hero-1.png" alt="" className="w-full h-full object-cover object-center" />
+          <img src="/hero-1.png" alt="" className="w-full h-full object-cover object-center" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 to-gray-900"></div>
 
