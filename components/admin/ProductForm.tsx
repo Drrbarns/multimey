@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface ProductFormProps {
     initialData?: any;
@@ -12,6 +12,8 @@ interface ProductFormProps {
 
 export default function ProductForm({ initialData, isEditMode = false }: ProductFormProps) {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const returnUrl = searchParams.get('return') || '/admin/products';
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState<any[]>([]);
 
@@ -392,7 +394,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
             }
 
             alert(isEditMode ? 'Product updated successfully!' : 'Product created successfully!');
-            router.push('/admin/products');
+            router.push(returnUrl);
 
         } catch (err: any) {
             console.error('Error saving product:', err);
@@ -407,7 +409,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                     <Link
-                        href="/admin/products"
+                        href={returnUrl}
                         className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-lg hover:border-gray-400 transition-colors"
                     >
                         <i className="ri-arrow-left-line text-xl text-gray-700"></i>

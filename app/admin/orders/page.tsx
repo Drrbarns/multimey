@@ -1,9 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import ProductSalesStats from './ProductSalesStats';
+
+const ADMIN_ORDERS_SCROLL_KEY = 'admin_orders_scroll';
+
+function buildOrdersQuery(tab: string, status: string, sort: string, product: string) {
+  const params = new URLSearchParams();
+  if (tab && tab !== 'confirmed') params.set('tab', tab);
+  if (status && status !== 'all') params.set('status', status);
+  if (sort && sort !== 'date') params.set('sort', sort);
+  if (product && product !== 'all') params.set('product', encodeURIComponent(product));
+  return params.toString();
+}
 
 interface Order {
   id: string;
@@ -35,14 +47,17 @@ interface OrderStats {
 }
 
 export default function AdminOrdersPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState(() => searchParams.get('status') || 'all');
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
-  const [sortBy, setSortBy] = useState('date');
+  const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || 'date');
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [orderViewTab, setOrderViewTab] = useState<'confirmed' | 'abandoned'>('confirmed');
+  const [orderViewTab, setOrderViewTab] = useState<'confirmed' | 'abandoned'>(() => (searchParams.get('tab') as 'confirmed' | 'abandoned') || 'confirmed');
   const [sendingPaymentLink, setSendingPaymentLink] = useState<string | null>(null);
   const [orderStats, setOrderStats] = useState<OrderStats[]>([
     { label: 'All Orders', count: 0, status: 'all' },
@@ -55,12 +70,52 @@ export default function AdminOrdersPage() {
   const [abandonedCount, setAbandonedCount] = useState(0);
   const [confirmedCount, setConfirmedCount] = useState(0);
   const [showProductStats, setShowProductStats] = useState(false);
-  const [productFilter, setProductFilter] = useState('all');
+  const [productFilter, setProductFilter] = useState(() => {
+    const p = searchParams.get('product');
+    return p ? decodeURIComponent(p) : 'all';
+  });
   const [availableProducts, setAvailableProducts] = useState<string[]>([]);
+  const scrollRestored = useRef(false);
+
+  useEffect(() => {
+    const tab = searchParams.get('tab') as 'confirmed' | 'abandoned' | null;
+    const status = searchParams.get('status');
+    const sort = searchParams.get('sort');
+    const product = searchParams.get('product');
+    if (tab) setOrderViewTab(tab === 'abandoned' ? 'abandoned' : 'confirmed');
+    if (status) setStatusFilter(status);
+    if (sort) setSortBy(sort);
+    if (product) setProductFilter(decodeURIComponent(product));
+  }, [searchParams]);
 
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    if (scrollRestored.current || loading) return;
+    const saved = sessionStorage.getItem(ADMIN_ORDERS_SCROLL_KEY);
+    if (saved) {
+      const y = parseInt(saved, 10);
+      if (!isNaN(y) && y > 0) {
+        scrollRestored.current = true;
+        sessionStorage.removeItem(ADMIN_ORDERS_SCROLL_KEY);
+        requestAnimationFrame(() => window.scrollTo(0, y));
+      }
+    }
+  }, [loading]);
+
+  const updateUrl = (tab: string, status: string, sort: string, product: string) => {
+    const q = buildOrdersQuery(tab, status, sort, product);
+    const url = q ? `${pathname}?${q}` : pathname;
+    router.replace(url);
+  };
+
+  const ordersReturnUrl = pathname + (buildOrdersQuery(orderViewTab, statusFilter, sortBy, productFilter) ? `?${buildOrdersQuery(orderViewTab, statusFilter, sortBy, productFilter)}` : '');
+
+  const saveScrollBeforeView = () => {
+    sessionStorage.setItem(ADMIN_ORDERS_SCROLL_KEY, String(window.scrollY));
+  };
 
   const fetchOrders = async () => {
     try {
@@ -352,7 +407,11 @@ export default function AdminOrdersPage() {
       {/* View Tabs: Confirmed Orders vs Abandoned Carts */}
       <div className="flex border-b border-gray-200">
         <button
-          onClick={() => { setOrderViewTab('confirmed'); setStatusFilter('all'); }}
+          onClick={() => {
+            setOrderViewTab('confirmed');
+            setStatusFilter('all');
+            updateUrl('confirmed', 'all', sortBy, productFilter);
+          }}
           className={`px-6 py-3 font-semibold text-sm border-b-2 transition-colors cursor-pointer ${
             orderViewTab === 'confirmed'
               ? 'border-gray-900 text-gray-900'
@@ -363,7 +422,11 @@ export default function AdminOrdersPage() {
           Confirmed Orders ({confirmedCount})
         </button>
         <button
-          onClick={() => { setOrderViewTab('abandoned'); setStatusFilter('all'); }}
+          onClick={() => {
+            setOrderViewTab('abandoned');
+            setStatusFilter('all');
+            updateUrl('abandoned', 'all', sortBy, productFilter);
+          }}
           className={`px-6 py-3 font-semibold text-sm border-b-2 transition-colors cursor-pointer ${
             orderViewTab === 'abandoned'
               ? 'border-amber-600 text-amber-600'
@@ -380,7 +443,10 @@ export default function AdminOrdersPage() {
         {orderStats.map((stat) => (
           <button
             key={stat.status}
-            onClick={() => setStatusFilter(stat.status)}
+            onClick={() => {
+              setStatusFilter(stat.status);
+              updateUrl(orderViewTab, stat.status, sortBy, productFilter);
+            }}
             className={`p-4 rounded-xl border-2 transition-all text-left cursor-pointer ${statusFilter === stat.status
               ? 'border-gray-900 bg-gray-50'
               : 'border-gray-200 bg-white hover:border-gray-300'
@@ -434,7 +500,11 @@ export default function AdminOrdersPage() {
               </button>
               <select
                 value={productFilter}
-                onChange={(e) => setProductFilter(e.target.value)}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setProductFilter(v);
+                  updateUrl(orderViewTab, statusFilter, sortBy, v);
+                }}
                 className="px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 font-medium cursor-pointer"
               >
                 <option value="all">All Products</option>
@@ -444,7 +514,11 @@ export default function AdminOrdersPage() {
               </select>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setSortBy(v);
+                  updateUrl(orderViewTab, statusFilter, v, productFilter);
+                }}
                 className="px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 font-medium cursor-pointer"
               >
                 <option value="date">Sort by Date</option>
@@ -562,7 +636,11 @@ export default function AdminOrdersPage() {
                       />
                     </td>
                     <td className="py-4 px-4">
-                      <Link href={`/admin/orders/${order.id}`} className="text-gray-900 hover:text-gray-800 font-semibold whitespace-nowrap cursor-pointer">
+                      <Link
+                        href={`/admin/orders/${order.id}?return=${encodeURIComponent(ordersReturnUrl)}`}
+                        onClick={saveScrollBeforeView}
+                        className="text-gray-900 hover:text-gray-800 font-semibold whitespace-nowrap cursor-pointer"
+                      >
                         {order.order_number || order.id.substring(0, 8)}
                       </Link>
                     </td>
@@ -598,7 +676,8 @@ export default function AdminOrdersPage() {
                     <td className="py-4 px-4">
                       <div className="flex items-center space-x-2">
                         <Link
-                          href={`/admin/orders/${order.id}`}
+                          href={`/admin/orders/${order.id}?return=${encodeURIComponent(ordersReturnUrl)}`}
+                          onClick={saveScrollBeforeView}
                           className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
                           title="View Order"
                         >

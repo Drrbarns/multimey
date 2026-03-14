@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import FraudDetectionAlert from '@/components/FraudDetectionAlert';
 
@@ -17,6 +18,8 @@ interface FraudAnalysis {
 }
 
 export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get('return') || '/admin/orders';
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -362,7 +365,7 @@ export default function OrderDetailClient({ orderId }: OrderDetailClientProps) {
         {/* Page Header with Print Button */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <Link href="/admin/orders" className="text-gray-600 hover:text-gray-900">
+            <Link href={returnUrl} className="text-gray-600 hover:text-gray-900">
               <i className="ri-arrow-left-line text-2xl"></i>
             </Link>
             <div>

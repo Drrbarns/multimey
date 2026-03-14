@@ -1,20 +1,35 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
+const ADMIN_PRODUCTS_SCROLL_KEY = 'admin_products_scroll';
+
+function buildProductsQuery(category: string, status: string, sort: string) {
+  const params = new URLSearchParams();
+  if (category) params.set('category', category);
+  if (status) params.set('status', status);
+  if (sort && sort !== 'newest') params.set('sort', sort);
+  return params.toString();
+}
+
 export default function ProductsPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
-  const [sortBy, setSortBy] = useState('newest');
+  const [sortBy, setSortBy] = useState(() => searchParams.get('sort') || 'newest');
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterCategory, setFilterCategory] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');
+  const [filterCategory, setFilterCategory] = useState(() => searchParams.get('category') || '');
+  const [filterStatus, setFilterStatus] = useState(() => searchParams.get('status') || '');
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<any[]>([]);
+  const scrollRestored = useRef(false);
 
   // Statistics
   const [stats, setStats] = useState({
@@ -30,10 +45,46 @@ export default function ProductsPage() {
     'archived': 'bg-amber-100 text-amber-700',
   };
 
+  // Restore filters/sort from URL on load and when returning from edit
+  useEffect(() => {
+    const cat = searchParams.get('category') ?? '';
+    const status = searchParams.get('status') ?? '';
+    const sort = searchParams.get('sort') ?? 'newest';
+    setFilterCategory(cat);
+    setFilterStatus(status);
+    setSortBy(sort || 'newest');
+  }, [searchParams]);
+
   useEffect(() => {
     fetchProducts();
     fetchCategories();
   }, [sortBy, filterCategory, filterStatus]);
+
+  // Restore scroll position when returning from edit
+  useEffect(() => {
+    if (scrollRestored.current || loading) return;
+    const saved = sessionStorage.getItem(ADMIN_PRODUCTS_SCROLL_KEY);
+    if (saved) {
+      const y = parseInt(saved, 10);
+      if (!isNaN(y) && y > 0) {
+        scrollRestored.current = true;
+        sessionStorage.removeItem(ADMIN_PRODUCTS_SCROLL_KEY);
+        requestAnimationFrame(() => window.scrollTo(0, y));
+      }
+    }
+  }, [loading]);
+
+  const updateUrl = (category: string, status: string, sort: string) => {
+    const q = buildProductsQuery(category, status, sort);
+    const url = q ? `${pathname}?${q}` : pathname;
+    router.replace(url);
+  };
+
+  const productsReturnUrl = pathname + (buildProductsQuery(filterCategory, filterStatus, sortBy) ? `?${buildProductsQuery(filterCategory, filterStatus, sortBy)}` : '');
+
+  const saveScrollBeforeEdit = () => {
+    sessionStorage.setItem(ADMIN_PRODUCTS_SCROLL_KEY, String(window.scrollY));
+  };
 
   const fetchCategories = async () => {
     const { data } = await supabase.from('categories').select('id, name').order('name');
@@ -221,7 +272,11 @@ export default function ProductsPage() {
               </button>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setSortBy(v);
+                  updateUrl(filterCategory, filterStatus, v);
+                }}
                 className="px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 font-medium cursor-pointer"
               >
                 <option value="newest">Newest First</option>
@@ -255,7 +310,11 @@ export default function ProductsPage() {
                 <label className="block text-xs font-medium text-gray-500 mb-1">Category</label>
                 <select
                   value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setFilterCategory(v);
+                    updateUrl(v, filterStatus, sortBy);
+                  }}
                   className="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg text-sm cursor-pointer focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
                 >
                   <option value="">All Categories</option>
@@ -268,7 +327,11 @@ export default function ProductsPage() {
                 <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
                 <select
                   value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setFilterStatus(v);
+                    updateUrl(filterCategory, v, sortBy);
+                  }}
                   className="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg text-sm cursor-pointer focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
                 >
                   <option value="">All Status</option>
@@ -374,7 +437,8 @@ export default function ProductsPage() {
                     <td className="py-4 px-4">
                       <div className="flex items-center space-x-2">
                         <Link
-                          href={`/admin/products/${product.id}`}
+                          href={`/admin/products/${product.id}?return=${encodeURIComponent(productsReturnUrl)}`}
+                          onClick={saveScrollBeforeEdit}
                           className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
                         >
                           <i className="ri-edit-line text-lg"></i>
@@ -420,7 +484,8 @@ export default function ProductsPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Link
-                    href={`/admin/products/${product.id}`}
+                    href={`/admin/products/${product.id}?return=${encodeURIComponent(productsReturnUrl)}`}
+                    onClick={saveScrollBeforeEdit}
                     className="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-lg text-sm font-medium text-center transition-colors whitespace-nowrap cursor-pointer"
                   >
                     Edit
