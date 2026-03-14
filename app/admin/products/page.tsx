@@ -8,6 +8,8 @@ export default function ProductsPage() {
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [sortBy, setSortBy] = useState('newest');
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
@@ -31,10 +33,10 @@ export default function ProductsPage() {
   useEffect(() => {
     fetchProducts();
     fetchCategories();
-  }, [sortBy]);
+  }, [sortBy, filterCategory, filterStatus]);
 
   const fetchCategories = async () => {
-    const { data } = await supabase.from('categories').select('name');
+    const { data } = await supabase.from('categories').select('id, name').order('name');
     if (data) setCategories(data);
   };
 
@@ -49,6 +51,10 @@ export default function ProductsPage() {
           product_variants(count),
           product_images(url, position)
         `);
+
+      // Apply filters
+      if (filterCategory) query = query.eq('category_id', filterCategory);
+      if (filterStatus) query = query.eq('status', filterStatus);
 
       // Apply sorting
       if (sortBy === 'newest') query = query.order('created_at', { ascending: false });
@@ -245,16 +251,32 @@ export default function ProductsPage() {
 
           {showFilters && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg grid md:grid-cols-4 gap-4">
-              <select className="px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg text-sm cursor-pointer">
-                <option value="">All Categories</option>
-                {categories.map((cat: any) => <option key={cat.name} value={cat.name}>{cat.name}</option>)}
-              </select>
-              <select className="px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg text-sm cursor-pointer">
-                <option>All Status</option>
-                <option>Active</option>
-                <option>Draft</option>
-                <option>Archived</option>
-              </select>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Category</label>
+                <select
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                  className="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg text-sm cursor-pointer focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
+                >
+                  <option value="">All Categories</option>
+                  {categories.map((cat: any) => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg text-sm cursor-pointer focus:ring-2 focus:ring-gray-600 focus:border-gray-600"
+                >
+                  <option value="">All Status</option>
+                  <option value="active">Active</option>
+                  <option value="draft">Draft</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </div>
             </div>
           )}
         </div>

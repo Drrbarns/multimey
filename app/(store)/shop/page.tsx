@@ -31,14 +31,19 @@ function ShopContent() {
   const [page, setPage] = useState(1);
   const productsPerPage = 9;
 
-  // Initialize from URL params
+  // Initialize from URL params (keeps position when returning from product page)
   useEffect(() => {
     const category = searchParams.get('category');
     const sort = searchParams.get('sort');
     const type = searchParams.get('type');
+    const pageParam = searchParams.get('page');
 
     if (category) setSelectedCategory(category);
     if (sort) setSortBy(sort);
+    if (pageParam) {
+      const p = parseInt(pageParam, 10);
+      if (!isNaN(p) && p >= 1) setPage(p);
+    }
     // type (retail/closet) is read from searchParams in fetch and classificationParam below
   }, [searchParams]);
 
@@ -48,6 +53,14 @@ function ShopContent() {
     else params.set('type', type);
     params.delete('page'); // reset to page 1
     setPage(1);
+    router.push(`${pathname}${params.toString() ? `?${params.toString()}` : ''}`);
+  };
+
+  const goToPage = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (newPage <= 1) params.delete('page');
+    else params.set('page', String(newPage));
+    setPage(newPage);
     router.push(`${pathname}${params.toString() ? `?${params.toString()}` : ''}`);
   };
 
@@ -493,7 +506,7 @@ function ShopContent() {
                 <div className="mt-16 flex justify-center">
                   <div className="flex items-center space-x-2">
                     <button
-                      onClick={() => setPage(p => Math.max(1, p - 1))}
+                      onClick={() => goToPage(Math.max(1, page - 1))}
                       disabled={page === 1}
                       className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -506,7 +519,7 @@ function ShopContent() {
                     </span>
 
                     <button
-                      onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                      onClick={() => goToPage(Math.min(totalPages, page + 1))}
                       disabled={page === totalPages}
                       className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >

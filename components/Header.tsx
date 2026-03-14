@@ -23,6 +23,10 @@ const STATIC_MOBILE_NAV_ITEMS: MobileNavItem[] = [
   { label: 'Register for 1v1 Online Importation Class', href: '/importation-class' },
 ];
 
+const RECENT_SEARCHES_KEY = 'multimey_recent_searches';
+const MAX_RECENT = 6;
+const POPULAR_SEARCHES = ['Beauty', 'Skincare', 'Electronics', 'Bags', 'Closet Sales', 'Accessories'];
+
 function buildMobileNavFromCategories(categories: { id: string; name: string; slug: string; parent_id: string | null }[]): MobileNavItem[] {
   const roots = categories.filter((c) => !c.parent_id).sort((a, b) => a.name.localeCompare(b.name));
   const byParent = new Map<string | null, typeof categories>();
@@ -70,6 +74,7 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [wishlistCount, setWishlistCount] = useState(0);
   const [user, setUser] = useState<any>(null);
   const [expandedMobileSection, setExpandedMobileSection] = useState<string | null>(null);
@@ -131,12 +136,59 @@ export default function Header() {
     loadCategories();
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const raw = localStorage.getItem(RECENT_SEARCHES_KEY);
+      const list = raw ? JSON.parse(raw) : [];
+      setRecentSearches(Array.isArray(list) ? list.slice(0, MAX_RECENT) : []);
+    } catch {
+      setRecentSearches([]);
+    }
+  }, []);
+
+  const runSearch = (query: string) => {
+    const q = query.trim();
+    if (!q) return;
+    const url = `/shop?search=${encodeURIComponent(q)}`;
+    try {
+      const raw = localStorage.getItem(RECENT_SEARCHES_KEY);
+      const list = raw ? JSON.parse(raw) : [];
+      const next = [q, ...(Array.isArray(list) ? list.filter((x: string) => x.trim().toLowerCase() !== q.toLowerCase()) : [])].slice(0, MAX_RECENT);
+      localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+    setIsSearchOpen(false);
+    setSearchQuery('');
+    window.location.href = url;
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      window.location.href = `/shop?search=${encodeURIComponent(searchQuery)}`;
-    }
+    runSearch(searchQuery);
   };
+
+  const clearRecentSearches = () => {
+    localStorage.removeItem(RECENT_SEARCHES_KEY);
+    setRecentSearches([]);
+  };
+
+  useEffect(() => {
+    if (!isSearchOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsSearchOpen(false);
+        setSearchQuery('');
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [isSearchOpen]);
 
   return (
     <>
@@ -250,32 +302,97 @@ export default function Header() {
 
       {/* Search overlay */}
       {isSearchOpen && (
-        <div className="fixed inset-0 z-[60] bg-white" role="dialog" aria-modal="true" aria-label="Search">
-          <div className="max-w-2xl mx-auto px-4 pt-6 pb-4">
-            <div className="flex items-center gap-3 border-b border-gray-200 pb-4">
-              <i className="ri-search-line text-2xl text-gray-400" aria-hidden />
-              <form onSubmit={handleSearch} className="flex-1">
-                <input
-                  type="search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search products..."
-                  className="w-full py-2 text-lg focus:outline-none placeholder:text-gray-400"
-                  autoFocus
-                  autoComplete="off"
-                />
-              </form>
-              <button
-                type="button"
-                className="p-2 text-gray-500 hover:text-gray-900"
-                onClick={() => setIsSearchOpen(false)}
-                aria-label="Close search"
-              >
-                <i className="ri-close-line text-2xl" aria-hidden />
-              </button>
+        <div
+          className="fixed inset-0 z-[60] flex items-start justify-center bg-black/40 backdrop-blur-sm pt-[12vh] px-4 sm:pt-[15vh]"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Search"
+        >
+          <div
+            className="w-full max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-4 border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-100 text-gray-500">
+                  <i className="ri-search-line text-xl" aria-hidden />
+                </span>
+                <form onSubmit={handleSearch} className="flex-1 min-w-0">
+                  <input
+                    type="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search products, brands, categories..."
+                    className="w-full py-2.5 text-base focus:outline-none placeholder:text-gray-400"
+                    autoFocus
+                    autoComplete="off"
+                  />
+                </form>
+                <button
+                  type="button"
+                  className="flex items-center justify-center w-10 h-10 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                  onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
+                  aria-label="Close search"
+                >
+                  <i className="ri-close-line text-2xl" aria-hidden />
+                </button>
+              </div>
+              <p className="text-xs text-gray-400 mt-2 pl-[3.25rem]">Press Enter to search · Try beauty, electronics, bags</p>
             </div>
-            <p className="text-sm text-gray-500 mt-2">Press Enter to search</p>
+
+            <div className="p-4 max-h-[50vh] overflow-y-auto">
+              {recentSearches.length > 0 && (
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-gray-700">Recent searches</span>
+                    <button
+                      type="button"
+                      onClick={clearRecentSearches}
+                      className="text-xs text-gray-500 hover:text-gray-900"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {recentSearches.map((term) => (
+                      <button
+                        key={term}
+                        type="button"
+                        onClick={() => runSearch(term)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 text-sm hover:bg-gray-200 transition-colors"
+                      >
+                        <i className="ri-time-line text-gray-400" />
+                        {term}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <span className="text-sm font-semibold text-gray-700 block mb-2">Popular searches</span>
+                <div className="flex flex-wrap gap-2">
+                  {POPULAR_SEARCHES.map((term) => (
+                    <button
+                      key={term}
+                      type="button"
+                      onClick={() => runSearch(term)}
+                      className="inline-flex items-center px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm hover:border-brand-gold hover:bg-brand-gold/5 hover:text-gray-900 transition-colors"
+                    >
+                      {term}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
+
+          <button
+            type="button"
+            className="absolute inset-0 -z-10"
+            aria-label="Close"
+            onClick={() => { setIsSearchOpen(false); setSearchQuery(''); }}
+          />
         </div>
       )}
 

@@ -32,8 +32,11 @@ The SMS notification system has been updated with improved security, better erro
 ### Moolre Payment
 | Variable | Purpose | Required |
 |----------|---------|----------|
+| `MOOLRE_API_USER` | Moolre API user ID | Yes |
+| `MOOLRE_API_PUBKEY` | Moolre API public key | Yes |
 | `MOOLRE_ACCOUNT_NUMBER` | Payment account number | Yes |
 | `MOOLRE_MERCHANT_EMAIL` | Merchant email | Yes |
+| `MOOLRE_CALLBACK_SECRET` | Secret for verifying payment callbacks (from Moolre dashboard) | Optional but recommended |
 
 ### App Configuration
 | Variable | Purpose | Required |
