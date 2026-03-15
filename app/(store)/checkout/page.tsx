@@ -51,7 +51,7 @@ export default function CheckoutPage() {
     'Western North'
   ];
 
-  const [deliveryMethod, setDeliveryMethod] = useState('pickup');
+  const [deliveryMethod, setDeliveryMethod] = useState('doorstep');
   const [paymentMethod, setPaymentMethod] = useState<'paystack' | 'moolre' | 'stripe' | 'paypal'>('moolre');
   const [errors, setErrors] = useState<any>({});
 
@@ -81,7 +81,7 @@ export default function CheckoutPage() {
 
   // Calculate Totals
   const subtotal = cartSubtotal;
-  const shippingCost = deliveryMethod === 'doorstep' ? 50 : 0; // 50 GHS for doorstep, 0 for pickup
+  const shippingCost = 50; // Delivery only (GHS)
   const tax = 0; // No Tax
   const total = subtotal + shippingCost + tax;
 
@@ -177,7 +177,7 @@ export default function CheckoutPage() {
       // Batch-fetch product metadata (for preorder_shipping etc.)
       const productIds = cart.map(item => item.id).filter(id => isValidUUID(id));
       const { data: productsData } = productIds.length > 0
-        ? await supabase.from('products').select('id, metadata').in('id', productIds)
+        ? await supabase.from('products').select('id, metadata').eq('status', 'active').in('id', productIds)
         : { data: [] };
       const productMetaMap = new Map((productsData || []).map((p: any) => [p.id, p.metadata]));
       
@@ -189,6 +189,7 @@ export default function CheckoutPage() {
           const { data: product } = await supabase
             .from('products')
             .select('id, metadata')
+            .eq('status', 'active')
             .or(`slug.eq.${productId},id.eq.${productId}`)
             .single();
           
@@ -559,39 +560,18 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-6">
-                  <h2 className="text-2xl font-serif text-gray-900 mb-8">Delivery Method</h2>
-                  <div className="space-y-4">
-                    <label 
-                      onClick={() => setDeliveryMethod('pickup')}
-                      className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'pickup' ? 'border-brand-blue bg-brand-gold/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'
-                      }`}>
-                      <div className="flex items-center space-x-4">
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'pickup' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300'}`}>
-                           {deliveryMethod === 'pickup' && <div className="w-2 h-2 bg-white rounded-full"></div>}
-                        </div>
-                        <div>
-                          <p className="font-bold text-gray-900 text-[15px]">Store Pickup</p>
-                          <p className="text-sm text-gray-500 mt-0.5">Pick up from our store — Ready in 24 hours</p>
-                        </div>
+                  <h2 className="text-2xl font-serif text-gray-900 mb-4">Delivery</h2>
+                  <div className="flex items-center justify-between p-5 border-2 border-brand-blue bg-brand-gold/5 rounded-xl">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-6 h-6 rounded-full border-2 border-brand-blue bg-brand-blue flex items-center justify-center flex-shrink-0">
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
                       </div>
-                      <p className="font-bold text-brand-blue bg-brand-gold/20 px-3 py-1 rounded-lg border border-brand-gold/30 text-xs tracking-wider uppercase shadow-sm">FREE</p>
-                    </label>
-
-                    <label 
-                      onClick={() => setDeliveryMethod('doorstep')}
-                      className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'doorstep' ? 'border-brand-blue bg-brand-gold/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'
-                      }`}>
-                      <div className="flex items-center space-x-4">
-                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'doorstep' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300'}`}>
-                           {deliveryMethod === 'doorstep' && <div className="w-2 h-2 bg-white rounded-full"></div>}
-                        </div>
-                        <div>
-                          <p className="font-bold text-gray-900 text-[15px]">Doorstep Delivery</p>
-                          <p className="text-sm text-gray-500 mt-0.5">Standard delivery to your address</p>
-                        </div>
+                      <div>
+                        <p className="font-bold text-gray-900 text-[15px]">Doorstep Delivery</p>
+                        <p className="text-sm text-gray-500 mt-0.5">Standard delivery to your address</p>
                       </div>
-                      <p className="font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200 text-xs tracking-wider uppercase shadow-sm">GH₵50.00</p>
-                    </label>
+                    </div>
+                    <p className="font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200 text-xs tracking-wider uppercase shadow-sm">GH₵50.00</p>
                   </div>
 
                   <h2 className="text-2xl font-serif text-gray-900 mt-12 mb-6">Payment Method</h2>

@@ -102,6 +102,7 @@ function ShopContent() {
                 product_images!product_id(url, position),
                 product_variants(id, name, price, quantity, option1, option2, image_url)
               `, { count: 'exact' })
+              .eq('status', 'active')
               .order('position', { foreignTable: 'product_images', ascending: true });
 
             // Search
@@ -140,7 +141,8 @@ function ShopContent() {
               query = query.gte('rating_avg', selectedRating);
             }
 
-            // Sorting
+            // In-stock first, then apply sort (out-of-stock at bottom)
+            query = query.order('quantity', { ascending: false });
             switch (sortBy) {
               case 'price-low':
                 query = query.order('price', { ascending: true });

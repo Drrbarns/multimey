@@ -25,6 +25,7 @@ export default function Home() {
           .select('*, product_variants(*), product_images(*)')
           .eq('status', 'active')
           .eq('featured', true)
+          .order('quantity', { ascending: false })
           .order('created_at', { ascending: false })
           .limit(8);
 
