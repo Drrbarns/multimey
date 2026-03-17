@@ -26,7 +26,10 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
     const [moq, setMoq] = useState(initialData?.moq || '1');
     const [lowStockThreshold, setLowStockThreshold] = useState(initialData?.metadata?.low_stock_threshold || '5');
     const [description, setDescription] = useState(initialData?.description || '');
-    const [status, setStatus] = useState(initialData?.status || 'Active');
+    const [status, setStatus] = useState(() => {
+        const s = initialData?.status ?? 'active';
+        return typeof s === 'string' ? s.toLowerCase() : 'active';
+    });
     const [featured, setFeatured] = useState(initialData?.featured || false);
     const [preorderShipping, setPreorderShipping] = useState(initialData?.metadata?.preorder_shipping || '');
     const [classification, setClassification] = useState<'retail' | 'closet' | ''>(initialData?.metadata?.classification || '');
@@ -310,7 +313,7 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                 sku: sku || generateSku(), // Auto-generate if empty
                 quantity: hasVariants ? variantStockTotal : (parseInt(stock) || 0),
                 moq: parseInt(moq) || 1,
-                status: status.toLowerCase(),
+                status: typeof status === 'string' ? status.toLowerCase() : 'active',
                 featured,
                 seo_title: seoTitle,
                 seo_description: metaDescription,
@@ -532,9 +535,9 @@ export default function ProductForm({ initialData, isEditMode = false }: Product
                                         onChange={(e) => setStatus(e.target.value)}
                                         className="w-full px-4 py-3 pr-8 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-600 focus:border-gray-600 cursor-pointer"
                                     >
-                                        <option>Active</option>
-                                        <option>Draft</option>
-                                        <option>Archived</option>
+                                        <option value="active">Active</option>
+                                        <option value="draft">Draft</option>
+                                        <option value="archived">Archived</option>
                                     </select>
                                 </div>
                             </div>
