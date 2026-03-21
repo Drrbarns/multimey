@@ -51,7 +51,8 @@ export default function CheckoutPage() {
     'Western North'
   ];
 
-  const [deliveryMethod, setDeliveryMethod] = useState('doorstep');
+  const [deliveryMethod, setDeliveryMethod] = useState<'doorstep' | 'house_pickup'>('doorstep');
+  const [housePickupAcknowledged, setHousePickupAcknowledged] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'paystack' | 'moolre' | 'stripe' | 'paypal'>('moolre');
   const [errors, setErrors] = useState<any>({});
 
@@ -81,7 +82,7 @@ export default function CheckoutPage() {
 
   // Calculate Totals
   const subtotal = cartSubtotal;
-  const shippingCost = 50; // Delivery only (GHS)
+  const shippingCost = deliveryMethod === 'doorstep' ? 50 : 0;
   const tax = 0; // No Tax
   const total = subtotal + shippingCost + tax;
 
@@ -95,6 +96,9 @@ export default function CheckoutPage() {
     if (!shippingData.address) newErrors.address = 'Address is required';
     if (!shippingData.city) newErrors.city = 'City is required';
     if (!shippingData.region) newErrors.region = 'Region is required';
+    if (deliveryMethod === 'house_pickup' && !housePickupAcknowledged) {
+      newErrors.pickupPermission = 'Please confirm you have permission from the business owner for house pickup.';
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -560,18 +564,62 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-6">
-                  <h2 className="text-2xl font-serif text-gray-900 mb-4">Delivery</h2>
-                  <div className="flex items-center justify-between p-5 border-2 border-brand-blue bg-brand-gold/5 rounded-xl">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-6 h-6 rounded-full border-2 border-brand-blue bg-brand-blue flex items-center justify-center flex-shrink-0">
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                  <h2 className="text-2xl font-serif text-gray-900 mb-8">Delivery</h2>
+                  <div className="space-y-4">
+                    <label
+                      onClick={() => { setDeliveryMethod('doorstep'); setHousePickupAcknowledged(false); }}
+                      className={`flex items-center justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'doorstep' ? 'border-brand-blue bg-brand-gold/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-4 min-w-0">
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${deliveryMethod === 'doorstep' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300'}`}>
+                          {deliveryMethod === 'doorstep' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                        </div>
+                        <div>
+                          <p className="font-bold text-gray-900 text-[15px]">Delivery</p>
+                          <p className="text-sm text-gray-500 mt-0.5">Standard doorstep delivery to your address</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-bold text-gray-900 text-[15px]">Doorstep Delivery</p>
-                        <p className="text-sm text-gray-500 mt-0.5">Standard delivery to your address</p>
-                      </div>
+                      <p className="font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200 text-xs tracking-wider uppercase shadow-sm flex-shrink-0 ml-2">GH₵50.00</p>
+                    </label>
+
+                    <div>
+                      <label
+                        onClick={() => setDeliveryMethod('house_pickup')}
+                        className={`flex items-start justify-between p-5 border-2 rounded-xl cursor-pointer transition-all ${deliveryMethod === 'house_pickup' ? 'border-brand-blue bg-brand-gold/5 shadow-sm' : 'border-gray-100 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="flex items-start space-x-4 min-w-0">
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-colors ${deliveryMethod === 'house_pickup' ? 'border-brand-blue bg-brand-blue' : 'border-gray-300'}`}>
+                            {deliveryMethod === 'house_pickup' && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                          </div>
+                          <div>
+                            <p className="font-bold text-gray-900 text-[15px]">House pickup</p>
+                            <p className="text-sm text-amber-800 mt-1 font-medium">You must get permission from the business owner before choosing this option.</p>
+                            <p className="text-sm text-gray-500 mt-1">Collect from our location after approval — no delivery fee.</p>
+                          </div>
+                        </div>
+                        <p className="font-bold text-brand-blue bg-brand-gold/20 px-3 py-1 rounded-lg border border-brand-gold/30 text-xs tracking-wider uppercase shadow-sm flex-shrink-0 ml-2">FREE</p>
+                      </label>
+                      {deliveryMethod === 'house_pickup' && (
+                        <div className="mt-3 ml-10 sm:ml-14 p-4 bg-amber-50/80 border border-amber-200 rounded-xl">
+                          <label className="flex items-start gap-3 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={housePickupAcknowledged}
+                              onChange={(e) => setHousePickupAcknowledged(e.target.checked)}
+                              className="w-5 h-5 mt-0.5 text-brand-blue rounded border-gray-300 focus:ring-brand-blue"
+                            />
+                            <span className="text-sm text-gray-800">
+                              I confirm I have received permission from the business owner to use house pickup.
+                            </span>
+                          </label>
+                          {errors.pickupPermission && (
+                            <p className="text-sm text-red-600 mt-2">{errors.pickupPermission}</p>
+                          )}
+                        </div>
+                      )}
                     </div>
-                    <p className="font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200 text-xs tracking-wider uppercase shadow-sm">GH₵50.00</p>
                   </div>
 
                   <h2 className="text-2xl font-serif text-gray-900 mt-12 mb-6">Payment Method</h2>
