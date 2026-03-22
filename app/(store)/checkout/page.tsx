@@ -8,11 +8,19 @@ import { useCart } from '@/context/CartContext';
 import { supabase } from '@/lib/supabase';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useRecaptcha } from '@/hooks/useRecaptcha';
+import { useCMS } from '@/context/CMSContext';
+
+function parseShippingAmount(raw: string, fallback: number): number {
+  const n = parseFloat(String(raw).replace(/,/g, ''));
+  if (!Number.isFinite(n) || n < 0) return fallback;
+  return n;
+}
 
 export default function CheckoutPage() {
   usePageTitle('Checkout');
   const router = useRouter();
   const { cart, subtotal: cartSubtotal, clearCart } = useCart();
+  const { getSetting } = useCMS();
 
   const [isLoading, setIsLoading] = useState(false);
   const [checkoutType, setCheckoutType] = useState<'guest' | 'account'>('guest');
@@ -80,9 +88,12 @@ export default function CheckoutPage() {
     return () => clearTimeout(timer);
   }, [cart, router, isLoading]);
 
-  // Calculate Totals
+  // Calculate Totals (shipping amounts from admin Settings → Shipping & delivery)
   const subtotal = cartSubtotal;
-  const shippingCost = deliveryMethod === 'doorstep' ? 50 : 0;
+  const currencySymbol = getSetting('currency_symbol') || 'GH₵';
+  const doorstepShippingPrice = parseShippingAmount(getSetting('shipping_doorstep_price'), 50);
+  const housePickupShippingPrice = parseShippingAmount(getSetting('shipping_house_pickup_price'), 0);
+  const shippingCost = deliveryMethod === 'doorstep' ? doorstepShippingPrice : housePickupShippingPrice;
   const tax = 0; // No Tax
   const total = subtotal + shippingCost + tax;
 
@@ -580,7 +591,9 @@ export default function CheckoutPage() {
                           <p className="text-sm text-gray-500 mt-0.5">Standard doorstep delivery to your address</p>
                         </div>
                       </div>
-                      <p className="font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200 text-xs tracking-wider uppercase shadow-sm flex-shrink-0 ml-2">GH₵50.00</p>
+                      <p className="font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200 text-xs tracking-wider uppercase shadow-sm flex-shrink-0 ml-2">
+                        {currencySymbol}{doorstepShippingPrice.toFixed(2)}
+                      </p>
                     </label>
 
                     <div>
@@ -596,10 +609,16 @@ export default function CheckoutPage() {
                           <div>
                             <p className="font-bold text-gray-900 text-[15px]">House pickup</p>
                             <p className="text-sm text-amber-800 mt-1 font-medium">You must get permission from the business owner before choosing this option.</p>
-                            <p className="text-sm text-gray-500 mt-1">Collect from our location after approval — no delivery fee.</p>
+                            <p className="text-sm text-gray-500 mt-1">
+                              {housePickupShippingPrice <= 0
+                                ? 'Collect from our location after approval — no pickup fee.'
+                                : `Collect from our location after approval — pickup fee applies.`}
+                            </p>
                           </div>
                         </div>
-                        <p className="font-bold text-brand-blue bg-brand-gold/20 px-3 py-1 rounded-lg border border-brand-gold/30 text-xs tracking-wider uppercase shadow-sm flex-shrink-0 ml-2">FREE</p>
+                        <p className="font-bold text-brand-blue bg-brand-gold/20 px-3 py-1 rounded-lg border border-brand-gold/30 text-xs tracking-wider uppercase shadow-sm flex-shrink-0 ml-2">
+                          {housePickupShippingPrice <= 0 ? 'FREE' : `${currencySymbol}${housePickupShippingPrice.toFixed(2)}`}
+                        </p>
                       </label>
                       {deliveryMethod === 'house_pickup' && (
                         <div className="mt-3 ml-10 sm:ml-14 p-4 bg-amber-50/80 border border-amber-200 rounded-xl">

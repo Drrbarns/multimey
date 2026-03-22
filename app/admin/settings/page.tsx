@@ -254,6 +254,39 @@ export default function SettingsPage() {
                             <FieldGroup label="Store Address"><input type="text" value={val('contact_address')} onChange={e => set('contact_address', e.target.value)} className={inputClass} /></FieldGroup>
                         </SectionCard>
 
+                        <SectionCard title="Shipping & delivery" icon="ri-truck-line" description="Checkout delivery fees (amounts in your store currency)">
+                            <div className="grid md:grid-cols-2 gap-5">
+                                <FieldGroup
+                                    label="Doorstep delivery fee"
+                                    description="Charged when the customer chooses standard delivery at checkout."
+                                >
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        step={0.01}
+                                        value={val('shipping_doorstep_price')}
+                                        onChange={e => set('shipping_doorstep_price', e.target.value)}
+                                        className={inputClass}
+                                        placeholder="50"
+                                    />
+                                </FieldGroup>
+                                <FieldGroup
+                                    label="House pickup fee"
+                                    description="Usually 0. Set a fee only if you charge for approved pickups."
+                                >
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        step={0.01}
+                                        value={val('shipping_house_pickup_price')}
+                                        onChange={e => set('shipping_house_pickup_price', e.target.value)}
+                                        className={inputClass}
+                                        placeholder="0"
+                                    />
+                                </FieldGroup>
+                            </div>
+                        </SectionCard>
+
                         <SectionCard title="Social Media" icon="ri-share-line" description="Links to your social media profiles">
                             <div className="grid md:grid-cols-2 gap-5">
                                 <FieldGroup label="Facebook"><input type="url" value={val('social_facebook')} onChange={e => set('social_facebook', e.target.value)} className={inputClass} placeholder="https://facebook.com/..." /></FieldGroup>

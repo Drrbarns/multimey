@@ -22,6 +22,10 @@ export interface SiteSettings {
     social_whatsapp: string;
     currency: string;
     currency_symbol: string;
+    /** Flat delivery fee for doorstep delivery (number as string, e.g. "50") */
+    shipping_doorstep_price: string;
+    /** Optional fee for house pickup; use "0" for free */
+    shipping_house_pickup_price: string;
 
     // Appearance / Theme
     primary_color: string;
@@ -201,6 +205,8 @@ export const defaultSettings: SiteSettings = {
     social_whatsapp: '',
     currency: 'GHS',
     currency_symbol: 'GH₵',
+    shipping_doorstep_price: '50',
+    shipping_house_pickup_price: '0',
 
     // Appearance — black & white
     primary_color: '#000000',
