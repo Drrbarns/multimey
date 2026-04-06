@@ -106,7 +106,7 @@ export default function ContactPage() {
       title: 'WhatsApp',
       value: contactPhone,
       link: `https://wa.me/${(contactPhone || '').replace(/\D/g, '')}`,
-      description: getSetting('contact_whatsapp_hours') || 'Chat with us instantly'
+      description: getSetting('contact_whatsapp_hours') || 'No calls. But chat with us instantly.'
     },
     {
       icon: 'ri-map-pin-line',

@@ -273,7 +273,7 @@ export const defaultSettings: SiteSettings = {
     contact_hero_subtitle: 'Questions? We’re here to help.',
     contact_hours: 'Mon-Fri, 8am-6pm GMT',
     contact_visit_hours: 'Mon-Sat, 9am-6pm',
-    contact_whatsapp_hours: 'Chat with us instantly',
+    contact_whatsapp_hours: 'No calls. But chat with us instantly.',
     contact_map_link: 'https://maps.google.com',
     contact_team_json: '[]',
 
