@@ -420,6 +420,9 @@ export function CMSProvider({ children }: { children: ReactNode }) {
         if (key === 'contact_email' && value === 'info@doctorbarns.com') {
             value = 'contact@example.com';
         }
+        if (key === 'contact_whatsapp_hours' && value.trim() === 'Chat with us instantly') {
+            value = defaultSettings.contact_whatsapp_hours;
+        }
         return value;
     };
 

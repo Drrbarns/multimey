@@ -417,6 +417,18 @@ export default function SettingsPage() {
                                 <FieldGroup label="Visit Hours (Visit Us)"><input type="text" value={val('contact_visit_hours')} onChange={e => set('contact_visit_hours', e.target.value)} className={inputClass} placeholder="Mon-Sat, 9am-6pm" /></FieldGroup>
                                 <FieldGroup label="Google Maps Link"><input type="url" value={val('contact_map_link')} onChange={e => set('contact_map_link', e.target.value)} className={inputClass} /></FieldGroup>
                             </div>
+                            <FieldGroup
+                                label="WhatsApp card line"
+                                description="Short line under the WhatsApp number on the Contact page (chat only, no calls)."
+                            >
+                                <input
+                                    type="text"
+                                    value={val('contact_whatsapp_hours')}
+                                    onChange={e => set('contact_whatsapp_hours', e.target.value)}
+                                    className={inputClass}
+                                    placeholder="No calls. But chat with us instantly."
+                                />
+                            </FieldGroup>
                             <TeamContactsEditor />
                         </SectionCard>
                     </div>
