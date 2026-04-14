@@ -141,24 +141,35 @@ function ShopContent() {
               query = query.gte('rating_avg', selectedRating);
             }
 
-            // In-stock first, then apply sort (out-of-stock at bottom)
-            query = query.order('quantity', { ascending: false });
+            // Primary sort must be the user's choice. (Previously quantity was ordered first,
+            // which produced ORDER BY quantity DESC, price DESC — so stock level dominated and
+            // "Price: High to Low" looked broken.)
             switch (sortBy) {
               case 'price-low':
-                query = query.order('price', { ascending: true });
+                query = query
+                  .order('price', { ascending: true, nullsFirst: false })
+                  .order('quantity', { ascending: false });
                 break;
               case 'price-high':
-                query = query.order('price', { ascending: false });
+                query = query
+                  .order('price', { ascending: false, nullsFirst: false })
+                  .order('quantity', { ascending: false });
                 break;
               case 'rating':
-                query = query.order('rating_avg', { ascending: false });
+                query = query
+                  .order('rating_avg', { ascending: false, nullsFirst: false })
+                  .order('quantity', { ascending: false });
                 break;
               case 'new':
-                query = query.order('created_at', { ascending: false });
+                query = query
+                  .order('created_at', { ascending: false })
+                  .order('quantity', { ascending: false });
                 break;
               case 'popular':
               default:
-                query = query.order('created_at', { ascending: false });
+                query = query
+                  .order('created_at', { ascending: false })
+                  .order('quantity', { ascending: false });
                 break;
             }
 
@@ -451,8 +462,14 @@ function ShopContent() {
                   <select
                     value={sortBy}
                     onChange={(e) => {
-                      setSortBy(e.target.value);
+                      const next = e.target.value;
+                      setSortBy(next);
                       setPage(1);
+                      const params = new URLSearchParams(searchParams.toString());
+                      if (next === 'popular') params.delete('sort');
+                      else params.set('sort', next);
+                      params.delete('page');
+                      router.replace(`${pathname}${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false });
                     }}
                     className="px-4 py-2 pr-8 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-blue focus:border-brand-blue text-sm bg-white cursor-pointer transition-all"
                   >

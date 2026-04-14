@@ -10,6 +10,9 @@ import AnimatedSection, { AnimatedGrid } from '@/components/AnimatedSection';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { motion } from 'framer-motion';
 
+/** Max featured products to load on the homepage (Supabase fetch). Raise if you need more than this. */
+const FEATURED_PRODUCTS_HOME_LIMIT = 200;
+
 export default function Home() {
   usePageTitle('');
   const { getSetting, getActiveBanners } = useCMS();
@@ -27,7 +30,7 @@ export default function Home() {
           .eq('featured', true)
           .order('quantity', { ascending: false })
           .order('created_at', { ascending: false })
-          .limit(8);
+          .limit(FEATURED_PRODUCTS_HOME_LIMIT);
 
         if (productsError) throw productsError;
         setFeaturedProducts(productsData || []);
