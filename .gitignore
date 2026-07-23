@@ -34,4 +34,7 @@ yarn-error.log*
 # Vercel
 .vercel
 
-.vercel
+# Migration artifacts (large dumps / storage — not for git)
+migration-artifacts/dumps/
+migration-artifacts/storage/
+.env.staging
