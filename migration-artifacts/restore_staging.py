@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-"""Restore Jane's Luxe dump into raymahomes_staging (or janesluxe) on fleet-postgres."""
+"""Restore MultiMey Supplies dump into multimey_staging on fleet-postgres."""
 import json
 import os
 import subprocess
 import sys
 from pathlib import Path
 
-DUMP = Path(os.environ.get("RH_DUMP_DIR", "/data/coolify/raymahomes-staging/dumps"))
-DB = os.environ.get("RH_DB_NAME", "raymahomes_staging")
-ROLE = os.environ.get("RH_DB_ROLE", DB)
+DUMP = Path(os.environ.get("MM_DUMP_DIR", "/data/coolify/multimey-staging/dumps"))
+DB = os.environ.get("MM_DB_NAME", "multimey_staging")
+ROLE = os.environ.get("MM_DB_ROLE", DB)
+SUPABASE_HOST = os.environ.get(
+    "MM_SUPABASE_HOST", "https://ucryyxtwbuuohaazmjrh.supabase.co"
+)
 
-LOAD_ORDER = [
+PREFERRED = [
     "profiles",
     "addresses",
     "categories",
@@ -41,35 +44,24 @@ LOAD_ORDER = [
     "navigation_items",
     "store_modules",
     "audit_logs",
+    "course_registrations",
 ]
 
 JSONB_COLS = {
     "addresses": {"metadata"},
     "audit_logs": {"details"},
     "categories": {"metadata"},
-    "chat_conversations": {"messages", "metadata"},
     "cms_content": {"metadata"},
     "coupons": {"metadata"},
-    "customer_insights": {"ai_notes", "preferences"},
     "customers": {"default_address"},
-    "delivery_assignments": {"metadata"},
     "notifications": {"data"},
     "order_items": {"metadata"},
     "orders": {"billing_address", "metadata", "shipping_address"},
     "product_variants": {"metadata"},
     "products": {"metadata", "options"},
     "profiles": {"preferences"},
-    "riders": {"metadata"},
-    "roles": {"permissions"},
     "site_settings": {"value"},
     "store_settings": {"value"},
-    "support_analytics_daily": {
-        "sentiment_distribution",
-        "top_categories",
-        "top_intents",
-    },
-    "support_escalation_rules": {"action_value", "condition_value"},
-    "support_ticket_messages": {"attachments", "metadata"},
     "support_messages": {"attachments"},
     "support_tickets": {"metadata"},
 }
@@ -92,6 +84,8 @@ def psql(sql: str, as_user: str = "postgres", db: str = DB, stop=True):
 
 def psql_file(path: Path, as_user: str = "postgres"):
     content = path.read_text()
+    content = content.replace("extensions.uuid_generate_v4()", "gen_random_uuid()")
+    content = content.replace("uuid_generate_v4()", "gen_random_uuid()")
     cmd = [
         "docker", "exec", "-i", "fleet-postgres",
         "psql", "-U", as_user, "-d", DB, "-v", "ON_ERROR_STOP=0",
@@ -99,9 +93,9 @@ def psql_file(path: Path, as_user: str = "postgres"):
     r = subprocess.run(cmd, input=content, capture_output=True, text=True)
     print(f"Applied {path.name}: rc={r.returncode}")
     errs = [l for l in (r.stderr or "").splitlines() if "ERROR" in l]
-    for l in errs[:20]:
+    for l in errs[:30]:
         print(" ", l)
-    return r.returncode
+    return r.returncode, len(errs)
 
 
 def table_columns(table: str) -> dict:
@@ -112,9 +106,6 @@ def table_columns(table: str) -> dict:
         f"WHERE table_schema='public' AND table_name='{table}';",
     ]
     r = subprocess.run(cmd, capture_output=True, text=True)
-    if r.returncode != 0:
-        print(r.stderr[:400], file=sys.stderr)
-        return {}
     cols = {}
     for line in r.stdout.splitlines():
         line = line.strip()
@@ -129,10 +120,7 @@ def esc(val, udt: str, force_jsonb: bool = False):
     if val is None:
         return "NULL"
     if force_jsonb or udt == "jsonb":
-        if isinstance(val, (dict, list)):
-            s = json.dumps(val)
-        else:
-            s = json.dumps(val)
+        s = json.dumps(val)
         return f"'{s.replace(chr(39), chr(39)+chr(39))}'::jsonb"
     if udt.endswith("[]") or udt == "_text":
         if not isinstance(val, list):
@@ -180,11 +168,10 @@ def load_json_table(table: str):
     n = 0
     batch = []
     for row in rows:
-        vals = []
-        for c in cols:
-            udt = db_cols[c]
-            force_j = c in jsonb_forced or udt == "jsonb"
-            vals.append(esc(row.get(c), udt, force_jsonb=force_j))
+        vals = [
+            esc(row.get(c), db_cols[c], force_jsonb=(c in jsonb_forced or db_cols[c] == "jsonb"))
+            for c in cols
+        ]
         batch.append("(" + ", ".join(vals) + ")")
         if len(batch) >= 40:
             sql = (
@@ -247,13 +234,11 @@ def load_auth_users():
             if c in ("is_sso_user", "is_anonymous"):
                 udt = "bool"
             parts.append(esc(row[c], udt, force_jsonb=("meta" in c)))
-        vals = ", ".join(parts)
         sql = (
-            f"INSERT INTO auth.users ({', '.join(cols)}) VALUES ({vals}) "
+            f"INSERT INTO auth.users ({', '.join(cols)}) VALUES ({', '.join(parts)}) "
             f"ON CONFLICT (id) DO UPDATE SET email=EXCLUDED.email, "
             f"encrypted_password=COALESCE(EXCLUDED.encrypted_password, auth.users.encrypted_password);"
         )
-        # Avoid shell $ expansion of bcrypt hashes by piping via stdin
         cmd = [
             "docker", "exec", "-i", "fleet-postgres",
             "psql", "-U", "postgres", "-d", DB, "-v", "ON_ERROR_STOP=1",
@@ -268,7 +253,6 @@ def load_auth_users():
 
 
 def rewrite_storage_urls():
-    """Make Supabase storage URLs host-relative."""
     patterns = [
         ("product_images", "url"),
         ("categories", "image_url"),
@@ -299,19 +283,30 @@ def rewrite_storage_urls():
             )
         except SystemExit:
             pass
-    # jsonb settings that may embed URLs
     for table in ("site_settings", "store_settings"):
         try:
             psql(
                 f"""
                 UPDATE public.{table}
-                SET value = replace(value::text, 'https://etyipxntzsjjchetdqtl.supabase.co', '')::jsonb
+                SET value = replace(value::text, '{SUPABASE_HOST}', '')::jsonb
                 WHERE value::text LIKE '%supabase.co%';
                 """,
                 stop=False,
             )
         except SystemExit:
             pass
+
+
+def load_order():
+    inv = DUMP / "_inventory.json"
+    names = []
+    if inv.exists():
+        names = list(json.loads(inv.read_text()).get("tables", {}).keys())
+    ordered = [t for t in PREFERRED if t in names]
+    for t in sorted(names):
+        if t not in ordered:
+            ordered.append(t)
+    return ordered
 
 
 def main():
@@ -323,29 +318,28 @@ def main():
     schema = DUMP / "schema_plain.sql"
     if schema.exists():
         print("Applying public schema...")
-        psql_file(schema)
+        _, errs = psql_file(schema)
+        print(f"schema errors noted: {errs}")
 
-    # Extra migrations if present as plain SQL
-    for name in (
-        "20260611000000_multi_branch.sql",
-        "20260612000000_assign_all_stock_to_madina.sql",
-        "20260618000000_add_product_variants_sort_order.sql",
-    ):
-        p = DUMP / name
-        if p.exists():
-            psql_file(p)
+    triggers = DUMP / "02_functions_triggers.sql"
+    if triggers.exists():
+        print("Applying triggers...")
+        psql_file(triggers)
 
     psql(
         """
-    DO $$
-    DECLARE r record;
-    BEGIN
-      FOR r IN SELECT tablename FROM pg_tables WHERE schemaname='public'
-      LOOP
-        EXECUTE format('ALTER TABLE public.%I DISABLE ROW LEVEL SECURITY', r.tablename);
-      END LOOP;
-    END $$;
-    """,
+        DO $$
+        DECLARE r record;
+        BEGIN
+          FOR r IN
+            SELECT conrelid::regclass AS tbl, conname
+            FROM pg_constraint
+            WHERE contype = 'c' AND connamespace = 'public'::regnamespace
+          LOOP
+            EXECUTE format('ALTER TABLE %s DROP CONSTRAINT IF EXISTS %I', r.tbl, r.conname);
+          END LOOP;
+        END $$;
+        """,
         stop=False,
     )
 
@@ -354,40 +348,79 @@ def main():
 
     print("Loading public tables...")
     psql("SET session_replication_role = replica;", stop=False)
-    for t in LOAD_ORDER:
+    for t in load_order():
         try:
             load_json_table(t)
         except SystemExit as e:
             print(f"ERROR loading {t}: {e}")
     psql("SET session_replication_role = DEFAULT;", stop=False)
 
+    print("Removing schema seed duplicates not in dump...")
+    for table in load_order():
+        path = DUMP / f"{table}.json"
+        if not path.exists():
+            continue
+        rows = json.loads(path.read_text())
+        ids = [r.get("id") for r in rows if r.get("id")]
+        if not ids:
+            continue
+        id_list = ",".join(f"'{i}'" for i in ids)
+        psql(
+            f'DELETE FROM public."{table}" WHERE id IS NOT NULL AND id NOT IN ({id_list});',
+            stop=False,
+        )
+
     print("Rewriting storage URLs...")
     rewrite_storage_urls()
 
     psql(
         f"""
-    GRANT ALL ON ALL TABLES IN SCHEMA public TO {ROLE};
-    GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO {ROLE};
-    GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO {ROLE};
-    GRANT USAGE ON SCHEMA public TO {ROLE};
-    GRANT USAGE ON SCHEMA auth TO {ROLE};
-    GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA auth TO {ROLE};
-    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO {ROLE};
-    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO {ROLE};
-    """,
+        CREATE OR REPLACE FUNCTION auth.uid() RETURNS uuid
+        LANGUAGE sql STABLE
+        AS $$
+          SELECT NULLIF(current_setting('request.jwt.claim.sub', true), '')::uuid;
+        $$;
+        CREATE OR REPLACE FUNCTION auth.role() RETURNS text
+        LANGUAGE sql STABLE
+        AS $$
+          SELECT COALESCE(current_setting('request.jwt.claim.role', true), 'anon');
+        $$;
+
+        DO $$
+        DECLARE r record;
+        BEGIN
+          FOR r IN SELECT tablename FROM pg_tables WHERE schemaname = 'public'
+          LOOP
+            EXECUTE format('ALTER TABLE public.%I DISABLE ROW LEVEL SECURITY', r.tablename);
+          END LOOP;
+        END $$;
+
+        GRANT USAGE ON SCHEMA public TO {ROLE};
+        GRANT USAGE ON SCHEMA auth TO {ROLE};
+        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO {ROLE};
+        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA auth TO {ROLE};
+        GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO {ROLE};
+        GRANT EXECUTE ON FUNCTION auth.uid() TO {ROLE};
+        GRANT EXECUTE ON FUNCTION auth.role() TO {ROLE};
+        ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO {ROLE};
+        ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO {ROLE};
+        """,
         stop=False,
     )
 
     out = psql(
         """
     SELECT 'products' t, count(*)::int n FROM products
+    UNION ALL SELECT 'product_variants', count(*)::int FROM product_variants
+    UNION ALL SELECT 'product_images', count(*)::int FROM product_images
     UNION ALL SELECT 'orders', count(*)::int FROM orders
     UNION ALL SELECT 'order_items', count(*)::int FROM order_items
     UNION ALL SELECT 'categories', count(*)::int FROM categories
-    UNION ALL SELECT 'product_images', count(*)::int FROM product_images
     UNION ALL SELECT 'profiles', count(*)::int FROM profiles
     UNION ALL SELECT 'auth.users', count(*)::int FROM auth.users
     UNION ALL SELECT 'customers', count(*)::int FROM customers
+    UNION ALL SELECT 'course_registrations', count(*)::int FROM course_registrations
+    UNION ALL SELECT 'store_settings', count(*)::int FROM store_settings
     ORDER BY 1;
     """
     )
